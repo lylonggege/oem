@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        android:id="@+id/rootView_company"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/dp_15">
+
+        <RelativeLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.xuexiang.xui.widget.imageview.RadiusImageView
+                android:id="@+id/company_loge_iv"
+                android:layout_width="@dimen/dp_50"
+                android:layout_height="@dimen/dp_50"
+                android:src="@drawable/shop_b_sp_db"
+                app:riv_corner_radius="@dimen/dp_360">
+
+            </com.xuexiang.xui.widget.imageview.RadiusImageView>
+
+            <TextView
+                android:id="@+id/company_kehu_name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_15"
+                android:layout_toRightOf="@+id/company_loge_iv"
+                android:text="hahah"
+                android:textColor="@color/b3"
+                android:textSize="@dimen/dp_16"></TextView>
+
+            <TextView
+                android:id="@+id/companyphone_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_15"
+                android:layout_toRightOf="@+id/company_kehu_name_tv"
+                android:text="hahah"
+                android:textColor="@color/b6"></TextView>
+
+            <TextView
+                android:id="@+id/company_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/company_kehu_name_tv"
+                android:layout_marginLeft="@dimen/dp_15"
+                android:layout_marginTop="@dimen/dp_15"
+                android:layout_toRightOf="@+id/company_loge_iv"
+                android:text="hahah"
+                android:textColor="@color/b6"
+                android:textSize="@dimen/dp_16"></TextView>
+
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/company_contont_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_15"
+            android:text="hahhahha"
+            android:textColor="@color/b3"
+            android:textSize="@dimen/dp_16"></TextView>
+
+        <com.zhangying.oem1688.custom.MyRecycleView
+            android:id="@+id/company_recycleview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_15">
+
+        </com.zhangying.oem1688.custom.MyRecycleView>
+
+        <TextView
+            android:id="@+id/company_time_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_15"
+            android:layout_marginBottom="@dimen/dp_15"
+            android:text="hahah"
+            android:textColor="@color/b6"></TextView>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_10"
+        android:background="@color/fF3F4F5">
+
+    </View>
+</RelativeLayout>

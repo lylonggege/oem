@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/type_ll_1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/content_tv_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_15"
+            android:text=""
+            android:textColor="@color/b6"></TextView>
+
+        <com.zhangying.oem1688.custom.MyRecycleView
+            android:id="@+id/MyRecycleView_1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/dp_15">
+
+        </com.zhangying.oem1688.custom.MyRecycleView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/type_ll_2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/content_tv_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="@dimen/dp_15"
+            android:text=""
+            android:textColor="@color/b6"></TextView>
+
+        <com.zhangying.oem1688.custom.MyRecycleView
+            android:id="@+id/MyRecycleView_2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/dp_15">
+
+        </com.zhangying.oem1688.custom.MyRecycleView>
+    </LinearLayout>
+
+</RelativeLayout>

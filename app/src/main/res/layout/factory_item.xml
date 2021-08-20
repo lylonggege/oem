@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="@dimen/dp_10">
+
+    <TextView
+        android:id="@+id/name_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:text=""
+        android:textColor="@color/b3"
+        android:textSize="@dimen/dp_16">
+
+    </TextView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/line_sign"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_50"
+            android:layout_toRightOf="@+id/company_loge_iv"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/dian"
+                android:layout_width="@dimen/dp_50"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/dian">
+
+                <TextView
+                    android:id="@+id/companyname_authtag_tv"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/redf04142"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_1"
+                    android:text=""
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dp_11">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/company_storetime_tv"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_1"
+                    android:text=""
+                    android:textSize="@dimen/dp_11"></TextView>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/cate_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_15"
+                android:text=""
+                android:textColor="@color/b3">
+
+            </TextView>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/line_sign"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_toRightOf="@+id/company_loge_iv">
+
+
+            <LinearLayout
+                android:id="@+id/rootView_bang_ll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dp_10">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="@dimen/dp_3"
+                    android:background="@drawable/bang"></ImageView>
+
+                <TextView
+                    android:id="@+id/rootView_bang_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="@color/b25720"
+                    android:textSize="@dimen/dp_11">
+
+                </TextView>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tuijian_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/dp_10"
+                android:layout_toRightOf="@+id/rootView_bang_ll"
+                android:background="@drawable/findfactory_recycviewparent"
+                android:paddingLeft="@dimen/dp_5"
+                android:paddingTop="@dimen/dp_2"
+                android:paddingRight="@dimen/dp_5"
+                android:paddingBottom="@dimen/dp_2"
+                android:text=""
+                android:textColor="@color/white"
+                android:textSize="@dimen/dp_11">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/company_verification_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/tuijian_tv"
+                android:background="@drawable/red_hot"
+                android:paddingLeft="@dimen/dp_5"
+                android:paddingTop="@dimen/dp_2"
+                android:paddingRight="@dimen/dp_5"
+                android:paddingBottom="@dimen/dp_2"
+                android:text=""
+                android:textColor="@color/ff3600"
+                android:textSize="@dimen/dp_11">
+
+            </TextView>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/storearea_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text=""
+            android:textColor="@color/b6">
+
+        </TextView>
+    </RelativeLayout>
+
+    <com.zhangying.oem1688.custom.MyRecycleView
+        android:id="@+id/MyRecycleView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </com.zhangying.oem1688.custom.MyRecycleView>
+
+</LinearLayout>

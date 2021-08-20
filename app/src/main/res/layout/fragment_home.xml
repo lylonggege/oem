@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".view.fragment.HomeFragment">
+
+    <include layout="@layout/title_inclue"></include>
+
+    //tab
+    <com.zhangying.oem1688.custom.MySlidingTabLayout
+        android:id="@+id/parent_tab_indictor"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_42"
+        android:layout_centerVertical="true"
+        android:background="@color/app_blue"
+        android:nestedScrollingEnabled="true"
+        app:tl_indicator_color="@color/white"
+        app:tl_indicator_corner_radius="1dp"
+        app:tl_indicator_height="@dimen/dp_2"
+        app:tl_indicator_width="@dimen/dp_17"
+        app:tl_indicator_width_equal_title="true"
+        app:tl_tab_padding="@dimen/dp_8"
+        app:tl_tab_space_equal="false"
+        app:tl_textBold="BOTH"
+        app:tl_textSelectColor="@color/white"
+        app:tl_textSelectSize="@dimen/dp_18"
+        app:tl_textUnSelectSize="@dimen/dp_17"
+        app:tl_textUnselectColor="@color/white" />
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/ViewPagerSlide"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible" />
+
+
+</LinearLayout>

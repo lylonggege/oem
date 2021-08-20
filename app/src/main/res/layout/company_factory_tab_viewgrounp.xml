@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/dp_5">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_100"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:id="@+id/company_rl"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/company_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="产品"
+                        android:textColor="@drawable/company_factory_tv"
+                        android:textSize="@dimen/dp_16"></TextView>
+
+                    <TextView
+                        android:id="@+id/company_tv_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_1"
+                        android:layout_alignParentBottom="true"
+                        android:background="@drawable/company_factory_tv_line"></TextView>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/factory_rl"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/factory_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="工厂"
+                        android:textColor="@drawable/company_factory_tv"
+                        android:textSize="@dimen/dp_16"></TextView>
+
+                    <TextView
+                        android:id="@+id/factory_tv_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_1"
+                        android:layout_alignParentBottom="true"
+                        android:background="@drawable/company_factory_tv_line"></TextView>
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        <include layout="@layout/includecompanyfactory"></include>
+
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

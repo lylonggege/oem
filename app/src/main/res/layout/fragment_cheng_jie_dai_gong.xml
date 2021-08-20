@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.fragment.daigongchang.ChengJieDaiGongFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/dp_5"
+        android:layout_marginRight="@dimen/dp_5">
+        <com.scwang.smartrefresh.layout.header.ClassicsHeader
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.zhangying.oem1688.custom.MyRecycleView
+                android:id="@+id/recycview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </com.zhangying.oem1688.custom.MyRecycleView>
+        </androidx.core.widget.NestedScrollView>
+
+        <com.scwang.smartrefresh.layout.footer.ClassicsFooter
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+</FrameLayout>

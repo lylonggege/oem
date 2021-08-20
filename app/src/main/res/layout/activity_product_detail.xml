@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".view.activity.home.GoodsDetailActivity">
+
+    <include
+        android:id="@+id/include_title"
+        layout="@layout/title_inclue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></include>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/include_title">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_55"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/imageView_banner"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_360"></ImageView>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_15"
+                android:layout_marginBottom="@dimen/dp_5">
+
+                <TextView
+                    android:id="@+id/goods_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_15"
+                    android:text=""
+                    android:textColor="@color/b6"
+                    android:textSize="@dimen/dp_16"></TextView>
+
+                <RelativeLayout
+                    android:id="@+id/cata_rl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/goods_name"
+                    android:layout_marginLeft="@dimen/dp_15"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_marginBottom="@dimen/dp_15"
+                    android:layout_toRightOf="@+id/company_loge_iv">
+
+                    <TextView
+                        android:id="@+id/goods_verification_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/dp_15"
+                        android:background="@drawable/red_hot"
+                        android:paddingLeft="@dimen/dp_5"
+                        android:paddingTop="@dimen/dp_2"
+                        android:paddingRight="@dimen/dp_5"
+                        android:paddingBottom="@dimen/dp_2"
+                        android:text=""
+                        android:textColor="@color/ff3600"
+                        android:textSize="@dimen/dp_11">
+
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/goostuijian_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/goods_verification_tv"
+                        android:background="@drawable/findfactory_recycviewparent"
+                        android:paddingLeft="@dimen/dp_5"
+                        android:paddingTop="@dimen/dp_2"
+                        android:paddingRight="@dimen/dp_5"
+                        android:paddingBottom="@dimen/dp_2"
+                        android:text=""
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/dp_11">
+
+                    </TextView>
+
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/message_LL"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/dp_15"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/icon_zixun"></ImageView>
+
+                    <TextView
+                        android:id="@+id/im_tip_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/dp_3"
+                        android:text=""
+                        android:textColor="@color/redf04142"></TextView>
+
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_10"
+                android:background="@color/ee">
+
+            </View>
+
+            <include layout="@layout/factorymessage"></include>
+
+            //详细介绍
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_10"
+                android:background="@color/ee"></View>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:padding="@dimen/dp_15">
+
+                <View
+                    android:layout_width="@dimen/dp_5"
+                    android:layout_height="match_parent"
+                    android:background="@color/redf04142"></View>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="@dimen/dp_5"
+                    android:text="详细介绍"
+                    android:textColor="@color/b666666"
+                    android:textSize="@dimen/dp_16"></TextView>
+
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_1"
+                android:background="@color/ee"></View>
+
+            <WebView
+                android:id="@+id/webView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp_15" />
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/ee">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_marginBottom="@dimen/dp_10"
+                    android:text="在线预约,免费获取报价"
+                    android:textColor="@color/redf04142"
+                    android:textSize="@dimen/dp_20"></TextView>
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp_15"
+                android:drawableLeft="@drawable/bitian"
+                android:text="oem代工品类"
+                android:textSize="@dimen/dp_16">
+
+            </TextView>
+
+            <com.zhangying.oem1688.custom.MyRecycleView
+                android:id="@+id/oemRecycleView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_15"
+                android:layout_marginTop="@dimen/dp_15"
+                android:layout_marginRight="@dimen/dp_15"></com.zhangying.oem1688.custom.MyRecycleView>
+
+            <include
+                layout="@layout/submitnameandphone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp_15"></include>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_10"
+                android:background="@color/ee"></View>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp_15"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="@dimen/dp_5"
+                    android:layout_height="match_parent"
+                    android:background="@color/redf04142"></View>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="@dimen/dp_5"
+                    android:text="相似品类推荐"
+                    android:textColor="@color/b666666"
+                    android:textSize="@dimen/dp_16"></TextView>
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_1"
+                android:background="@color/ee"></View>
+
+            <com.zhangying.oem1688.custom.MyRecycleView
+                android:id="@+id/tuijian_RecycleView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp_15"></com.zhangying.oem1688.custom.MyRecycleView>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <include
+        layout="@layout/collection_phone_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"></include>
+</RelativeLayout>

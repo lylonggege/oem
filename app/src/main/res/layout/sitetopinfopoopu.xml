@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhangying.oem1688.custom.RadiusCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="@dimen/dp_200"
+    app:rcv_topLeftRadiu="@dimen/dp_10"
+    app:rcv_topRightRadiu="@dimen/dp_10"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.zhangying.oem1688.custom.MyRecycleView
+            android:id="@+id/recycview_left"
+            android:layout_width="@dimen/dp_100"
+            android:layout_height="match_parent">
+        </com.zhangying.oem1688.custom.MyRecycleView>
+
+        <androidx.core.widget.NestedScrollView
+            android:paddingBottom="@dimen/dp_10"
+            android:background="@color/de"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <com.zhangying.oem1688.custom.MyRecycleView
+
+                android:id="@+id/recycleView_right"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </com.zhangying.oem1688.custom.MyRecycleView>
+        </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
+</com.zhangying.oem1688.custom.RadiusCardView>

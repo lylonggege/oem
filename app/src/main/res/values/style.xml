@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="custom_dialog2" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <!-- Dialog的windowFrame框为无 -->
+        <item name="android:windowIsFloating">true</item>
+        <!-- 是否漂现在activity上 -->
+        <item name="android:windowIsTranslucent">true</item>
+        <!-- 是否半透明 -->
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:background">@null</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <!-- 去除黑色边框的关键设置项 -->
+        <item name="android:backgroundDimEnabled">true</item>
+        <!-- 屏幕背景是否变暗 -->
+        <item name="android:backgroundDimAmount">0.3</item>
+    </style>
+
+    <style name="MyappTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimaryDark">@color/app_blue</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <!-- <item name="android:typeface">serif</item>雅黑字体-->
+    </style>
+
+    <style name="AppTheme" parent="XUITheme.Phone">
+        <!-- 自定义自己的主题样式 -->
+        <item name="colorPrimary">@color/app_blue</item>
+        <item name="colorPrimaryDark">@color/app_blue</item>
+        <item name="colorAccent">@color/app_blue</item>
+
+    </style>
+
+    <style name="XUITheme" parent="XUIBaseTheme">
+        <!--设置默认窗口的动画样式-->
+        <item name="android:windowAnimationStyle">@style/WindowAnimStyle</item>
+
+        <!--自定义标题栏样式方法1-->
+        <!--<item name="xui_actionbar_color">@color/app_color_theme_1</item>-->
+        <!--<item name="xui_actionbar_text_color">@color/xui_config_color_primary_text</item>-->
+        <!--<item name="xui_actionbar_immersive">true</item>-->
+
+        <!--自定义标题栏样式方法2-->
+        <!--<item name="TitleBarStyle">@style/TitleBar.Custom</item>-->
+    </style>
+
+
+    <style name="WindowAnimStyle" parent="@android:style/Animation">
+        <item name="android:activityOpenEnterAnimation">@anim/xpage_slide_in_right</item>
+        <item name="android:activityOpenExitAnimation">@anim/xpage_slide_out_left</item>
+        <item name="android:activityCloseEnterAnimation">@anim/xpage_slide_in_left</item>
+        <item name="android:activityCloseExitAnimation">@anim/xpage_slide_out_right</item>
+    </style>
+
+
+
+
+
+
+</resources>

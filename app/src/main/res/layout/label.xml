@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/rootView"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:paddingTop="@dimen/dp_15"
+            android:paddingBottom="@dimen/dp_15"
+            android:text="姓名"
+            android:textColor="@color/b3"></TextView>
+
+        <TextView
+            android:id="@+id/address_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_30"
+            android:layout_toRightOf="@+id/name_tv"
+            android:paddingTop="@dimen/dp_15"
+            android:paddingBottom="@dimen/dp_15"
+            android:text="地区"
+            android:textColor="@color/b3"></TextView>
+
+        <TextView
+            android:id="@+id/time_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_30"
+            android:layout_toRightOf="@+id/address_tv"
+            android:paddingTop="@dimen/dp_15"
+            android:paddingBottom="@dimen/dp_15"
+            android:text="留言时间"
+            android:textColor="@color/b3"></TextView>
+
+        <TextView
+            android:id="@+id/see_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="@dimen/dp_30"
+            android:padding="@dimen/dp_15"
+            android:text="今日被看"
+            android:textColor="@color/app_blue"></TextView>
+
+    </RelativeLayout>
+</RelativeLayout>

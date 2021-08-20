@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="app_blue">#236de8</color>
+    <color name="fF3F4F5">#F3F4F5</color>
+    <color name="ff3600">#ff3600</color>
+    <color name="b666666">#666666</color>
+    <color name="b3">#333333</color>
+    <color name="ee">#eeeeee</color>
+    <color name="b6">#666666</color>
+    <color name="de">#dedede</color>
+    <color name="f6">#f6f6f6</color>
+    <color name="f69">#ff6969</color>
+    <color name="redf04142">#f04142</color>
+    <color name="redffeee4">#ffeee4</color>
+    <color name="fff3b6">#fff3b6</color>
+    <color name="ff7506">#ff7506</color>
+    <color name="b25720">#b25720</color>
+    <color name="green2669bf">#088e1b</color>
+    <color name="color_f4">#F4F4F4</color>
+    <color name="app_color_theme_1">#EF5362</color> <!-- Grapefruit -->
+    <color name="green2fcd98">#2fcd98</color>
+    <color name="b7">#777777</color>
+</resources>

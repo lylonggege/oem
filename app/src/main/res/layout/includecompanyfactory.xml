@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/companychildren_rl"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/companychildren_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="代工品类"
+                android:textColor="@drawable/company_factory_tv"
+                android:textSize="@dimen/dp_14"></TextView>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_5"
+                android:layout_toRightOf="@+id/companychildren_tv"
+                android:background="@drawable/icon_filter_off"></ImageView>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/factoeychildren_rl"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/factorychildren_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="所属区域"
+                android:textColor="@drawable/company_factory_tv"
+                android:textSize="@dimen/dp_14"></TextView>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_5"
+                android:layout_toRightOf="@+id/factorychildren_tv"
+                android:background="@drawable/icon_filter_off"></ImageView>
+        </RelativeLayout>
+
+    </LinearLayout>
+</RelativeLayout>

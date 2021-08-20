@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".view.activity.home.FactoryDetailActivity">
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/title_inclue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></include>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedscrollview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/include">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.zhangying.oem1688.widget.RadiusImageBanner
+                android:id="@+id/rib_simple_usage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:bb_barPaddingBottom="10dp"
+                app:bb_scale="0.4317" />
+
+            <include
+                layout="@layout/factorymessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></include>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_10"
+                android:background="@color/de"></View>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:padding="@dimen/dp_15"
+                android:text="公司简介"
+                android:textColor="@color/b3"
+                android:textSize="@dimen/dp_23"></TextView>
+
+            <TextView
+                android:id="@+id/description_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_15"
+                android:layout_marginRight="@dimen/dp_15"
+                android:text=""
+                android:textColor="@color/b3"
+                android:textSize="@dimen/dp_16"></TextView>
+
+            <LinearLayout
+                android:id="@+id/imageView_group_LL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp_15"
+                android:orientation="vertical"></LinearLayout>
+
+            <com.zhangying.oem1688.custom.MyRecycleView
+                android:id="@+id/myRecycleView_gcates"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </com.zhangying.oem1688.custom.MyRecycleView>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/ee">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_marginBottom="@dimen/dp_10"
+                    android:text="在线预约,免费获取报价"
+                    android:textColor="@color/redf04142"
+                    android:textSize="@dimen/dp_20"></TextView>
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp_15"
+                android:drawableLeft="@drawable/bitian"
+                android:text="oem代工品类"
+                android:textSize="@dimen/dp_16">
+
+            </TextView>
+
+            <com.zhangying.oem1688.custom.MyRecycleView
+                android:id="@+id/oemRecycleView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp_15"></com.zhangying.oem1688.custom.MyRecycleView>
+
+            <include
+                layout="@layout/submitnameandphone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp_15"></include>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_10"
+                android:background="@color/ee"></View>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp_15"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="@dimen/dp_5"
+                    android:layout_height="match_parent"
+                    android:background="@color/redf04142"></View>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="@dimen/dp_5"
+                    android:text="相似品类推荐"
+                    android:textColor="@color/b666666"
+                    android:textSize="@dimen/dp_16"></TextView>
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_1"
+                android:background="@color/ee"></View>
+
+            <com.zhangying.oem1688.custom.MyRecycleView
+                android:id="@+id/tuijian_RecycleView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_15"
+                android:layout_marginRight="@dimen/dp_15"
+                android:layout_marginBottom="@dimen/dp_50"></com.zhangying.oem1688.custom.MyRecycleView>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <include
+        layout="@layout/collection_phone_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"></include>
+
+
+    <LinearLayout
+        android:id="@+id/message_LL"
+        android:layout_width="@dimen/dp_51"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="@dimen/dp_15"
+        android:layout_marginBottom="@dimen/dp_100"
+        android:background="@drawable/xunjia_bg360"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dp_5"
+
+            android:scaleType="centerCrop"
+            android:src="@drawable/icon_zixun"></ImageView>
+
+        <TextView
+            android:id="@+id/im_tip_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dp_3"
+            android:layout_marginBottom="@dimen/dp_3"
+            android:text="询价"
+            android:textColor="@color/redf04142"
+            android:textSize="@dimen/dp_14"></TextView>
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>
