@@ -51,15 +51,15 @@
                 android:textColor="@color/b3"
                 android:textSize="@dimen/dp_23"></TextView>
 
-            <TextView
+            <com.zhangying.oem1688.custom.MoreLineTextView
                 android:id="@+id/description_tv"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
                 android:layout_marginLeft="@dimen/dp_15"
                 android:layout_marginRight="@dimen/dp_15"
-                android:text=""
-                android:textColor="@color/b3"
-                android:textSize="@dimen/dp_16"></TextView>
+                app:clickAll="true"
+                app:textColor="@color/b3" />
 
             <LinearLayout
                 android:id="@+id/imageView_group_LL"

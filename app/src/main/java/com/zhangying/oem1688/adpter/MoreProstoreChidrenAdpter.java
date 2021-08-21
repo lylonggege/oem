@@ -38,6 +38,7 @@ public class MoreProstoreChidrenAdpter extends BaseRecyclerAdapter<MoreProstoreB
         int i10 = ScreenTools.instance(context).dip2px(5);
         relative.setLayoutParams(layoutParams);
         layoutParams.setMargins(i10, i10, 0, i10);
+        image.setCornerRadius(5);
         GlideUtil.loadImage(context, item.getDefault_image(), image);
     }
 }

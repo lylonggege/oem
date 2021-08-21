@@ -27,4 +27,12 @@
     <color name="app_color_theme_1">#EF5362</color> <!-- Grapefruit -->
     <color name="green2fcd98">#2fcd98</color>
     <color name="b7">#777777</color>
+    <color name="lan047cf7">#047cf7</color>
+    <color name="b9">#999999</color>
+    <color name="triangle">#aa72d572</color>
+    <color name="circle">#aa738ffe</color>
+    <color name="rect">#aae84e40</color>
+    <color name="view_bg">#00000000</color>
+    <color name="shadow">#25808080</color>
+    <color name="dialog_bg">#f5f5f5</color>
 </resources>

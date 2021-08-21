@@ -94,7 +94,7 @@ public class NewsOemMoreAdpter extends BaseRecyclerAdapter<OemNewsMoreBean.Retva
                     content_tv_image_one.setText(item.getNtitle());
                     ncate_tv_image_one.setText(item.getNcate());
                     ntime_tv_image_one.setText(item.getNtime());
-                    nhits_tv_image_one.setText(item.getNtime());
+                    nhits_tv_image_one.setText(item.getNhits());
 
                 } else {
                     news_type_1_ImageView.setVisibility(View.VISIBLE);
@@ -124,7 +124,7 @@ public class NewsOemMoreAdpter extends BaseRecyclerAdapter<OemNewsMoreBean.Retva
             String cate_name="#"+item.getNcate()+"#";
             String text = cate_name + item.getNtitle();
             SpannableStringBuilder style = new SpannableStringBuilder(text);
-            style.setSpan(new ForegroundColorSpan(Color.BLUE), 0, cate_name.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+            style.setSpan(new ForegroundColorSpan(Color.parseColor("#047cf7")), 0, cate_name.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
             company_contont_tv.setText(style);
             company_time_tv.setText(item.getNtime());
             List<String> images = item.getNimg();

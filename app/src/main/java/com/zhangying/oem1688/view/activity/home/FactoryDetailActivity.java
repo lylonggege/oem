@@ -51,6 +51,7 @@ import com.zhangying.oem1688.base.BaseActivity;
 import com.zhangying.oem1688.bean.BaseBean;
 import com.zhangying.oem1688.bean.FactoryDetailBean;
 import com.zhangying.oem1688.custom.FenLeiRealization;
+import com.zhangying.oem1688.custom.MoreLineTextView;
 import com.zhangying.oem1688.custom.MyRecycleView;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
@@ -61,7 +62,9 @@ import com.zhangying.oem1688.singleton.HashMapSingleton;
 import com.zhangying.oem1688.util.AppManagerUtil;
 import com.zhangying.oem1688.util.AutoForcePermissionUtils;
 import com.zhangying.oem1688.util.GlideUtil;
+import com.zhangying.oem1688.util.ImageViewInfo;
 import com.zhangying.oem1688.util.MD5Util;
+import com.zhangying.oem1688.util.PreviewImageView;
 import com.zhangying.oem1688.util.ScreenTools;
 import com.zhangying.oem1688.util.ToastUtil;
 import com.zhangying.oem1688.util.TokenUtils;
@@ -142,7 +145,7 @@ public class FactoryDetailActivity extends BaseActivity {
     @BindView(R.id.rootView_line)
     TextView rootViewLine;
     @BindView(R.id.description_tv)
-    TextView description_tv;
+    MoreLineTextView description_tv;
     @BindView(R.id.message_LL)
     LinearLayout message_LL;
     @BindView(R.id.im_tip_tv)
@@ -221,7 +224,7 @@ public class FactoryDetailActivity extends BaseActivity {
                                 if (ctype == 1) {
                                     List<Object> content = (List<Object>) spageBean1.getContent();
                                     if (content.size() > 0) {
-
+                                        List<ImageViewInfo> list = new ArrayList<>();
                                             for (int i1 = 0; i1 < content.size(); i1++) {
                                                 LinkedTreeMap<String, Object> hashMap = (LinkedTreeMap<String, Object>) content.get(i1);
                                                 ImageView imageView = new ImageView(FactoryDetailActivity.this);
@@ -235,6 +238,17 @@ public class FactoryDetailActivity extends BaseActivity {
                                                 if (FactoryDetailActivity.this != null) {
                                                     GlideUtil.loadImage(FactoryDetailActivity.this, (String) hashMap.get("url"), imageView);
                                                 }
+
+                                                ImageViewInfo imageViewInfo = new ImageViewInfo((String) hashMap.get("url"));
+                                                list.add(imageViewInfo);
+                                                int finalI = i1;
+                                                imageView.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View v) {
+                                                        PreviewImageView.save(imageView, finalI, list);
+                                                    }
+                                                });
+
                                             }
 
 

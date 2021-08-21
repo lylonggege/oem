@@ -338,7 +338,6 @@ public class MySlidingTabLayout extends HorizontalScrollView implements ViewPage
 
                 if (mTextBold == TEXT_BOLD_BOTH) {
                     tv_tab_title.getPaint().setFakeBoldText(true);
-                    tv_tab_title.getPaint().setStrokeWidth(1.2f);
                 } else if (mTextBold == TEXT_BOLD_NONE) {
                     tv_tab_title.getPaint().setFakeBoldText(false);
                 }
@@ -366,7 +365,11 @@ public class MySlidingTabLayout extends HorizontalScrollView implements ViewPage
             scrollToCurrentTab();
             invalidate();
         }catch (Exception e){
+
         }
+
+
+
     }
 
     @Override
@@ -407,7 +410,11 @@ public class MySlidingTabLayout extends HorizontalScrollView implements ViewPage
                 scrollTo(newScrollX, 0);
             }
         }catch (Exception e){
+
         }
+
+
+
     }
 
     private void updateTabSelection(int position) {
@@ -421,12 +428,13 @@ public class MySlidingTabLayout extends HorizontalScrollView implements ViewPage
                     tab_title.setTextColor(isSelect ? mTextSelectColor : mTextUnselectColor);
                     if (mTextBold == TEXT_BOLD_WHEN_SELECT) {
                         tab_title.getPaint().setFakeBoldText(isSelect);
-                        tab_title.getPaint().setStrokeWidth(1.2f);
                     }
                 }
             }
         }catch (Exception e){
+
         }
+
     }
 
     private float margin;

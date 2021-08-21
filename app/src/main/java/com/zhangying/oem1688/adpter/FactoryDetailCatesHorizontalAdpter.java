@@ -32,17 +32,31 @@ public class FactoryDetailCatesHorizontalAdpter extends BaseRecyclerAdapter<Fact
     @Override
     protected void bindData(@NonNull RecyclerViewHolder holder, int position, FactoryDetailBean.RetvalBean.GcatesBean.GlistBean item) {
         RadiusImageView image = holder.findViewById(R.id.image);
-        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) image.getLayoutParams();
-        layoutParams.width = ScreenTools.instance(context).getScreenWidth() / 2;
+        RelativeLayout rootView = holder.findViewById(R.id.rootView);
+        int i5 = ScreenTools.instance(context).dip2px(5);
+        int i15 = ScreenTools.instance(context).dip2px(10);
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) rootView.getLayoutParams();
+        layoutParams.width = ScreenTools.instance(context).getScreenWidth() / 2 ;
         layoutParams.height = ScreenTools.instance(context).getScreenWidth() / 2;
-        int i10 = ScreenTools.instance(context).dip2px(5);
-        image.setLayoutParams(layoutParams);
-        layoutParams.setMargins(i10, i10, 0, i10);
+        layoutParams.setMargins(0, i5, 0, i5);
+        rootView.setLayoutParams(layoutParams);
+//        if (position % 2 == 0) {
+//            layoutParams.width = ScreenTools.instance(context).getScreenWidth() / 2 -i15;
+//            layoutParams.height = ScreenTools.instance(context).getScreenWidth() / 2;
+//            image.setLayoutParams(layoutParams);
+//            layoutParams.setMargins(0, i5, 0, i5);
+//        } else {
+//            layoutParams.width = ScreenTools.instance(context).getScreenWidth() / 2 - i5;
+//            layoutParams.height = ScreenTools.instance(context).getScreenWidth() / 2;
+//            image.setLayoutParams(layoutParams);
+//            layoutParams.setMargins(0, i5, i5, i5);
+//        }
+
         GlideUtil.loadImage(context, item.getDefault_image(), image);
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                GoodsDetailActivity.simpleActivity(context,item.getGoods_id());
+                GoodsDetailActivity.simpleActivity(context, item.getGoods_id());
             }
         });
     }

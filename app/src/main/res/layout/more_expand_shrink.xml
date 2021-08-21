@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.zhangying.oem1688.custom.AlignTextView
+        android:id="@+id/tv_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:lineSpacingExtra="3dp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/dp_15"
+        tools:text="..." />
+
+    <LinearLayout
+        android:background="#33000000"
+        android:id="@+id/ll_expand"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_expand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/expand"
+            android:textColor="@color/b7"
+            android:textSize="@dimen/dp_13" />
+
+        <ImageView
+            android:id="@+id/iv_expand"
+            android:layout_width="13dp"
+            android:layout_height="13dp"
+            android:layout_marginLeft="3dp"
+            android:src="@drawable/icon_backtop" />
+    </LinearLayout>
+</LinearLayout>

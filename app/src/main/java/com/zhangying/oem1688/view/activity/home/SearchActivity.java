@@ -55,8 +55,13 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
         query();
         tagAdapter = new FlowTagAdapter(SearchActivity.this);
         mNormalFlowTagLayout.setAdapter(tagAdapter);
-        mNormalFlowTagLayout.setOnTagClickListener((parent, view, position) ->
-                SearchResultActivity.simpleActivity(SearchActivity.this, (String) parent.getAdapter().getItem(position)));
+        mNormalFlowTagLayout.setOnTagClickListener(new FlowTagLayout.OnTagClickListener() {
+            @Override
+            public void onItemClick(FlowTagLayout parent, View view, int position) {
+                SearchResultActivity.simpleActivity(SearchActivity.this, (String) parent.getAdapter().getItem(position));
+                finish();
+            }
+        });
         tagAdapter.addTags(tagArrayList);
         et_input.setOnEditorActionListener(this);
 
@@ -70,7 +75,7 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
         }
     }
 
-    @OnClick({R.id.et_input, R.id.clear_ll, R.id.imageView5,R.id.imageView2})
+    @OnClick({R.id.et_input, R.id.clear_ll, R.id.imageView5, R.id.imageView2})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.imageView2:
@@ -114,6 +119,9 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
                 String searchStr = et_input.getText().toString();
                 dbDao.insertData(searchStr);
                 query();
+                tagAdapter.clearAndAddTags(tagArrayList);
+                SearchResultActivity.simpleActivity(SearchActivity.this, searchStr);
+                finish();
                 break;
 
         }
@@ -132,6 +140,7 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
             query();
             tagAdapter.clearAndAddTags(tagArrayList);
             SearchResultActivity.simpleActivity(SearchActivity.this, searchStr);
+            finish();
             return true;
         }
         return false;

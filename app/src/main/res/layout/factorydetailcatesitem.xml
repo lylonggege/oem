@@ -16,10 +16,11 @@
         android:textColor="@color/b6"
         android:textSize="@dimen/dp_20"></TextView>
 
-    <com.zhangying.oem1688.custom.MyRecycleView
-        android:layout_below="@+id/name_tv"
+    <com.zhangying.oem1688.custom.scroll.AutoPollRecyclerView
         android:id="@+id/MyRecycleView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </com.zhangying.oem1688.custom.MyRecycleView>
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/name_tv"
+        android:paddingLeft="@dimen/dp_5"
+        android:paddingRight="@dimen/dp_5"></com.zhangying.oem1688.custom.scroll.AutoPollRecyclerView>
 </RelativeLayout>
