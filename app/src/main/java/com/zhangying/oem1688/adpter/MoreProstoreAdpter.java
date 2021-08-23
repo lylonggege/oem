@@ -1,6 +1,8 @@
 package com.zhangying.oem1688.adpter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -49,6 +51,17 @@ public class MoreProstoreAdpter extends BaseRecyclerAdapter<MoreProstoreBean.Ret
         } else {
             companyStoretimeTv.setVisibility(View.GONE);
         }
+
+        String sColor = retval.getScolor();
+        LinearLayout vipView = holder.findViewById(R.id.dian);
+        GradientDrawable drawable = (GradientDrawable) vipView.getBackground();
+        if (sColor.length() > 0){
+            drawable.setStroke(2, Color.parseColor(sColor));//设置边框的宽度和颜色
+            companynameAuthtagTv.setBackgroundColor(Color.parseColor(sColor));
+        }else {
+            drawable.setStroke(2, Color.parseColor("#f04142"));
+        }
+
         TextView cateTv = holder.findViewById(R.id.cate_tv);
         cateTv.setText(retval.getStoretip() + retval.getService());
 

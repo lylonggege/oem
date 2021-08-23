@@ -10,7 +10,6 @@
         android:layout_height="wrap_content"
         android:background="@color/white">
 
-
         <ImageView
             android:id="@+id/company_loge_iv"
             android:layout_width="@dimen/dp_50"
@@ -53,9 +52,10 @@
                     android:id="@+id/companyname_authtag_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:background="@color/redf04142"
+                    android:background="@drawable/dian_pre"
                     android:gravity="center"
-                    android:padding="@dimen/dp_2"
+                    android:paddingHorizontal="@dimen/dp_3"
+                    android:paddingVertical="@dimen/dp_2"
                     android:text=""
                     android:textColor="@color/white"
                     android:textSize="@dimen/dp_11">
@@ -67,6 +67,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
+                    android:textColor="@color/redf04142"
                     android:padding="@dimen/dp_2"
                     android:text=""
                     android:textSize="@dimen/dp_11"></TextView>
@@ -74,7 +75,7 @@
             </LinearLayout>
 
             <TextView
-                android:textSize="@dimen/dp_12"
+                android:textSize="@dimen/dp_14"
                 android:id="@+id/cate_tv"
                 android:layout_width="@dimen/dp_210"
                 android:layout_height="wrap_content"
@@ -85,7 +86,7 @@
                 android:textColor="@color/b3"></TextView>
 
             <TextView
-                android:textSize="@dimen/dp_12"
+                android:textSize="@dimen/dp_14"
                 android:visibility="visible"
                 android:id="@+id/address_tv1"
                 android:layout_width="match_parent"
@@ -130,7 +131,7 @@
                     android:layout_height="wrap_content"
                     android:text=""
                     android:textColor="@color/b25720"
-                    android:textSize="@dimen/dp_11">
+                    android:textSize="@dimen/dp_12">
 
                 </TextView>
 
@@ -148,8 +149,8 @@
                 android:paddingRight="@dimen/dp_5"
                 android:paddingBottom="@dimen/dp_2"
                 android:text=""
-                android:textColor="@color/white"
-                android:textSize="@dimen/dp_11">
+                android:textColor="@color/ff3600"
+                android:textSize="@dimen/dp_12">
 
             </TextView>
 
@@ -165,7 +166,7 @@
                 android:paddingBottom="@dimen/dp_2"
                 android:text=""
                 android:textColor="@color/ff3600"
-                android:textSize="@dimen/dp_11">
+                android:textSize="@dimen/dp_12">
 
             </TextView>
 

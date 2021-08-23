@@ -50,7 +50,7 @@
                         android:layout_marginBottom="@dimen/dp_10"
                         android:text="首页"
                         android:textColor="@drawable/factory_button_home_tv"
-                        android:textSize="@dimen/dp_16">
+                        android:textSize="@dimen/dp_14">
 
                     </TextView>
                 </LinearLayout>
@@ -78,7 +78,7 @@
                         android:layout_marginBottom="@dimen/dp_10"
                         android:text="品类"
                         android:textColor="@drawable/factory_button_home_tv"
-                        android:textSize="@dimen/dp_16">
+                        android:textSize="@dimen/dp_14">
 
                     </TextView>
                 </LinearLayout>
@@ -108,7 +108,7 @@
                         android:clickable="false"
                         android:text="收藏"
                         android:textColor="@color/b6"
-                        android:textSize="@dimen/dp_16">
+                        android:textSize="@dimen/dp_14">
 
                     </TextView>
                 </LinearLayout>

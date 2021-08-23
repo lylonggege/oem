@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -87,7 +88,8 @@ import io.reactivex.annotations.NonNull;
 
 public class FactoryDetailActivity extends BaseActivity {
 
-
+    @BindView(R.id.title_TV)
+    TextView titleTV;
     @BindView(R.id.company_loge_iv)
     ImageView companyLogeIv;
     @BindView(R.id.companyname_tv)
@@ -197,6 +199,7 @@ public class FactoryDetailActivity extends BaseActivity {
                     protected void success(FactoryDetailBean data) {
                         dissmissLoading();
                         retval = data.getRetval();
+                        titleTV.setText(retval.getStore_name());
                         List<FactoryDetailBean.RetvalBean.slidesBean> slides = retval.getSlides();
                         if (slides != null && slides.size() > 0) {
                             for (FactoryDetailBean.RetvalBean.slidesBean slide : slides) {
@@ -310,6 +313,14 @@ public class FactoryDetailActivity extends BaseActivity {
             companyStoretimeTv.setVisibility(View.GONE);
         }
 
+        //非vip设置颜色
+        String sColor = retval.getScolor();
+        if (sColor.length() > 0){
+            GradientDrawable drawable = (GradientDrawable) dian.getBackground();
+            drawable.setStroke(1, Color.parseColor(sColor));//设置边框的宽度和颜色
+            companynameAuthtagTv.setBackgroundColor(Color.parseColor(sColor));
+        }
+
         cateTv.setText(retval.getStoretip() + retval.getService());
 
         List<FactoryDetailBean.RetvalBean.storetagsBean> storetags = retval.getStoretags();
@@ -356,12 +367,15 @@ public class FactoryDetailActivity extends BaseActivity {
         rib_simple_usage.setSource(bannerItemData).startScroll();
     }
 
-    @OnClick({R.id.rootView_shop_b_sp_ll, R.id.rootview_shoucang_tv,
+    @OnClick({R.id.bacK_RL, R.id.rootView_shop_b_sp_ll, R.id.rootview_shoucang_tv,
             R.id.rootView_shop_b_sc_ll, R.id.rootView_phone,
             R.id.rootView_line, R.id.message_LL, R.id.imageView2,
             R.id.textView, R.id.rootView_shop_b_dp_ll})
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.bacK_RL://返回
+                finish();
+                break;
             case R.id.rootView_shop_b_dp_ll: //首頁
                 setHomeCateSate(true);
                 break;

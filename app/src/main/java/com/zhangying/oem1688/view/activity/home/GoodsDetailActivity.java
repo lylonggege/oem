@@ -3,6 +3,8 @@ package com.zhangying.oem1688.view.activity.home;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -59,6 +61,8 @@ import static com.xuexiang.xutil.tip.ToastUtils.toast;
  */
 public class GoodsDetailActivity extends BaseActivity implements BaseView {
 
+    @BindView(R.id.title_TV)
+    TextView titleTV;
     @BindView(R.id.imageView)
     ImageView imageView;
     @BindView(R.id.imageView2)
@@ -162,6 +166,7 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
                         goodsdetailBean = data;
                         dissmissLoading();
                         GoodsdetailBean.RetvalBean retval = data.getRetval();
+                        titleTV.setText(retval.getGoods().getGoods_name());
 
                         int has_collect = retval.getStore_data().getHas_collect();
                         if (has_collect == 0) {
@@ -215,6 +220,14 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
             } else {
                 company_verification_tv.setVisibility(View.GONE);
             }
+        }
+
+        //非vip设置颜色
+        String sColor = store_data.getScolor();
+        if (sColor.length() > 0){
+            GradientDrawable drawable = (GradientDrawable) dian.getBackground();
+            drawable.setStroke(1, Color.parseColor(sColor));//设置边框的宽度和颜色
+            companyname_authtag_tv.setBackgroundColor(Color.parseColor(sColor));
         }
 
         if (store_data.getStorebang() != null && store_data.getStorebang().length() > 0) {
@@ -280,13 +293,16 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
         context.startActivity(intent);
     }
 
-    @OnClick({R.id.submit_tv, R.id.rootView_shop_b_dp_ll,
+    @OnClick({R.id.bacK_RL,R.id.submit_tv, R.id.rootView_shop_b_dp_ll,
             R.id.rootView_shop_b_sp_ll, R.id.rootView_shop_b_sc_ll,
             R.id.rootView_phone, R.id.rootView_line, R.id.message_LL
             , R.id.imageView2, R.id.textView})
     public void onClick(View view) {
         GoodsdetailBean.RetvalBean.StoreDataBean store_data = goodsdetailBean.getRetval().getStore_data();
         switch (view.getId()) {
+            case R.id.bacK_RL://返回
+                finish();
+                break;
             case R.id.message_LL:
                 new XPopup.Builder(this)
                         .setPopupCallback(new XPopupCallback() {

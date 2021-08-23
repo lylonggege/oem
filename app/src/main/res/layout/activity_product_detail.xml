@@ -7,11 +7,24 @@
     android:orientation="vertical"
     tools:context=".view.activity.home.GoodsDetailActivity">
 
-    <include
-        android:id="@+id/include_title"
-        layout="@layout/title_inclue"
+    <LinearLayout
+        android:id="@+id/navTitle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></include>
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <include
+            layout="@layout/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></include>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <include
+                layout="@layout/title_inclue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></include>
+        </RelativeLayout>
+    </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -23,7 +36,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp_55"
             android:background="@color/white"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            tools:ignore="WebViewLayout">
 
             <ImageView
                 android:id="@+id/imageView_banner"
