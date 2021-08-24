@@ -337,9 +337,12 @@ public class MySlidingTabLayout extends HorizontalScrollView implements ViewPage
                 }
 
                 if (mTextBold == TEXT_BOLD_BOTH) {
-                    tv_tab_title.getPaint().setFakeBoldText(true);
+                    //tv_tab_title.getPaint().setFakeBoldText(true);
+                    tv_tab_title.getPaint().setStyle(Paint.Style.FILL_AND_STROKE);
+                    tv_tab_title.getPaint().setStrokeWidth(1.0f);
                 } else if (mTextBold == TEXT_BOLD_NONE) {
-                    tv_tab_title.getPaint().setFakeBoldText(false);
+                    //tv_tab_title.getPaint().setFakeBoldText(false);
+                    tv_tab_title.getPaint().setStyle(Paint.Style.STROKE);
                 }
             }
         }
@@ -367,9 +370,6 @@ public class MySlidingTabLayout extends HorizontalScrollView implements ViewPage
         }catch (Exception e){
 
         }
-
-
-
     }
 
     @Override
@@ -412,9 +412,6 @@ public class MySlidingTabLayout extends HorizontalScrollView implements ViewPage
         }catch (Exception e){
 
         }
-
-
-
     }
 
     private void updateTabSelection(int position) {
@@ -427,7 +424,11 @@ public class MySlidingTabLayout extends HorizontalScrollView implements ViewPage
                 if (tab_title != null) {
                     tab_title.setTextColor(isSelect ? mTextSelectColor : mTextUnselectColor);
                     if (mTextBold == TEXT_BOLD_WHEN_SELECT) {
-                        tab_title.getPaint().setFakeBoldText(isSelect);
+                        //tab_title.getPaint().setFakeBoldText(isSelect);
+                        if(isSelect){
+                            tab_title.getPaint().setStyle(Paint.Style.FILL_AND_STROKE);
+                            tab_title.getPaint().setStrokeWidth(1.0f);
+                        }
                     }
                 }
             }

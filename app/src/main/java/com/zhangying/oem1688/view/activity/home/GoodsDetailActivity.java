@@ -224,10 +224,12 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
 
         //非vip设置颜色
         String sColor = store_data.getScolor();
+        GradientDrawable drawable = (GradientDrawable) dian.getBackground();
         if (sColor.length() > 0){
-            GradientDrawable drawable = (GradientDrawable) dian.getBackground();
-            drawable.setStroke(1, Color.parseColor(sColor));//设置边框的宽度和颜色
+            drawable.setStroke(2, Color.parseColor(sColor));//设置边框的宽度和颜色
             companyname_authtag_tv.setBackgroundColor(Color.parseColor(sColor));
+        }else {
+            drawable.setStroke(2, this.getColor(R.color.redf04142));
         }
 
         if (store_data.getStorebang() != null && store_data.getStorebang().length() > 0) {

@@ -10,10 +10,11 @@ import com.xuexiang.xui.adapter.recyclerview.BaseRecyclerAdapter;
 import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.bean.FactoryDetailBean;
+import com.zhangying.oem1688.bean.FactoryGCateBean;
 import com.zhangying.oem1688.bean.SitetopinfoBean;
 import com.zhangying.oem1688.onterface.BaseInterfacePosition;
 
-public class SitetopinfoLeftAdpter extends BaseRecyclerAdapter<FactoryDetailBean.RetvalBean.GcatesBean> {
+public class SitetopinfoLeftAdpter extends BaseRecyclerAdapter<FactoryGCateBean.RetvalBean> {
 
     public void setBaseInterfacePosition(BaseInterfacePosition baseInterfacePosition) {
         this.baseInterfacePosition = baseInterfacePosition;
@@ -27,7 +28,7 @@ public class SitetopinfoLeftAdpter extends BaseRecyclerAdapter<FactoryDetailBean
     }
 
     @Override
-    protected void bindData(@NonNull RecyclerViewHolder holder, int position, FactoryDetailBean.RetvalBean.GcatesBean item) {
+    protected void bindData(@NonNull RecyclerViewHolder holder, int position, FactoryGCateBean.RetvalBean item) {
         TextView name_tv = holder.findViewById(R.id.name_tv);
         TextView tv_line = holder.findViewById(R.id.tv_line);
         RelativeLayout rootView_left = holder.findViewById(R.id.rootView_left);

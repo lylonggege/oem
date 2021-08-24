@@ -690,6 +690,7 @@ public class FactoryDetailBean {
             public static class GlistBean {
                 private String default_image;
                 private String goods_id;
+                private String goods_name;
 
                 public String getDefault_image() {
                     return default_image;
@@ -705,6 +706,14 @@ public class FactoryDetailBean {
 
                 public void setGoods_id(String goods_id) {
                     this.goods_id = goods_id;
+                }
+
+                public String getGoods_name() {
+                    return goods_name;
+                }
+
+                public void setGoods_name(String goods_name) {
+                    this.goods_name = goods_name;
                 }
             }
         }

@@ -7,6 +7,8 @@ import com.zhangying.oem1688.bean.CateAreaListBean;
 import com.zhangying.oem1688.bean.CcatesJsonBean;
 import com.zhangying.oem1688.bean.CompanyFactoryBean;
 import com.zhangying.oem1688.bean.FactoryDetailBean;
+import com.zhangying.oem1688.bean.FactoryGCateBean;
+import com.zhangying.oem1688.bean.FactoryGoodsBean;
 import com.zhangying.oem1688.bean.GoodsdetailBean;
 import com.zhangying.oem1688.bean.HomeBena;
 import com.zhangying.oem1688.bean.HomeTabBean;
@@ -27,6 +29,8 @@ import com.zhangying.oem1688.bean.ScinfoTopBean;
 import com.zhangying.oem1688.bean.SitetopinfoBean;
 import com.zhangying.oem1688.bean.WordsBean;
 import com.zhangying.oem1688.bean.ListHistoryBean;
+
+import org.intellij.lang.annotations.Flow;
 
 import java.util.HashMap;
 
@@ -109,6 +113,15 @@ public class RemoteRepository {
     public Flowable<FactoryDetailBean> get_store(HashMap<String, Object> body) {
         return serverApi.get_store(body);
     }
+
+    public Flowable<FactoryGCateBean>get_store_gcate(HashMap<String, Object> body) {
+        return serverApi.get_store_gcate(body);
+    }
+
+    public Flowable<FactoryGoodsBean>get_store_goods(HashMap<String, Object> body) {
+        return serverApi.get_store_goods(body);
+    }
+
     public Flowable<SitetopinfoBean> sitetopinfo() {
         return serverApi.sitetopinfo();
     }

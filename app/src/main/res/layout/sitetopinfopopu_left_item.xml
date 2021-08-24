@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="行业"
-        android:textColor="@color/b6"
-        android:textSize="@dimen/dp_18">
+        android:textColor="@color/b3"
+        android:textSize="@dimen/dp_16">
     </TextView>
 </RelativeLayout>

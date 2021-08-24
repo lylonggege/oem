@@ -28,7 +28,7 @@
         app:tl_textBold="BOTH"
         app:tl_textSelectColor="@color/white"
         app:tl_textSelectSize="@dimen/dp_19"
-        app:tl_textUnSelectSize="@dimen/dp_19"
+        app:tl_textUnSelectSize="@dimen/dp_18"
         app:tl_textUnselectColor="@color/white" />
 
     <androidx.viewpager.widget.ViewPager

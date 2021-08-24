@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 
 import com.xuexiang.xui.adapter.recyclerview.BaseRecyclerAdapter;
 import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
+import com.xuexiang.xui.utils.DrawableUtils;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.bean.HomeBena;
 import com.zhangying.oem1688.custom.JumpViewPage;

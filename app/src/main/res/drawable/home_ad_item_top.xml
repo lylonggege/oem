@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <!-- rectangle 表示为矩形 -->
+    <corners android:topLeftRadius="@dimen/dp_3"
+             android:topRightRadius="@dimen/dp_3"/>
+</shape>

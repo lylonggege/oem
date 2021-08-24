@@ -7,6 +7,8 @@ import com.zhangying.oem1688.bean.CateAreaListBean;
 import com.zhangying.oem1688.bean.CcatesJsonBean;
 import com.zhangying.oem1688.bean.CompanyFactoryBean;
 import com.zhangying.oem1688.bean.FactoryDetailBean;
+import com.zhangying.oem1688.bean.FactoryGCateBean;
+import com.zhangying.oem1688.bean.FactoryGoodsBean;
 import com.zhangying.oem1688.bean.GoodsdetailBean;
 import com.zhangying.oem1688.bean.HomeBena;
 import com.zhangying.oem1688.bean.HomeTabBean;
@@ -104,9 +106,17 @@ public interface ApiService {
     @GET("?app=xcxindex&act=oemnewsmore")
     Flowable<OemNewsMoreBean> oemnewsmore(@QueryMap HashMap<String, Object> hashMap);
 
-    //获取公司详情数据
+    //获取公司详情数据-公司首页
     @GET("?app=xcxindex&act=get_store")
     Flowable<FactoryDetailBean> get_store(@QueryMap HashMap<String, Object> hashMap);
+
+    //获取公司产品分类-公司首页
+    @GET("?app=xcxindex&act=store_gcate")
+    Flowable<FactoryGCateBean> get_store_gcate(@QueryMap HashMap<String, Object> hashMap);
+
+    //获取公司产品列表-公司首页
+    @GET("?app=store&act=ajax_goodsmore")
+    Flowable<FactoryGoodsBean> get_store_goods(@QueryMap HashMap<String, Object> hashMap);
 
     //首页顶部导航右侧快捷导航数据
     @GET("?app=xcxindex&act=sitetopinfo&ly=app")

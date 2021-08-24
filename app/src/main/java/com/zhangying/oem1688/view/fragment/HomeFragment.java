@@ -43,9 +43,7 @@ public class HomeFragment extends XBaseFragment implements TabLayout.OnTabSelect
     private FragmnetPagerAdapter fragmnetPagerAdapter;
     private BaseValidateCredentials fenLeiRealization;
 
-
     //设置菜单适配器里面的recycleView
-
 
     @Override
     protected int getLayoutId() {
@@ -78,10 +76,7 @@ public class HomeFragment extends XBaseFragment implements TabLayout.OnTabSelect
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-
     }
-
 
     private void gethome() {
         RemoteRepository.getInstance()

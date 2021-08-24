@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -55,6 +56,8 @@ public class FindProductActivity extends BaseActivity implements BaseView {
     WrapContentHeightViewPager ViewPagerSlide;
     @BindView(R.id.release_LL)
     LinearLayout release_LL;
+	@BindView(R.id.title_TV)
+    TextView title_TV;
     private BaseValidateCredentials fenLeiRealization;
     private List<Fragment> fragmentList = new ArrayList<>();
     private List<String> tabList = new ArrayList<>();
@@ -71,6 +74,7 @@ public class FindProductActivity extends BaseActivity implements BaseView {
         super.onCreate(savedInstanceState);
         AppManagerUtil.getInstance().addHomeActivity(this);
         fenLeiRealization = new FenLeiRealization(this, this);
+		title_TV.setText("工厂承接代加工-代工帮");
         //获取数据
         scinfo_top();
 
@@ -119,7 +123,7 @@ public class FindProductActivity extends BaseActivity implements BaseView {
                 });
     }
 
-    @OnClick({R.id.imageView2, R.id.textView})
+    @OnClick({R.id.imageView2, R.id.textView, R.id.bacK_RL})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.imageView2:
@@ -127,6 +131,9 @@ public class FindProductActivity extends BaseActivity implements BaseView {
                 break;
             case R.id.textView:
 
+                break;
+			case R.id.bacK_RL:
+                finish();
                 break;
         }
     }

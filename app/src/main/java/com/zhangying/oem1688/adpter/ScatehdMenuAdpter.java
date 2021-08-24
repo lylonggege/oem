@@ -14,6 +14,7 @@ import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.bean.HomeBena;
 import com.zhangying.oem1688.custom.JumpViewPage;
 import com.zhangying.oem1688.util.GlideUtil;
+import com.zhangying.oem1688.view.activity.home.NewProductFactoryActivity;
 
 public class ScatehdMenuAdpter extends BaseRecyclerAdapter<HomeBena.RetvalBean.ScatehdBean> {
 
@@ -49,8 +50,9 @@ public class ScatehdMenuAdpter extends BaseRecyclerAdapter<HomeBena.RetvalBean.S
                 }
 
                 String sid = item.getSid();
-                JumpViewPage jumpViewPage = new JumpViewPage();
-                jumpViewPage.intentActivity(context, stype, sid, item.getSname());
+                NewProductFactoryActivity.simpleActivity(context, sid, stype, item.getSname(),item.getSname());
+                //JumpViewPage jumpViewPage = new JumpViewPage();
+                //jumpViewPage.intentActivity(context, stype, sid, item.getSname());
             }
         });
         GlideUtil.loadImage(context, item.getSpic(), iv_apply_image);

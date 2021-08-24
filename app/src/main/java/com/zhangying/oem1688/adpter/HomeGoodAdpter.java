@@ -23,14 +23,17 @@ public class HomeGoodAdpter extends BaseRecyclerAdapter<HomeBena.RetvalBean.Sgoo
     public HomeGoodAdpter(Context context) {
         this.context = context;
     }
+    private Context context;
 
     private ICallBcak iCallBcak;
-
     public void setiCallBcak(ICallBcak iCallBcak) {
         this.iCallBcak = iCallBcak;
     }
 
-    private Context context;
+    private int parentWidth;
+    public void setParentWidth(int parentWidth) {
+        this.parentWidth = parentWidth;
+    }
 
     @Override
     protected int getItemLayoutId(int viewType) {
@@ -57,6 +60,7 @@ public class HomeGoodAdpter extends BaseRecyclerAdapter<HomeBena.RetvalBean.Sgoo
         LinearLayout.LayoutParams layoutParamsiv = (LinearLayout.LayoutParams) imageView.getLayoutParams();
         int Morelength = ScreenTools.instance(context).dip2px(10);
         int screenWidth = ScreenTools.instance(context).getScreenWidth();
+        if (parentWidth > 0)screenWidth = parentWidth;
         layoutParamsiv.width = (screenWidth - Morelength) / 2;
         layoutParamsiv.height = layoutParamsiv.width;
         imageView.setLayoutParams(layoutParamsiv);

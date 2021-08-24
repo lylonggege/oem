@@ -65,6 +65,9 @@
             android:name=".view.activity.home.FactoryDetailActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".view.activity.home.NewProductFactoryActivity"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".view.activity.home.GoodsDetailActivity"
             android:screenOrientation="portrait" />
         <activity

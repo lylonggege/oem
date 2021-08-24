@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -46,10 +47,16 @@ public class MoreProstoreAdpter extends BaseRecyclerAdapter<MoreProstoreBean.Ret
         companynameAuthtagTv.setText(retval.getAuthtag());
         TextView companyStoretimeTv = holder.findViewById(R.id.company_storetime_tv);
         String storetime = retval.getStoretime();
+        //GradientDrawable drawablePre = (GradientDrawable) companynameAuthtagTv.getBackground();
         if (storetime != null && storetime.length() > 0) {
             companyStoretimeTv.setText(storetime);
+            companyStoretimeTv.setVisibility(View.VISIBLE);
+
+            //float corner[] = {6,0,0,6};
+            //drawablePre.setCornerRadii(6,0,0,6);
         } else {
             companyStoretimeTv.setVisibility(View.GONE);
+            //drawablePre.setCornerRadius(6);
         }
 
         String sColor = retval.getScolor();
@@ -57,9 +64,12 @@ public class MoreProstoreAdpter extends BaseRecyclerAdapter<MoreProstoreBean.Ret
         GradientDrawable drawable = (GradientDrawable) vipView.getBackground();
         if (sColor.length() > 0){
             drawable.setStroke(2, Color.parseColor(sColor));//设置边框的宽度和颜色
+            //drawablePre.setColor(Color.parseColor(sColor));
             companynameAuthtagTv.setBackgroundColor(Color.parseColor(sColor));
-        }else {
-            drawable.setStroke(2, Color.parseColor("#f04142"));
+        } else {
+            drawable.setStroke(2, context.getColor(R.color.redf04142));
+            //drawablePre.setColor(context.getColor(R.color.redf04142));
+            companynameAuthtagTv.setBackgroundColor(context.getColor(R.color.redf04142));
         }
 
         TextView cateTv = holder.findViewById(R.id.cate_tv);

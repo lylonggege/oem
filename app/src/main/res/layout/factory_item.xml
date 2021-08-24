@@ -42,7 +42,7 @@
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/redf04142"
+                    android:background="@drawable/dian_pre"
                     android:gravity="center"
                     android:padding="@dimen/dp_1"
                     android:text=""
