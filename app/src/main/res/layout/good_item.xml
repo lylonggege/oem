@@ -22,6 +22,7 @@
         <TextView
             android:id="@+id/textView_content"
             android:layout_width="wrap_content"
+            android:textColor="@color/b3"
             android:layout_height="@dimen/dp_38"
             android:layout_gravity="center"
             android:layout_marginStart="2dp"

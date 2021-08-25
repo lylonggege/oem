@@ -167,10 +167,14 @@ public class ProductFragment extends BaseFragment implements BaseView {
                     cateIndexSelected.set(0,options1);
                     cateIndexSelected.set(1,options2);
 
-                    cateSelected.set(0,cateList.get(options1).getId() + "");
-                    String minText = mTimeOption1[options1][options2];
-                    String maxText = option[options1];
+                    String minText = "";
+                    if (options1 > 0){
+                        cateSelected.set(0,cateList.get(options1).getId() + "");
+                        minText = mTimeOption1[options1][options2];
+                    }
+
                     if (options2 == 0){
+                        String maxText = option[options1];
                         cateSelected.set(1,"0");
                         companychildrenTv.setText(maxText);
                     }else {
@@ -306,18 +310,24 @@ public class ProductFragment extends BaseFragment implements BaseView {
                         CompanyFactoryBean.RetvalBean retval = data.getRetval();
                         cateList = retval.getOemcate();
 
-                        option = new String[retval.getOemcate().size()];
-                        mTimeOption1 = new String[retval.getOemcate().size()][];
+                        List<CompanyFactoryBean.RetvalBean.OemcateBean> maxList = cateList;
+                        int maxNum = maxList.size();
+                        option = new String[maxNum + 1];
+                        option[0] = "全部品类";
+
+                        mTimeOption1 = new String[maxNum + 1][];
+                        mTimeOption1[0] = new String[]{"全部"};
+
                         int childSize = 0;
                         List<CompanyFactoryBean.RetvalBean.OemcateBean.ChildrenBean> cateChildList = null;
-                        for (int i = 0; i < retval.getOemcate().size(); i++) {
-                            CompanyFactoryBean.RetvalBean.OemcateBean oemcateBean = retval.getOemcate().get(i);
+                        for (int i = 1; i <= maxNum; i++) {
+                            CompanyFactoryBean.RetvalBean.OemcateBean oemcateBean = maxList.get(i - 1);
                             option[i] = oemcateBean.getValue();
 
-                            cateChildList = retval.getOemcate().get(i).getChildren();
+                            cateChildList = maxList.get(i - 1).getChildren();
                             childSize = cateChildList.size() + 1;
                             String[] time = new String[childSize];
-                            time[0] = option[i] + "全部";
+                            time[0] = oemcateBean.getValue() + "全部";
                             for (int i1 = 1; i1 <= cateChildList.size(); i1++) {
                                 time[i1] = cateChildList.get(i1 - 1).getValue();
                             }
