@@ -79,7 +79,7 @@ public class FactoryDetailBean {
         this.retval = retval;
     }
 
-    public static class RetvalBean implements Serializable {
+    public static class RetvalBean{
         private int store_id;
         private String store_name;
         private String store_video;

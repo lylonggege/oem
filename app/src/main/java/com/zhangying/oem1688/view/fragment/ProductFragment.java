@@ -12,6 +12,7 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.xuexiang.xui.utils.WidgetUtils;
+import com.xuexiang.xui.widget.dialog.LoadingDialog;
 import com.xuexiang.xui.widget.picker.widget.OptionsPickerView;
 import com.xuexiang.xui.widget.picker.widget.builder.OptionsPickerBuilder;
 import com.zhangying.oem1688.R;
@@ -227,7 +228,6 @@ public class ProductFragment extends BaseFragment implements BaseView {
         }
     }
 
-
     @Override
     public void showloading() {
         showLoading();
@@ -296,7 +296,9 @@ public class ProductFragment extends BaseFragment implements BaseView {
     }
 
     private void initdata() {
-        showLoading();
+        LoadingDialog loading = new LoadingDialog(getActivity());
+        loading.show();
+
         HashMap<String, Object> map = new HashMap<>();
         map.put("ly", "app");
         map.put("catebid", 0);
@@ -306,7 +308,7 @@ public class ProductFragment extends BaseFragment implements BaseView {
                 .subscribeWith(new DefaultDisposableSubscriber<CompanyFactoryBean>() {
                     @Override
                     protected void success(CompanyFactoryBean data) {
-                        dissmissLoading();
+                        loading.dismiss();
                         CompanyFactoryBean.RetvalBean retval = data.getRetval();
                         cateList = retval.getOemcate();
 
@@ -367,7 +369,6 @@ public class ProductFragment extends BaseFragment implements BaseView {
                 refreshLayout.finishRefresh();
                 page = 1;
                 moredata();
-
             }
         });
     }

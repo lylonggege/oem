@@ -6,6 +6,7 @@ import android.view.View;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
+import com.xuexiang.xui.widget.dialog.LoadingDialog;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.adpter.HomeGoodAdpter;
 import com.zhangying.oem1688.adpter.SitetopinfoLeftAdpter;
@@ -53,9 +54,11 @@ public class FactoryDetailClassFragment extends BaseFragment {
     @Override
     public void initView() {
         recycleView_left.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LoadingDialog loading = new LoadingDialog(getActivity());
+        loading.show();
+
         mcid = getArguments().getString("mcid");
-        HashMapSingleton.getInstance().clear();
-        HashMapSingleton.getInstance().put("ly", "app");
+        HashMapSingleton.getInstance().reload();
         HashMapSingleton.getInstance().put("cid", mcid);
         RemoteRepository.getInstance()
                 .get_store_gcate(HashMapSingleton.getInstance())
@@ -64,21 +67,23 @@ public class FactoryDetailClassFragment extends BaseFragment {
                     @Override
                     protected void success(FactoryGCateBean data) {
                         setDataView(data);
+                        loading.dismiss();
                     }
 
                     @Override
                     public void onError(Throwable t) {
                         super.onError(t);
-                        dissmissLoading();
+                        loading.dismiss();
                     }
                 });
     }
 
     //初始化右侧产品分类视图
     private void initRightView(){
-        showLoading();
-        HashMapSingleton.getInstance().clear();
-        HashMapSingleton.getInstance().put("ly", "app");
+        LoadingDialog loading = new LoadingDialog(getActivity());
+        loading.show();
+
+        HashMapSingleton.getInstance().reload();
         HashMapSingleton.getInstance().put("id", mcid);
         HashMapSingleton.getInstance().put("cate_id", cateId);
         HashMapSingleton.getInstance().put("page", page);
@@ -88,7 +93,7 @@ public class FactoryDetailClassFragment extends BaseFragment {
 
                     @Override
                     protected void success(FactoryGoodsBean data) {
-                        dissmissLoading();
+                        loading.dismiss();
                         List<FactoryGoodsBean.RetvalBean.GoodsBean> goodsList = data.getRetval().getGoodsList();
                         if (page == 1) {getGoods.clear();}
                         for (int i = 0; i < goodsList.size(); i++) {
@@ -113,7 +118,7 @@ public class FactoryDetailClassFragment extends BaseFragment {
                     @Override
                     public void onError(Throwable t) {
                         super.onError(t);
-                        dissmissLoading();
+                        loading.dismiss();
                     }
                 });
     }

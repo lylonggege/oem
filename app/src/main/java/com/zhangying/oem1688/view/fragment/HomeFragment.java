@@ -118,7 +118,6 @@ public class HomeFragment extends XBaseFragment implements TabLayout.OnTabSelect
         }
     }
 
-
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
 

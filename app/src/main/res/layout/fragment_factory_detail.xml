@@ -102,9 +102,7 @@
                 android:drawableLeft="@drawable/bitian"
                 android:text="oem代工品类"
                 android:textSize="@dimen/dp_16">
-
             </TextView>
-
             <com.zhangying.oem1688.custom.MyRecycleView
                 android:id="@+id/oemRecycleView"
                 android:layout_width="match_parent"

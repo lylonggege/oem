@@ -11,9 +11,9 @@ import androidx.annotation.NonNull;
 import com.lxj.xpopup.core.DrawerPopupView;
 import com.lxj.xpopup.core.PositionPopupView;
 import com.zhangying.oem1688.R;
+import com.zhangying.oem1688.onterface.BaseMessageListener;
 
 public class GoodsDetailPopu extends PositionPopupView {
-
     private EditText name_et_popu;
     private EditText phone_et_popu;
     private TextView submit_tv_popu;
@@ -22,6 +22,12 @@ public class GoodsDetailPopu extends PositionPopupView {
     public GoodsDetailPopu(@NonNull Context context) {
         super(context);
     }
+
+    public void setMessageLister(BaseMessageListener messageListener) {
+        this.messageListener = messageListener;
+    }
+
+    private BaseMessageListener messageListener;
 
     @Override
     protected int getImplLayoutId() {
@@ -45,7 +51,8 @@ public class GoodsDetailPopu extends PositionPopupView {
         submit_tv_popu.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                destroy();
+                boolean result = messageListener.submit(name_et_popu.getText().toString(),phone_et_popu.getText().toString());
+                if (result)destroy();
             }
         });
     }

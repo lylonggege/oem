@@ -12,11 +12,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
@@ -25,7 +20,9 @@ import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.enums.PopupAnimation;
 import com.lxj.xpopup.interfaces.OnConfirmListener;
 import com.lxj.xpopup.interfaces.XPopupCallback;
+import com.xuexiang.xui.widget.dialog.LoadingDialog;
 import com.xuexiang.xui.widget.imageview.RadiusImageView;
+import com.xuexiang.xui.widget.toast.XToast;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.base.BaseActivity;
 import com.zhangying.oem1688.bean.BaseBean;
@@ -36,24 +33,23 @@ import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.onterface.BaseValidateCredentials;
 import com.zhangying.oem1688.onterface.BaseView;
 import com.zhangying.oem1688.popu.GoodsDetailPopu;
+import com.zhangying.oem1688.singleton.GlobalEntitySingleton;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
 import com.zhangying.oem1688.util.AppManagerUtil;
 import com.zhangying.oem1688.util.AutoForcePermissionUtils;
-import com.zhangying.oem1688.util.MD5Util;
 import com.zhangying.oem1688.util.ToastUtil;
-import com.zhangying.oem1688.util.TokenUtils;
 import com.zhangying.oem1688.util.WeiXinActivity;
 import com.zhangying.oem1688.view.activity.entry.LoginActivity;
 import com.zhangying.oem1688.view.fragment.home.FactoryDetailClassFragment;
 import com.zhangying.oem1688.view.fragment.home.FactoryDetailFragment;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
 
-import java.util.HashMap;
-
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import butterknife.BindView;
 import butterknife.OnClick;
-
-import static com.xuexiang.xui.utils.WidgetUtils.getMessageLoader;
 
 
 /**
@@ -61,7 +57,6 @@ import static com.xuexiang.xui.utils.WidgetUtils.getMessageLoader;
  */
 
 public class FactoryDetailActivity extends BaseActivity implements BaseView {
-
     @BindView(R.id.rootView_shop_b_dp_ll)
     LinearLayout rootView_shop_b_dp_ll;
     @BindView(R.id.rootView_shop_b_sp_ll)
@@ -101,7 +96,9 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
         setHomeCateSate(ishomne);
         AppManagerUtil.getInstance().addHomeActivity(this);
         fenLeiRealization = new FenLeiRealization(this, this);
-        showLoading();
+
+        LoadingDialog loading = new LoadingDialog(this);
+        loading.show();
 
         if (tabIndex == 1){
             setHomeCateSate(false);
@@ -114,7 +111,7 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
 
                     @Override
                     protected void success(FactoryDetailBean data) {
-                        dissmissLoading();
+                        loading.dismiss();
                         retval = data.getRetval();
 
                         //切换到首页
@@ -130,7 +127,7 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
                     @Override
                     public void onError(Throwable t) {
                         super.onError(t);
-                        dissmissLoading();
+                        loading.dismiss();
                     }
                 });
     }
@@ -177,9 +174,7 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
                                     @Override
 
                                     public void onConfirm() {
-
                                         AutoForcePermissionUtils.requestPermissions(FactoryDetailActivity.this, new AutoForcePermissionUtils.PermissionCallback() {
-
                                             @Override
                                             public void onPermissionGranted() {
                                                 Intent intent = new Intent(Intent.ACTION_CALL);
@@ -282,6 +277,7 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
 
     //添加收藏
     private void storecollect() {
+        Context contxt = this;
         showLoading();
         HashMapSingleton.getInstance().reload();
         HashMapSingleton.getInstance().put("id", retval.getStore_id());
@@ -307,6 +303,10 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
                 });
     }
 
+    public FactoryDetailBean.RetvalBean getFactoryBean(){
+        return retval;
+    }
+
     //取消收藏
     private void drop_collect() {
         showLoading();
@@ -315,7 +315,6 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
         RemoteRepository.getInstance()
                 .drop_collect(HashMapSingleton.getInstance())
                 .subscribeWith(new DefaultDisposableSubscriber<BaseBean>() {
-
                     @Override
                     protected void success(BaseBean data) {
                         dissmissLoading();
@@ -323,7 +322,7 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
                         if (data.isDone()) {
                             ToastUtil.showToast("取消收藏成功");
                             retval.setHas_collect(0);
-                            rootView_shop_b_sp_ll.setSelected(false);
+                            rootView_shop_b_sc_ll.setSelected(false);
                         }
                     }
 
@@ -356,7 +355,6 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
             shop_b_sp_db_iv.setSelected(true);
             shop_b_sp_db_tv.setSelected(true);
         }
-
     }
 
     private void selectTab(int index) {
@@ -369,9 +367,9 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
                 if (factoryDetailFragment == null) {
                     factoryDetailFragment = new FactoryDetailFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("mcobj",retval);
                     bundle.putString("mcid",mcid);
                     factoryDetailFragment.setArguments(bundle);
+                    GlobalEntitySingleton.getInstance().setFactoryDetail(retval);
                     transaction.add(R.id.fragment_container, factoryDetailFragment);
                 } else {
                     transaction.show(factoryDetailFragment);

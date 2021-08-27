@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.EditText;
@@ -15,8 +16,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import androidx.annotation.Nullable;
 
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
@@ -37,6 +36,7 @@ import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.mvp.leave.DateBean;
 import com.zhangying.oem1688.mvp.leave.LeaveMessagePersenterImpl;
+import com.zhangying.oem1688.onterface.BaseMessageListener;
 import com.zhangying.oem1688.onterface.BasePresenter;
 import com.zhangying.oem1688.onterface.BaseValidateCredentials;
 import com.zhangying.oem1688.onterface.BaseView;
@@ -45,20 +45,18 @@ import com.zhangying.oem1688.singleton.HashMapSingleton;
 import com.zhangying.oem1688.util.AppManagerUtil;
 import com.zhangying.oem1688.util.AutoForcePermissionUtils;
 import com.zhangying.oem1688.util.GlideUtil;
-import com.zhangying.oem1688.util.MD5Util;
 import com.zhangying.oem1688.util.MyUtilsWebView;
+import com.zhangying.oem1688.util.StringUtils;
 import com.zhangying.oem1688.util.ToastUtil;
-import com.zhangying.oem1688.util.TokenUtils;
 import com.zhangying.oem1688.util.WebViewSeting;
 import com.zhangying.oem1688.util.WeiXinActivity;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.OnClick;
-
-import static com.xuexiang.xutil.tip.ToastUtils.toast;
 
 /**
  * 产品详情页面
@@ -152,6 +150,7 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
     private BasePresenter basePresenter;
     private boolean ishomne = true;
     private BaseValidateCredentials fenLeiRealization;
+    private GoodsDetailPopu msgPop;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -168,8 +167,7 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
         setHomeCateSate(ishomne);
         AppManagerUtil.getInstance().addHomeActivity(this);
         showLoading();
-        HashMapSingleton.getInstance().clear();
-        HashMapSingleton.getInstance().put("ly", "app");
+        HashMapSingleton.getInstance().reload();
         HashMapSingleton.getInstance().put("id", goods_id);
         RemoteRepository.getInstance()
                 .goodsdetail(HashMapSingleton.getInstance())
@@ -324,27 +322,32 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
             case R.id.bacK_RL://返回
                 finish();
                 break;
-            case R.id.message_LL:
+            case R.id.message_LL://打开留言层留言
+                if (msgPop == null){
+                    msgPop = new GoodsDetailPopu(this);
+                    msgPop.setMessageLister(new BaseMessageListener() {
+                        @Override
+                        public boolean submit(String name, String phone) {
+                            return doSubmitMessage(name,phone,false);
+                        }
+                    });
+                }
                 BasePopupView popView = new XPopup.Builder(this)
                         .setPopupCallback(new XPopupCallback() {
                             @Override
                             public void onCreated() {
-
                             }
 
                             @Override
                             public void beforeShow() {
-
                             }
 
                             @Override
                             public void onShow() {
-
                             }
 
                             @Override
                             public void onDismiss() {
-
                             }
 
                             @Override
@@ -353,52 +356,20 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
                             }
                         })
                         .dismissOnTouchOutside(true)
-                        .asCustom(new GoodsDetailPopu(this));
+                        .asCustom(msgPop);
                 popView.popupInfo.popupAnimation = PopupAnimation.ScaleAlphaFromCenter;
                 popView.show();
                 break;
-            case R.id.submit_tv:
-                String name = nameEt.getText().toString();
-                if (name == null || name.length() == 0) {
-                    ToastUtil.showToast("请输入您的姓名");
-                    return;
-                }
-
-                String phone = phoneEt.getText().toString();
-                if (phone == null || phone.length() == 0) {
-                    ToastUtil.showToast("请输入您的电话");
-                    return;
-                }
-                GoodsdetailBean.RetvalBean retval = goodsdetailBean.getRetval();
-                StringBuffer stringBuffer = new StringBuffer();
-                List<GoodsdetailBean.RetvalBean.StoreDataBean.StoreGcatesBean> store_gcates = retval.getStore_data().getStore_gcates();
-                for (int i = 0; i < store_gcates.size(); i++) {
-                    GoodsdetailBean.RetvalBean.StoreDataBean.StoreGcatesBean storeGcatesBean = store_gcates.get(i);
-                    if (storeGcatesBean.isaBoolean()) {
-                        stringBuffer.append(storeGcatesBean.getId() + ",");
-                    }
-                }
-
-                //提交信息
-                DateBean dateBean = new DateBean();
-                dateBean.setName(name);
-                dateBean.setPhone(phone);
-                dateBean.setLycomId(retval.getStore_data().getStore_id());
-                dateBean.setLycate(stringBuffer.toString());
-                dateBean.setLylm("goods");
-                dateBean.setId(retval.getGoods().getGoods_id());
-                dateBean.setLyagent("7");
-                basePresenter = new LeaveMessagePersenterImpl(this, dateBean);
-                basePresenter.validateCredentials();
-
+            case R.id.submit_tv://界面提交留言
+                doSubmitMessage(nameEt.getText().toString(),phoneEt.getText().toString(),true);
                 break;
-            case R.id.rootView_shop_b_dp_ll:
+            case R.id.rootView_shop_b_dp_ll://工厂首页
                 FactoryDetailActivity.simpleActivity(this,store_data.getStore_id(),0);
                 break;
-            case R.id.rootView_shop_b_sp_ll:
+            case R.id.rootView_shop_b_sp_ll://工厂产品
                 FactoryDetailActivity.simpleActivity(this,store_data.getStore_id(), 1);
                 break;
-            case R.id.rootView_shop_b_sc_ll:
+            case R.id.rootView_shop_b_sc_ll://收藏或取消收藏
                 int has_collect = store_data.getHas_collect();
                 if (has_collect == 0) {
                     storecollect();
@@ -414,7 +385,6 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
                                 new OnConfirmListener() {
                                     @Override
                                     public void onConfirm() {
-
                                         AutoForcePermissionUtils.requestPermissions(GoodsDetailActivity.this, new AutoForcePermissionUtils.PermissionCallback() {
 
                                             @Override
@@ -448,18 +418,54 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
         }
     }
 
+    private boolean doSubmitMessage(String name, String phone, boolean chkCate){
+        if (StringUtils.isEmity(name)) {
+            ToastUtil.showToast("请输入您的姓名");
+            return false;
+        }
+
+        if (phone == null || phone.length() == 0) {
+            ToastUtil.showToast("请输入您的电话");
+            return false;
+        }
+
+        GoodsdetailBean.RetvalBean retval = goodsdetailBean.getRetval();
+        ArrayList<Integer> stringBuffer = new ArrayList<Integer>();
+        if (chkCate){
+            List<GoodsdetailBean.RetvalBean.StoreDataBean.StoreGcatesBean> store_gcates = retval.getStore_data().getStore_gcates();
+            for (int i = 0; i < store_gcates.size(); i++) {
+                GoodsdetailBean.RetvalBean.StoreDataBean.StoreGcatesBean storeGcatesBean = store_gcates.get(i);
+                if (storeGcatesBean.isaBoolean()) {
+                    stringBuffer.add(storeGcatesBean.getId());
+                }
+            }
+        }
+        if (stringBuffer.size() == 0){
+            ToastUtil.showToast("请选择代工品类");
+            return false;
+        }
+
+        //提交信息
+        DateBean dateBean = new DateBean();
+        dateBean.setName(name);
+        dateBean.setPhone(phone);
+        dateBean.setLycomId(retval.getStore_data().getStore_id());
+        dateBean.setLycate(TextUtils.join(",",stringBuffer));
+        dateBean.setLylm("goods");
+        dateBean.setId(retval.getGoods().getGoods_id());
+        dateBean.setLyagent("7");
+
+        basePresenter = new LeaveMessagePersenterImpl(this, dateBean);
+        basePresenter.validateCredentials();
+        return true;
+    }
+
     private void storecollect() {
         showLoading();
-        long timestamp = System.currentTimeMillis() / 1000;
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("id", goodsdetailBean.getRetval().getStore_data().getStore_id());
-        map.put("token", TokenUtils.getToken());
-        map.put("timestamp", timestamp);
-        String url = timestamp + TokenUtils.getToken() + "&^%$RSTUih09135ZST)(*";
-        String md5Str = MD5Util.getMD5Str(url);
-        map.put("sign", md5Str);
+        HashMapSingleton.getInstance().reload();
+        HashMapSingleton.getInstance().put("id", goodsdetailBean.getRetval().getStore_data().getStore_id());
         RemoteRepository.getInstance()
-                .storecollect(map)
+                .storecollect(HashMapSingleton.getInstance())
                 .subscribeWith(new DefaultDisposableSubscriber<BaseBean>() {
 
                     @Override
@@ -482,18 +488,11 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
 
     private void drop_collect() {
         showLoading();
-        long timestamp = System.currentTimeMillis() / 1000;
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("id", goodsdetailBean.getRetval().getStore_data().getStore_id());
-        map.put("timestamp", timestamp);
-        map.put("token", TokenUtils.getToken());
-        String url = timestamp + TokenUtils.getToken() + "&^%$RSTUih09135ZST)(*";
-        String md5Str = MD5Util.getMD5Str(url);
-        map.put("sign", md5Str);
+        HashMapSingleton.getInstance().reload();
+        HashMapSingleton.getInstance().put("id", goodsdetailBean.getRetval().getStore_data().getStore_id());
         RemoteRepository.getInstance()
-                .drop_collect(map)
+                .drop_collect(HashMapSingleton.getInstance())
                 .subscribeWith(new DefaultDisposableSubscriber<BaseBean>() {
-
                     @Override
                     protected void success(BaseBean data) {
                         dissmissLoading();

@@ -127,6 +127,8 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     public void initView() {
+        init();
+
         //设置标题“帮我找工厂、承接代加工”加粗度
         float boldRate = 1.2f;
         help_bold_1.getPaint().setStyle(Paint.Style.FILL_AND_STROKE);
@@ -162,10 +164,7 @@ public class HomeFragment extends BaseFragment {
             instance.put("type", cate_id);
             getrecomendindex(instance, 1);
             view_bg.setVisibility(View.GONE);
-
-            loadMoreGoods();
         }
-        init();
         //初始化下拉加载
         initRefresh();
     }
@@ -283,30 +282,24 @@ public class HomeFragment extends BaseFragment {
 
                     @Override
                     protected void success(HomeBena data) {
-
                         HomeBena.RetvalBean retval = data.getRetval();
-                        //tab
-                        List<HomeBena.RetvalBean.SindustryBean> sindustry = retval.getSindustry();
                         //banner
                         List<HomeBena.RetvalBean.SbannerBean> sbanner = retval.getSbanner();
+                        initbanner(sbanner);
+
                         //头条 文字滚动
                         HomeBena.RetvalBean.SnewslistBean snewslistBean = retval.getSnewslist();
+                        initmarqueeView(snewslistBean);
+
                         //zhshlist
                         List<HomeBena.RetvalBean.SzhshlistBean> szhshlist = retval.getSzhshlist();
+                        initszhshlist(szhshlist, type);
 
-                        //tab
-//                        initTab(sindustry);
-                        //banner
-                        initbanner(sbanner);
                         //初始化fragment
-                        //initfragment(data.getRetval().getScatehd());
                         initCateFragment(data.getRetval().getScatehd());
-                        //文字滚动
-                        initmarqueeView(snewslistBean);
                         //多条文字轮播
                         initScinfolist(retval.getScinfolist());
-                        //列表
-                        initszhshlist(szhshlist, type);
+
                         //加载更多
                         more_name_tv.setText(retval.getSgoodsList().getGtitle());
                         initgoosList(retval.getSgoodsList());
@@ -328,18 +321,20 @@ public class HomeFragment extends BaseFragment {
                         RecomendIndexBean.RetvalBean retval = data.getRetval();
                         //banner
                         List<HomeBena.RetvalBean.SbannerBean> sbanner = retval.getSbanner();
+                        initbanner(sbanner);
+
                         //首页的招商列表与推荐推荐的推荐专区
                         List<HomeBena.RetvalBean.SzhshlistBean> szhshlist = retval.getSzhshlist();
-                        //banner
-                        initbanner(sbanner);
-                        //初始化fragment
-                        //initfragment(data.getRetval().getScatehd());
-                        initCateFragment(data.getRetval().getScatehd());
-                        //列表
                         initszhshlist(szhshlist, type);
+
+                        //初始化fragment
+                        initCateFragment(data.getRetval().getScatehd());
+
                         //加载更多
                         more_name_tv.setText(retval.getGtitle());
-                        //initgoosList(retval.getSgoodsList());
+
+                        bindGoodsAdapter();
+                        loadMoreGoods();
                     }
 
                     @Override
@@ -369,10 +364,14 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void initgoosList(HomeBena.RetvalBean.SgoodsListBean sgoodsList) {
+        bindGoodsAdapter();
+        home_goodAdpter.refresh(sgoodsList.getGoods());
+    }
+
+    private void bindGoodsAdapter(){
         int space = getResources().getDimensionPixelSize(R.dimen.dp_5);
         recycView_sgoodlist.addItemDecoration(new SpacesItemDecoration(space, space));
         recycView_sgoodlist.setLayoutManager(new GridLayoutManager(context, 2));
-        home_goodAdpter.refresh(sgoodsList.getGoods());
         recycView_sgoodlist.setAdapter(home_goodAdpter);
     }
 
@@ -439,11 +438,10 @@ public class HomeFragment extends BaseFragment {
 
     //加载更多商品
     private void loadMoreGoods() {
-        long timestamp = System.currentTimeMillis() / 1000;
-        HashMapSingleton.getInstance().clear();
+        System.out.println("loadMoreGoods1");
+        HashMapSingleton.getInstance().reload();
         HashMapSingleton.getInstance().put("page", page);
         HashMapSingleton.getInstance().put("recomid", "999");
-        HashMapSingleton.getInstance().put("ly", "app");
         if (!cate_id.equals("-999")) {
             HashMapSingleton.getInstance().put("cateid", cate_id);
         }
@@ -453,6 +451,7 @@ public class HomeFragment extends BaseFragment {
 
                     @Override
                     protected void success(HomeGoodsBean data) {
+                        System.out.println("loadMoreGoods2");
                         List<HomeBena.RetvalBean.SgoodsListBean.GoodsBean> recordList = data.getRetval();
                         if (page == 1) {
                             home_goodAdpter.refresh(recordList);
@@ -464,6 +463,7 @@ public class HomeFragment extends BaseFragment {
                     @Override
                     public void onError(Throwable t) {
                         super.onError(t);
+                        System.out.println("loadMoreGoods3");
                     }
                 });
     }

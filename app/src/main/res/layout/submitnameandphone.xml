@@ -87,7 +87,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dp_20"
         android:gravity="center"
-        android:text="——— 预约成功后工厂第一时间主动与你联系  ———">
+        android:text="—预约成功后工厂第一时间主动与你联系—">
 
     </TextView>
 

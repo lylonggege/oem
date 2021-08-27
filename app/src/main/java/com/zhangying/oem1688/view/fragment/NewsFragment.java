@@ -1,14 +1,12 @@
 package com.zhangying.oem1688.view.fragment;
 
 import android.view.View;
-import android.widget.ImageView;
-
-import androidx.annotation.NonNull;
 
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.xuexiang.xui.utils.WidgetUtils;
+import com.xuexiang.xui.widget.dialog.LoadingDialog;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.adpter.NewsOemMoreAdpter;
 import com.zhangying.oem1688.base.BaseFragment;
@@ -18,24 +16,22 @@ import com.zhangying.oem1688.custom.MyRecycleView;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.onterface.BaseView;
-import com.zhangying.oem1688.singleton.HashMapSingleton;
 import com.zhangying.oem1688.view.activity.home.SearchActivity;
 
 import java.util.HashMap;
 
+import androidx.annotation.NonNull;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-
 public class NewsFragment extends BaseFragment {
-
-
     @BindView(R.id.recycview)
     MyRecycleView recycview;
     @BindView(R.id.refresh_layout)
     SmartRefreshLayout refreshLayout;
     private int page = 1;
     NewsOemMoreAdpter newsOemMoreAdpter;
+    LoadingDialog loading;
 
     @Override
     protected int getLayoutId() {
@@ -48,11 +44,15 @@ public class NewsFragment extends BaseFragment {
         WidgetUtils.initRecyclerView(recycview);
         recycview.setAdapter(newsOemMoreAdpter);
         initRefresh();
-        showLoading();
         initdata();
     }
 
     private void initdata() {
+        if (page == 1){
+            loading = new LoadingDialog(getActivity());
+            loading.show();
+        }
+
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("ly", "app");
         hashMap.put("page", page);
@@ -61,8 +61,8 @@ public class NewsFragment extends BaseFragment {
                 .subscribeWith(new DefaultDisposableSubscriber<OemNewsMoreBean>() {
                     @Override
                     protected void success(OemNewsMoreBean data) {
-                        dissmissLoading();
                         if (page == 1) {
+                            loading.dismiss();
                             newsOemMoreAdpter.refresh(data.getRetval());
                         } else {
                             newsOemMoreAdpter.loadMore(data.getRetval());
@@ -72,7 +72,9 @@ public class NewsFragment extends BaseFragment {
                     @Override
                     public void onError(Throwable t) {
                         super.onError(t);
-                        dissmissLoading();
+                        if (page == 1) {
+                            loading.dismiss();
+                        }
                     }
                 });
     }

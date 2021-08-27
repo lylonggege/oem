@@ -1,5 +1,6 @@
 package com.zhangying.oem1688.view.fragment.home;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import com.google.gson.internal.LinkedTreeMap;
@@ -11,6 +12,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -29,17 +31,23 @@ import com.zhangying.oem1688.adpter.FactoryDetailCatesAdpter;
 import com.zhangying.oem1688.adpter.FactoryDetailTuijianAdpter;
 import com.zhangying.oem1688.adpter.GoodsDetailOemAdpter;
 import com.zhangying.oem1688.base.BaseFragment;
+import com.zhangying.oem1688.bean.BaseBean;
 import com.zhangying.oem1688.bean.FactoryDetailBean;
+import com.zhangying.oem1688.bean.GoodsdetailBean;
 import com.zhangying.oem1688.custom.MoreLineTextView;
 import com.zhangying.oem1688.custom.MyRecycleView;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
+import com.zhangying.oem1688.onterface.BaseMessageListener;
 import com.zhangying.oem1688.popu.GoodsDetailPopu;
+import com.zhangying.oem1688.singleton.GlobalEntitySingleton;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
 import com.zhangying.oem1688.util.GlideUtil;
 import com.zhangying.oem1688.util.PreviewImageView;
 import com.zhangying.oem1688.util.ScreenTools;
 import com.zhangying.oem1688.util.ImageViewInfo;
+import com.zhangying.oem1688.util.StringUtils;
+import com.zhangying.oem1688.util.ToastUtil;
 import com.zhangying.oem1688.view.activity.home.FactoryDetailActivity;
 import com.zhangying.oem1688.widget.RadiusImageBanner;
 
@@ -76,6 +84,8 @@ public class FactoryDetailFragment extends BaseFragment {
     MyRecycleView oemRecycleView;
     @BindView(R.id.phone_et)
     EditText phoneEt;
+    @BindView(R.id.name_et)
+    EditText nameEt;
     @BindView(R.id.description_tv)
     MoreLineTextView description_tv;
 
@@ -108,6 +118,7 @@ public class FactoryDetailFragment extends BaseFragment {
     private FactoryDetailBean.RetvalBean retval;
     private boolean ishomne = true;
     FactoryDetailCatesAdpter factoryDetailCatesAdpter;
+    private GoodsDetailPopu msgPop;
 
     @Override
     protected int getLayoutId() {
@@ -125,7 +136,7 @@ public class FactoryDetailFragment extends BaseFragment {
         myRecycleView_gcates.setAdapter(factoryDetailCatesAdpter);
 
         mcid = getArguments().getString("mcid");
-        retval = (FactoryDetailBean.RetvalBean) getArguments().getSerializable("mcobj");
+        retval = GlobalEntitySingleton.getInstance().getFactoryDetail();
         if (retval == null){//主界面已加载店铺信息
             loadFactoryInfo();
         }else {
@@ -277,6 +288,8 @@ public class FactoryDetailFragment extends BaseFragment {
         }
 
         description_tv.setText(retval.getDescription());
+
+        //代工留言区域中工厂产品系列
         GoodsDetailOemAdpter goodsDetailOemAdpter = new GoodsDetailOemAdpter();
         goodsDetailOemAdpter.refresh(retval.getStore_gcates());
         WidgetUtils.initGridRecyclerView(oemRecycleView, 3, DensityUtils.dp2px(5));
@@ -297,11 +310,28 @@ public class FactoryDetailFragment extends BaseFragment {
     private void initbanner() {
         rib_simple_usage.setSource(bannerItemData).startScroll();
     }
-
-    @OnClick({R.id.message_LL})
+    @OnClick({R.id.message_LL,R.id.submit_tv})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.message_LL:
+            case R.id.submit_tv://界面提交留言
+                ArrayList<Integer> cateSelected = new ArrayList<Integer>();
+                List<GoodsdetailBean.RetvalBean.StoreDataBean.StoreGcatesBean> catesList = retval.getStore_gcates();
+                for (GoodsdetailBean.RetvalBean.StoreDataBean.StoreGcatesBean item:catesList) {
+                    if (item.isaBoolean())cateSelected.add(item.getId());
+                }
+
+                doSubmitMessage(nameEt.getText().toString(),phoneEt.getText().toString(),TextUtils.join(",",cateSelected), true);
+                break;
+            case R.id.message_LL://打开留言弹出层
+                if (msgPop == null){
+                    msgPop = new GoodsDetailPopu(getActivity());
+                    msgPop.setMessageLister(new BaseMessageListener() {
+                        @Override
+                        public boolean submit(String name, String phone) {
+                            return doSubmitMessage(name, phone, "", false);
+                        }
+                    });
+                }
                 BasePopupView popView = new XPopup.Builder(getActivity())
                         .setPopupCallback(new XPopupCallback() {
                             @Override
@@ -326,11 +356,71 @@ public class FactoryDetailFragment extends BaseFragment {
                             }
                         })
                         .dismissOnTouchOutside(true)
-                        .asCustom(new GoodsDetailPopu(getActivity()));
+                        .asCustom(msgPop);
                 popView.popupInfo.popupAnimation = PopupAnimation.ScaleAlphaFromCenter;
                 popView.show();
                 break;
         }
+    }
+
+    /**
+     * 提交留言到服务器
+     * @param name 姓名
+     * @param phone 电话
+     * @param cates 选择的工厂产品系列
+     * @param chkCate 检测产品系列是否选择
+     */
+    private boolean doSubmitMessage(String name, String phone, String cates, boolean chkCate){
+        if (StringUtils.isEmity(name)){
+            ToastUtil.showToast("请填写姓名");
+            return false;
+        }
+
+        if (StringUtils.isEmity(phone)){
+            ToastUtil.showToast("请填写电话");
+            return false;
+        }
+
+        if (chkCate && StringUtils.isEmity(cates)){
+            ToastUtil.showToast("请填写代工系列");
+            return false;
+        }
+
+        showLoading();
+        HashMapSingleton.getInstance().reload();
+        HashMapSingleton.getInstance().put("uname", name);
+        HashMapSingleton.getInstance().put("utel", phone);
+        HashMapSingleton.getInstance().put("lycomId", retval.getStore_id());
+        HashMapSingleton.getInstance().put("lylm", "store");
+        HashMapSingleton.getInstance().put("id", retval.getStore_id());
+        HashMapSingleton.getInstance().put("lyagent", "7");
+        HashMapSingleton.getInstance().put("lycate", cates);
+
+        //提交服务器
+        RemoteRepository.getInstance()
+                .add_message(HashMapSingleton.getInstance())
+                .subscribeWith(new DefaultDisposableSubscriber<BaseBean>() {
+                    @Override
+                    protected void success(BaseBean data) {
+                        dissmissLoading();
+                        if (data.isDone()){
+                            ToastUtil.showToast("留言成功");
+                            if (chkCate){
+                                nameEt.setText("");
+                                phoneEt.setText("");
+                            }
+                        }else {
+                            ToastUtil.showToast(data.getMsg());
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        super.onError(t);
+                        dissmissLoading();
+                    }
+                });
+        return true;
     }
 
     public static void simpleActivity(Context context, String cid) {

@@ -7,8 +7,9 @@
     android:layout_marginTop="@dimen/dp_10"
     android:layout_marginRight="@dimen/dp_10"
     app:cardCornerRadius="@dimen/dp_5"
+    android:elevation="@dimen/dp_0"
     android:id="@+id/cardview"
-    app:cardElevation="@dimen/dp_4">
+    app:cardElevation="@dimen/dp_0">
 
     <LinearLayout
         android:layout_width="match_parent"

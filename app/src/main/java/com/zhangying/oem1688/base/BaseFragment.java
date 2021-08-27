@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.xuexiang.xui.widget.dialog.LoadingDialog;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
 import com.zhangying.oem1688.util.LoadingView;
@@ -25,8 +26,10 @@ public  abstract  class BaseFragment   extends Fragment {
     public View inflate;
     private Unbinder bind;
     public Context context;
-    protected LoadingView loadingView;
 
+    private int loadStyle;
+    protected LoadingView loadingView;
+    protected LoadingDialog loadingView2;
 
     protected abstract int getLayoutId();
 
@@ -60,17 +63,32 @@ public  abstract  class BaseFragment   extends Fragment {
     }
 
     protected void showLoading() {
-        if (loadingView == null) {
-//            progressDialog = new ProgressDialog(context);
-            loadingView = new LoadingView(context, R.style.custom_dialog2);
+        if (loadStyle == 0)return;
+        if (loadStyle == 1){
+            if (loadingView == null) {
+                loadingView = new LoadingView(context, R.style.custom_dialog2);
+            }
+            loadingView.show();
+        }else if (loadStyle == 2){
+            if (loadingView2 == null){
+                loadingView2 = new LoadingDialog(context);
+            }
+
+            loadingView2.show();
         }
-        loadingView.show();
     }
 
 
     protected void dissmissLoading() {
-        if (loadingView != null && loadingView.isShowing()) {
-            loadingView.dismiss();
+        if (loadStyle == 0)return;
+        if (loadStyle == 1) {
+            if (loadingView != null && loadingView.isShowing()) {
+                loadingView.dismiss();
+            }
+        }else if (loadStyle == 2){
+            if (loadingView2 != null && loadingView2.isShowing()) {
+                loadingView2.dismiss();
+            }
         }
     }
 
