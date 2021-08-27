@@ -79,24 +79,24 @@ public class VerticalScrolledListview extends LinearLayout {
                     }
                 });
 
-                TextView txtViewMiddle = new TextView(mContext);
-                lineRow.addView(txtViewMiddle);
-                LinearLayout.LayoutParams layoutParamsM = (LayoutParams) txtViewMiddle.getLayoutParams();
-                layoutParamsM.width = ViewGroup.LayoutParams.WRAP_CONTENT;
-                layoutParamsM.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                layoutParamsM.weight = 1;
+//                TextView txtViewMiddle = new TextView(mContext);
+//                lineRow.addView(txtViewMiddle);
+//                LinearLayout.LayoutParams layoutParamsM = (LayoutParams) txtViewMiddle.getLayoutParams();
+//                layoutParamsM.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+//                layoutParamsM.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+//                layoutParamsM.weight = 1;
 
 
                 //右边文本
                 TextView txtViewRight = new TextView(mContext);
                 txtViewRight.setText(strArr[1]);
                 txtViewRight.setMaxLines(1);
-                txtViewRight.setTextColor(Color.parseColor("#333333"));
+                txtViewRight.setTextColor(Color.parseColor("#999999"));
                 lineRow.addView(txtViewRight);
 
                 LinearLayout.LayoutParams layoutParamsR = (LayoutParams) txtViewRight.getLayoutParams();
                 layoutParamsR.width = ViewGroup.LayoutParams.WRAP_CONTENT;
-                layoutParamsR.setMargins(0, 20, 20, 0);
+                layoutParamsR.setMargins(10, 20, 20, 0);
 
                 txtViewRight.setClickable(true);
                 txtViewRight.setOnClickListener(new OnClickListener() {
