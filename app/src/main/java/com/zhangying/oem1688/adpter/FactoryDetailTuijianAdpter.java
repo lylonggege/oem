@@ -1,6 +1,8 @@
 package com.zhangying.oem1688.adpter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -19,6 +21,8 @@ import com.zhangying.oem1688.util.GlideUtil;
 import com.zhangying.oem1688.view.activity.home.FactoryDetailActivity;
 
 import java.util.List;
+
+import static com.xuexiang.xui.utils.ResUtils.getResources;
 
 public class FactoryDetailTuijianAdpter extends BaseRecyclerAdapter<FactoryDetailBean.RetvalBean.OstoresBean> {
 
@@ -64,6 +68,16 @@ public class FactoryDetailTuijianAdpter extends BaseRecyclerAdapter<FactoryDetai
         }
         cate_tv.setText(item.getStoretip() + item.getService());
 
+        String sColor = item.getScolor();
+        LinearLayout dian = holder.findViewById(R.id.dian);
+        GradientDrawable drawable = (GradientDrawable) dian.getBackground();
+        if (sColor.length() > 0){
+            drawable.setStroke(2, Color.parseColor(sColor));//设置边框的宽度和颜色
+            companyname_authtag_tv.setBackgroundColor(Color.parseColor(sColor));
+        }else {
+            drawable.setStroke(2, getResources().getColor(R.color.redf04142));
+        }
+
         List<FactoryDetailBean.RetvalBean.storetagsBean> storetags = item.getStoretags();
         if (storetags.size() > 0) {
             if (storetags.get(0) != null) {
@@ -72,7 +86,7 @@ public class FactoryDetailTuijianAdpter extends BaseRecyclerAdapter<FactoryDetai
                 tuijian_tv.setVisibility(View.GONE);
             }
 
-            if (storetags.get(1) != null) {
+            if (storetags.size() >= 2 && storetags.get(1) != null) {
                 company_verification_tv.setText(storetags.get(1).getStag());
             } else {
                 company_verification_tv.setVisibility(View.GONE);

@@ -302,7 +302,7 @@ public class NewProductFactoryActivity extends BaseActivity implements BaseView 
 
                         CompanyFactoryBean.RetvalBean retval = data.getRetval();
                         title_TV.setText(name + "OEM,ODM贴牌工厂-代工帮");
-                        title_TV.setTypeface(Typeface.DEFAULT_BOLD);
+                        //title_TV.setTypeface(Typeface.DEFAULT_BOLD);
                         option = new String[retval.getOemcate().size()];
                         mTimeOption1 = new String[retval.getOemcate().size()][];
                         option_id = new String[retval.getOemcate().size()];

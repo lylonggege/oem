@@ -1,5 +1,7 @@
 package com.zhangying.oem1688.view.activity.entry;
 
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -20,6 +22,7 @@ import com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText;
 import com.xuexiang.xui.widget.textview.supertextview.SuperButton;
 import com.xuexiang.xutil.app.ActivityUtils;
 import com.xuexiang.xutil.common.RandomUtils;
+import com.xuexiang.xutil.common.StringUtils;
 import com.xuexiang.xutil.display.Colors;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.base.BaseActivity;
@@ -32,7 +35,9 @@ import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.util.LogUtil;
 import com.zhangying.oem1688.util.MD5Util;
 import com.zhangying.oem1688.util.ToastUtil;
+import com.zhangying.oem1688.util.TokenUtils;
 import com.zhangying.oem1688.view.activity.MainActivity;
+import com.zhangying.oem1688.view.activity.home.FactoryDetailActivity;
 import com.zhangying.oem1688.view.activity.my.ResetpasswordActivity;
 
 import org.json.JSONObject;
@@ -91,8 +96,6 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         StatusBarUtils.initStatusBarStyle(this, false, Colors.TRANSPARENT);
         mCountDownHelper = new CountDownButtonHelper(btnGetVerifyCode, 60);
-
-
     }
 
     @Override
@@ -168,6 +171,17 @@ public class LoginActivity extends BaseActivity {
                 });
     }
 
+    //判断是否登录，未登录则打开登录界面
+    public static Boolean simpleActivity(Context context) {
+        String token = TokenUtils.getToken();
+        if (!StringUtils.isEmpty(token)) {
+            return true;
+        }
+        Intent intent = new Intent(context, LoginActivity.class);
+        context.startActivity(intent);
+        return false;
+    }
+
     private void phonelogin(String phone, String code) {
 //        HashMap<String, Object> map = new HashMap<>();
 //        map.put("ly", "app");
@@ -237,9 +251,7 @@ public class LoginActivity extends BaseActivity {
                         }
                     }
                 } catch (Exception exception) {
-
                 }
-
             }
         });
 
@@ -259,7 +271,6 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-
                 try {
                     String string = response.body().string();
                     LogUtil.e("url===", string);
@@ -280,7 +291,6 @@ public class LoginActivity extends BaseActivity {
                     //  ToastUtil.showToast("微信获取数据异常");
                     finish();
                 }
-
             }
         });
 

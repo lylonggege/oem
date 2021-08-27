@@ -6,6 +6,9 @@ import com.google.gson.internal.LinkedTreeMap;
 
 import androidx.core.widget.NestedScrollView;
 
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
@@ -15,6 +18,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.core.BasePopupView;
+import com.lxj.xpopup.enums.PopupAnimation;
 import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.xuexiang.xui.utils.DensityUtils;
 import com.xuexiang.xui.utils.WidgetUtils;
@@ -102,7 +107,7 @@ public class FactoryDetailFragment extends BaseFragment {
     private static String mcid;
     private FactoryDetailBean.RetvalBean retval;
     private boolean ishomne = true;
-
+    FactoryDetailCatesAdpter factoryDetailCatesAdpter;
 
     @Override
     protected int getLayoutId() {
@@ -111,38 +116,34 @@ public class FactoryDetailFragment extends BaseFragment {
 
     @Override
     public void initView() {
+        companynameTv.getPaint().setStyle(Paint.Style.FILL_AND_STROKE);
+        companynameTv.getPaint().setStrokeWidth(0.5f);
+
         //初始化工厂产品列表
-        FactoryDetailCatesAdpter factoryDetailCatesAdpter = new FactoryDetailCatesAdpter(getActivity());
+        factoryDetailCatesAdpter = new FactoryDetailCatesAdpter(getActivity());
         WidgetUtils.initRecyclerView(myRecycleView_gcates);
         myRecycleView_gcates.setAdapter(factoryDetailCatesAdpter);
 
         mcid = getArguments().getString("mcid");
-        HashMapSingleton.getInstance().clear();
-        HashMapSingleton.getInstance().put("ly", "app");
+        retval = (FactoryDetailBean.RetvalBean) getArguments().getSerializable("mcobj");
+        if (retval == null){//主界面已加载店铺信息
+            loadFactoryInfo();
+        }else {
+            renderFactoryInfo();
+        }
+    }
+
+    private void loadFactoryInfo(){
+        HashMapSingleton.getInstance().reload();
         HashMapSingleton.getInstance().put("cid", mcid);
         RemoteRepository.getInstance()
                 .get_store(HashMapSingleton.getInstance())
                 .subscribeWith(new DefaultDisposableSubscriber<FactoryDetailBean>() {
-
                     @Override
                     protected void success(FactoryDetailBean data) {
                         dissmissLoading();
                         retval = data.getRetval();
-                        //初始化公司基本信息
-                        initCompanyBase(retval);
-
-                        //产品分类
-                        if (retval.getGcates().size() > 0) {
-                            factoryDetailCatesAdpter.refresh(retval.getGcates());
-                            Message message = new Message();
-                            message.what = 1;
-                            handler.sendMessageDelayed(message, 1500);
-                        } else {
-                            myRecycleView_gcates.setVisibility(View.GONE);
-                        }
-
-                        //图片列表或者
-                        initCompanySpage(retval);
+                        renderFactoryInfo();
                     }
 
                     @Override
@@ -151,6 +152,23 @@ public class FactoryDetailFragment extends BaseFragment {
                         dissmissLoading();
                     }
                 });
+    }
+
+    private void renderFactoryInfo(){
+        //初始化公司基本信息
+        initCompanyBase(retval);
+
+        //产品分类
+        if (retval.getGcates().size() > 0) {
+            factoryDetailCatesAdpter.refresh(retval.getGcates());
+            Message message = new Message();
+            message.what = 1;
+            handler.sendMessageDelayed(message, 1500);
+        } else {
+            myRecycleView_gcates.setVisibility(View.GONE);
+        }
+        //图片列表或者
+        initCompanySpage(retval);
     }
 
     //初始化公司页面模板
@@ -207,11 +225,20 @@ public class FactoryDetailFragment extends BaseFragment {
                 BannerItem bannerItembean = new BannerItem();
                 bannerItembean.setImgUrl(slide.getUrl());
                 bannerItemData.add(bannerItembean);
-
             }
             initbanner();
         } else {
             rib_simple_usage.setVisibility(View.GONE);
+        }
+
+        //非vip设置颜色
+        String sColor = retval.getScolor();
+        GradientDrawable drawable = (GradientDrawable) dian.getBackground();
+        if (sColor.length() > 0){
+            drawable.setStroke(2, Color.parseColor(sColor));//设置边框的宽度和颜色
+            companynameAuthtagTv.setBackgroundColor(Color.parseColor(sColor));
+        }else {
+            drawable.setStroke(2, getResources().getColor(R.color.redf04142));
         }
 
         GlideUtil.loadImage(getActivity(), retval.getStore_logo(), companyLogeIv);
@@ -223,7 +250,6 @@ public class FactoryDetailFragment extends BaseFragment {
         } else {
             companyStoretimeTv.setVisibility(View.GONE);
         }
-
         cateTv.setText(retval.getStoretip() + retval.getService());
 
         List<FactoryDetailBean.RetvalBean.storetagsBean> storetags = retval.getStoretags();
@@ -251,8 +277,6 @@ public class FactoryDetailFragment extends BaseFragment {
         }
 
         description_tv.setText(retval.getDescription());
-
-
         GoodsDetailOemAdpter goodsDetailOemAdpter = new GoodsDetailOemAdpter();
         goodsDetailOemAdpter.refresh(retval.getStore_gcates());
         WidgetUtils.initGridRecyclerView(oemRecycleView, 3, DensityUtils.dp2px(5));
@@ -278,21 +302,18 @@ public class FactoryDetailFragment extends BaseFragment {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.message_LL:
-                new XPopup.Builder(getActivity())
+                BasePopupView popView = new XPopup.Builder(getActivity())
                         .setPopupCallback(new XPopupCallback() {
                             @Override
                             public void onCreated() {
-
                             }
 
                             @Override
                             public void beforeShow() {
-
                             }
 
                             @Override
                             public void onShow() {
-
                             }
 
                             @Override
@@ -305,9 +326,9 @@ public class FactoryDetailFragment extends BaseFragment {
                             }
                         })
                         .dismissOnTouchOutside(true)
-                        .asCustom(new GoodsDetailPopu(getActivity()))
-                        .show();
-
+                        .asCustom(new GoodsDetailPopu(getActivity()));
+                popView.popupInfo.popupAnimation = PopupAnimation.ScaleAlphaFromCenter;
+                popView.show();
                 break;
         }
     }

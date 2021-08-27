@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,6 +19,8 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.core.BasePopupView;
+import com.lxj.xpopup.enums.PopupAnimation;
 import com.lxj.xpopup.interfaces.OnConfirmListener;
 import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.xuexiang.xui.utils.DensityUtils;
@@ -35,6 +38,7 @@ import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.mvp.leave.DateBean;
 import com.zhangying.oem1688.mvp.leave.LeaveMessagePersenterImpl;
 import com.zhangying.oem1688.onterface.BasePresenter;
+import com.zhangying.oem1688.onterface.BaseValidateCredentials;
 import com.zhangying.oem1688.onterface.BaseView;
 import com.zhangying.oem1688.popu.GoodsDetailPopu;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
@@ -147,10 +151,20 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
 
     private BasePresenter basePresenter;
     private boolean ishomne = true;
+    private BaseValidateCredentials fenLeiRealization;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        companynameTv.getPaint().setStyle(Paint.Style.FILL_AND_STROKE);
+        companynameTv.getPaint().setStrokeWidth(1.0f);
+
+        goods_name.getPaint().setStyle(Paint.Style.FILL_AND_STROKE);
+        goods_name.getPaint().setStrokeWidth(1.0f);
+
+        fenLeiRealization = new FenLeiRealization(this, this);
+
         setHomeCateSate(ishomne);
         AppManagerUtil.getInstance().addHomeActivity(this);
         showLoading();
@@ -205,7 +219,6 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
         GlideUtil.loadImage(this, store_data.getStore_logo(), company_loge_iv);
         companynameTv.setText(store_data.getStore_name());
         companyname_authtag_tv.setText(store_data.getAuthtag());
-        company_storetime_tv.setText(store_data.getStoretime());
         cateTv.setText(store_data.getStoretip() + store_data.getService());
         List<GoodsdetailBean.RetvalBean.goods_tagsBean> goods_tags = store_data.getStoretags();
         if (goods_tags.size() > 0) {
@@ -220,6 +233,16 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
             } else {
                 company_verification_tv.setVisibility(View.GONE);
             }
+        }else {
+            company_verification_tv.setVisibility(View.GONE);
+            tuijianTv.setVisibility(View.GONE);
+        }
+
+        String storetime = store_data.getStoretime();
+        if (storetime.length() > 0) {
+            company_storetime_tv.setText(storetime);
+        } else {
+            company_storetime_tv.setVisibility(View.GONE);
         }
 
         //非vip设置颜色
@@ -247,8 +270,6 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
         shopBSpDbTv.setText(store_data.getEndbtn2());
         rootViewPhone.setText(store_data.getEndbtn3());
         rootViewLine.setText(store_data.getEndbtn4());
-
-
     }
 
     //产品详情
@@ -281,9 +302,7 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
         goodsDetailTuijianAdpter.refresh(goods.getOgoods());
         WidgetUtils.initGridRecyclerView(tuijianRecycleView, 3, DensityUtils.dp2px(5));
         tuijianRecycleView.setAdapter(goodsDetailTuijianAdpter);
-
     }
-
 
     /**
      * @param context
@@ -306,7 +325,7 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
                 finish();
                 break;
             case R.id.message_LL:
-                new XPopup.Builder(this)
+                BasePopupView popView = new XPopup.Builder(this)
                         .setPopupCallback(new XPopupCallback() {
                             @Override
                             public void onCreated() {
@@ -334,9 +353,9 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
                             }
                         })
                         .dismissOnTouchOutside(true)
-                        .asCustom(new GoodsDetailPopu(this))
-                        .show();
-
+                        .asCustom(new GoodsDetailPopu(this));
+                popView.popupInfo.popupAnimation = PopupAnimation.ScaleAlphaFromCenter;
+                popView.show();
                 break;
             case R.id.submit_tv:
                 String name = nameEt.getText().toString();
@@ -374,10 +393,10 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
 
                 break;
             case R.id.rootView_shop_b_dp_ll:
-
+                FactoryDetailActivity.simpleActivity(this,store_data.getStore_id(),0);
                 break;
             case R.id.rootView_shop_b_sp_ll:
-
+                FactoryDetailActivity.simpleActivity(this,store_data.getStore_id(), 1);
                 break;
             case R.id.rootView_shop_b_sc_ll:
                 int has_collect = store_data.getHas_collect();
@@ -388,7 +407,6 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
                 }
                 break;
             case R.id.rootView_phone:
-
                 new XPopup.Builder(this)
                         .hasShadowBg(true)
                         .asConfirm("提示", store_data.getEndbtn3() + "    " + store_data.getTel(),
@@ -418,29 +436,13 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
                         .show();
 
                 break;
-            case R.id.rootView_line:
+            case R.id.rootView_line://打开微信客服
                 WeiXinActivity.init(this);
                 break;
-            case R.id.imageView2:
-                FenLeiRealization fenLeiRealization = new FenLeiRealization(this, new BaseView() {
-                    @Override
-                    public void showloading() {
-                        showLoading();
-                    }
-
-                    @Override
-                    public void hidenloading() {
-                        dissmissLoading();
-                    }
-
-                    @Override
-                    public void success(Object o) {
-
-                    }
-                });
-                fenLeiRealization.realization();
+            case R.id.imageView2://顶部导航右侧显示平台全部分类
+                fenLeiRealization.validateCredentials();
                 break;
-            case R.id.textView:
+            case R.id.textView://打开搜索界面
                 SearchActivity.simpleActivity(this);
                 break;
         }

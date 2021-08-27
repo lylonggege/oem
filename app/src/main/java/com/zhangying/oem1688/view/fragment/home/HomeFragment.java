@@ -23,6 +23,9 @@ import androidx.viewpager.widget.ViewPager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.xuexiang.xui.adapter.recyclerview.GridDividerItemDecoration;
 import com.xuexiang.xui.adapter.recyclerview.XGridLayoutManager;
 import com.xuexiang.xui.utils.DensityUtils;
@@ -38,6 +41,8 @@ import com.zhangying.oem1688.adpter.ScatehdMenuAdpter;
 import com.zhangying.oem1688.adpter.ViewPagerAdapter;
 import com.zhangying.oem1688.base.BaseFragment;
 import com.zhangying.oem1688.bean.HomeBena;
+import com.zhangying.oem1688.bean.HomeGoodsBean;
+import com.zhangying.oem1688.bean.ListCollectBean;
 import com.zhangying.oem1688.bean.RecomendIndexBean;
 import com.zhangying.oem1688.custom.MyRecycleView;
 import com.zhangying.oem1688.custom.VerticalScrolledListview;
@@ -45,9 +50,11 @@ import com.zhangying.oem1688.custom.WrapContentHeightViewPager;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
+import com.zhangying.oem1688.util.MD5Util;
 import com.zhangying.oem1688.util.ScreenTools;
 import com.zhangying.oem1688.util.SpacesItemDecoration;
 import com.zhangying.oem1688.util.ToastUtil;
+import com.zhangying.oem1688.util.TokenUtils;
 import com.zhangying.oem1688.view.activity.home.FindFactoryActivity;
 import com.zhangying.oem1688.view.activity.home.FindProductActivity;
 import com.zhouwei.mzbanner.MZBannerView;
@@ -58,6 +65,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.Console;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -108,6 +116,9 @@ public class HomeFragment extends BaseFragment {
     private ArrayList<String> marqueeViewList = new ArrayList<>();
     private HomeSzhshAdpter home_szhshAdpter;
     private HomeGoodAdpter home_goodAdpter;
+    @BindView(R.id.refresh_layout)
+    SmartRefreshLayout refreshLayout;
+    private int page = 1;
 
     @Override
     protected int getLayoutId() {
@@ -116,7 +127,6 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     public void initView() {
-
         //设置标题“帮我找工厂、承接代加工”加粗度
         float boldRate = 1.2f;
         help_bold_1.getPaint().setStyle(Paint.Style.FILL_AND_STROKE);
@@ -142,6 +152,7 @@ public class HomeFragment extends BaseFragment {
             instance.put("ly", "app");
             gethome(instance, 0);
         } else {
+            page = 1;
             //字体轮播布局隐藏
             lunbo_RL.setVisibility(View.GONE);
             marqueeView_LL.setVisibility(View.GONE);
@@ -151,8 +162,12 @@ public class HomeFragment extends BaseFragment {
             instance.put("type", cate_id);
             getrecomendindex(instance, 1);
             view_bg.setVisibility(View.GONE);
+
+            loadMoreGoods();
         }
         init();
+        //初始化下拉加载
+        initRefresh();
     }
 
     /**
@@ -305,7 +320,6 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void getrecomendindex(HashMapSingleton instance, int type) {
-
         RemoteRepository.getInstance()
                 .getrecomendindex(instance)
                 .subscribeWith(new DefaultDisposableSubscriber<RecomendIndexBean>() {
@@ -340,14 +354,16 @@ public class HomeFragment extends BaseFragment {
         for (int i = 0; i < scinfolist.size(); i++) {
             HomeBena.RetvalBean.ScinfolistBean scinfolistBean = scinfolist.get(i);
             try {
-                String name = strAppendStr(scinfolistBean.getName(), 8, "  ");
-                strings.add(name + scinfolistBean.getPhone() + "      " + scinfolistBean.getTitle());
+                //String name = strAppendStr(scinfolistBean.getName(), 8, "  ");
+                String name = scinfolistBean.getName();
+                strings.add(name + "("+scinfolistBean.getPhone() + ")," + scinfolistBean.getTitle());
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
         }
         VerticalScrolledListview verticalScrolledListview = new VerticalScrolledListview(context);
+        verticalScrolledListview.setPadding(0,10,0,10);
         verticalScrolledListview.setData(strings);
         lunbo_RL.addView(verticalScrolledListview);
     }
@@ -382,12 +398,10 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void initbanner(List<HomeBena.RetvalBean.SbannerBean> sbanner) {
-
         try {
             /**
              * 图片轮播的简单使用
              */
-
             RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) bannerView.getLayoutParams();
             layoutParams.width = ScreenTools.instance(context).getScreenWidth() - ScreenTools.instance(context).dip2px(20);
             layoutParams.height = layoutParams.width * 260 / 720;
@@ -402,10 +416,57 @@ public class HomeFragment extends BaseFragment {
         } catch (Exception e) {
 
         }
-
-
     }
 
+    //初始化下拉加载
+    private void initRefresh() {
+        refreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
+            @Override
+            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+                page++;
+                loadMoreGoods();
+                refreshLayout.finishLoadMore();
+            }
+
+            @Override
+            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+                page = 1;
+                loadMoreGoods();
+                refreshLayout.finishRefresh();
+            }
+        });
+    }
+
+    //加载更多商品
+    private void loadMoreGoods() {
+        long timestamp = System.currentTimeMillis() / 1000;
+        HashMapSingleton.getInstance().clear();
+        HashMapSingleton.getInstance().put("page", page);
+        HashMapSingleton.getInstance().put("recomid", "999");
+        HashMapSingleton.getInstance().put("ly", "app");
+        if (!cate_id.equals("-999")) {
+            HashMapSingleton.getInstance().put("cateid", cate_id);
+        }
+        RemoteRepository.getInstance()
+                .home_goods_more(HashMapSingleton.getInstance())
+                .subscribeWith(new DefaultDisposableSubscriber<HomeGoodsBean>() {
+
+                    @Override
+                    protected void success(HomeGoodsBean data) {
+                        List<HomeBena.RetvalBean.SgoodsListBean.GoodsBean> recordList = data.getRetval();
+                        if (page == 1) {
+                            home_goodAdpter.refresh(recordList);
+                        } else {
+                            home_goodAdpter.loadMore(recordList);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        super.onError(t);
+                    }
+                });
+    }
 
     /**
      * 设置字符长度  不足者 右侧添加 指定字符
@@ -522,5 +583,4 @@ public class HomeFragment extends BaseFragment {
     public void onDestroy() {
         super.onDestroy();
     }
-
 }

@@ -11,6 +11,7 @@ import com.zhangying.oem1688.bean.FactoryGCateBean;
 import com.zhangying.oem1688.bean.FactoryGoodsBean;
 import com.zhangying.oem1688.bean.GoodsdetailBean;
 import com.zhangying.oem1688.bean.HomeBena;
+import com.zhangying.oem1688.bean.HomeGoodsBean;
 import com.zhangying.oem1688.bean.HomeTabBean;
 import com.zhangying.oem1688.bean.ListCollectBean;
 import com.zhangying.oem1688.bean.ListHistoryBean;
@@ -198,6 +199,10 @@ public interface ApiService {
     //Factory - 工厂或产品分页
     @GET("?app=xcxindex&act=moreprostore")
     Flowable<MoreProstoreBean> moreprostore(@QueryMap HashMap<String, Object> hashMap);
+
+    //首页 - 加载更多商品
+    @GET("?app=xcxindex&act=goods_more")
+    Flowable<HomeGoodsBean> home_goods_more(@QueryMap HashMap<String, Object> hashMap);
 
     //Member - 浏览足迹
     @GET("?app=default&act=list_history&ly=app")

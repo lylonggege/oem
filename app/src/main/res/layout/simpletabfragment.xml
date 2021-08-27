@@ -10,7 +10,6 @@
         android:layout_height="wrap_content"
         android:fillViewport="true">
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -279,35 +278,26 @@
                             android:layout_centerVertical="true"
                             android:layout_marginRight="@dimen/dp_10"
                             android:background="@drawable/help_zpps">
-
                         </ImageView>
-
                     </RelativeLayout>
-
-
                 </LinearLayout>
             </LinearLayout>
 
-
             //多条字体轮播
-
             <RelativeLayout
                 android:id="@+id/lunbo_RL"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_150"
+                android:layout_height="@dimen/dp_190"
                 android:layout_margin="@dimen/dp_10"
                 android:background="@drawable/rb_bg_disabled_lunbo">
-
             </RelativeLayout>
 
             //列表
-
             <com.zhangying.oem1688.custom.MyRecycleView
                 android:id="@+id/recycView_szhshlist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_10">
-
             </com.zhangying.oem1688.custom.MyRecycleView>
 
             <RelativeLayout
@@ -315,18 +305,15 @@
                 android:layout_height="wrap_content"
                 android:background="@color/f6"
                 android:padding="@dimen/dp_10">
-
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_centerInParent="true"
                     android:orientation="horizontal">
-
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/renqi_jx">
-
                     </ImageView>
 
                     <TextView
@@ -340,23 +327,39 @@
                         android:textColor="@color/b3"
                         android:textSize="@dimen/dp_16"
                         android:textStyle="bold"></TextView>
-
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/renqi_jx">
-
                     </ImageView>
                 </LinearLayout>
 
-
             </RelativeLayout>
 
-            <com.zhangying.oem1688.custom.MyRecycleView
-                android:id="@+id/recycView_sgoodlist"
+            <com.scwang.smartrefresh.layout.SmartRefreshLayout
+                android:id="@+id/refresh_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/f6"></com.zhangying.oem1688.custom.MyRecycleView>
+                android:layout_height="match_parent">
+                <com.scwang.smartrefresh.layout.header.ClassicsHeader
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <androidx.core.widget.NestedScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <com.zhangying.oem1688.custom.MyRecycleView
+                        android:id="@+id/recycView_sgoodlist"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="@dimen/dp_5"
+                        android:background="@color/f6">
+                    </com.zhangying.oem1688.custom.MyRecycleView>
+                </androidx.core.widget.NestedScrollView>
+
+                <com.scwang.smartrefresh.layout.footer.ClassicsFooter
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

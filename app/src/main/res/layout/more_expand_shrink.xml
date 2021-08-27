@@ -16,7 +16,7 @@
         tools:text="..." />
 
     <LinearLayout
-        android:background="#33000000"
+        android:background="@drawable/factory_expand"
         android:id="@+id/ll_expand"
         android:layout_width="match_parent"
         android:layout_height="30dp"

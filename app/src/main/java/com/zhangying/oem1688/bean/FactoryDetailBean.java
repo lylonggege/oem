@@ -1,5 +1,6 @@
 package com.zhangying.oem1688.bean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,7 +79,7 @@ public class FactoryDetailBean {
         this.retval = retval;
     }
 
-    public static class RetvalBean {
+    public static class RetvalBean implements Serializable {
         private int store_id;
         private String store_name;
         private String store_video;

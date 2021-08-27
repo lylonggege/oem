@@ -14,7 +14,7 @@
     <com.zhangying.oem1688.custom.MySlidingTabLayout
         android:id="@+id/parent_tab_indictor"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_42"
+        android:layout_height="@dimen/dp_36"
         android:layout_centerVertical="true"
         android:background="@color/app_blue"
         android:nestedScrollingEnabled="true"
@@ -25,10 +25,10 @@
         app:tl_indicator_width_equal_title="true"
         app:tl_tab_padding="@dimen/dp_8"
         app:tl_tab_space_equal="false"
-        app:tl_textBold="BOTH"
+        app:tl_textBold="SELECT"
         app:tl_textSelectColor="@color/white"
-        app:tl_textSelectSize="@dimen/dp_19"
-        app:tl_textUnSelectSize="@dimen/dp_18"
+        app:tl_textSelectSize="@dimen/dp_18"
+        app:tl_textUnSelectSize="@dimen/dp_17"
         app:tl_textUnselectColor="@color/white" />
 
     <androidx.viewpager.widget.ViewPager

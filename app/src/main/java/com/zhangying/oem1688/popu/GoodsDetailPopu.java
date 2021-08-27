@@ -9,9 +9,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.lxj.xpopup.core.DrawerPopupView;
+import com.lxj.xpopup.core.PositionPopupView;
 import com.zhangying.oem1688.R;
 
-public class GoodsDetailPopu extends DrawerPopupView {
+public class GoodsDetailPopu extends PositionPopupView {
 
     private EditText name_et_popu;
     private EditText phone_et_popu;

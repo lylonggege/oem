@@ -1,5 +1,6 @@
 package com.zhangying.oem1688.custom;
 
+import android.content.Context;
 import android.view.View;
 
 import androidx.fragment.app.FragmentActivity;
@@ -17,12 +18,12 @@ import com.zhangying.oem1688.popu.PinLeiPopu;
 
 public class FenLeiRealization implements BaseValidateCredentials {
 
-    public FenLeiRealization(FragmentActivity fragmentActivity, BaseView baseView) {
+    public FenLeiRealization(Context fragmentActivity, BaseView baseView) {
         this.fragmentActivity = fragmentActivity;
         this.mbaseView = baseView;
     }
     private BaseView mbaseView;
-    private FragmentActivity fragmentActivity;
+    private Context fragmentActivity;
     private PinLeiPopu pinLeiView;
 
     public void realization() {

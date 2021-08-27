@@ -25,6 +25,7 @@ public class VerticalScrolledListview extends LinearLayout {
 
     public VerticalScrolledListview(Context context) {
         super(context);
+
         init(context);
     }
 
@@ -50,17 +51,55 @@ public class VerticalScrolledListview extends LinearLayout {
 
     private void initTextView() {
         if (data != null && data.size() != 0) {
+            String[] strArr = null;
             for (int i = 0; i < data.size(); i++) {
-                TextView textView = new TextView(mContext);
-                textView.setText(data.get(i));
-                textView.setMaxLines(1);
-                textView.setTextColor(Color.BLACK);
-                this.addView(textView);
-                LinearLayout.LayoutParams layoutParams = (LayoutParams) textView.getLayoutParams();
-                layoutParams.setMargins(20, 20, 20, 0);
-                textView.setClickable(true);
+                LinearLayout lineRow = new LinearLayout(mContext);
+                lineRow.setOrientation(HORIZONTAL);
+                this.addView(lineRow);
+
+                strArr = data.get(i).split(",");
+
+                //左边文本
+                TextView txtViewLeft = new TextView(mContext);
+                txtViewLeft.setText(strArr[0]);
+                txtViewLeft.setMaxLines(1);
+                txtViewLeft.setTextColor(Color.parseColor("#333333"));
+                lineRow.addView(txtViewLeft);
+
+                LinearLayout.LayoutParams layoutParamsL = (LayoutParams) txtViewLeft.getLayoutParams();
+                layoutParamsL.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+                layoutParamsL.setMargins(20, 20, 10, 0);
+
+                txtViewLeft.setClickable(true);
                 final int index = i;
-                textView.setOnClickListener(new OnClickListener() {
+                txtViewLeft.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        itemClickListener.onItemClick(index);
+                    }
+                });
+
+                TextView txtViewMiddle = new TextView(mContext);
+                lineRow.addView(txtViewMiddle);
+                LinearLayout.LayoutParams layoutParamsM = (LayoutParams) txtViewMiddle.getLayoutParams();
+                layoutParamsM.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+                layoutParamsM.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                layoutParamsM.weight = 1;
+
+
+                //右边文本
+                TextView txtViewRight = new TextView(mContext);
+                txtViewRight.setText(strArr[1]);
+                txtViewRight.setMaxLines(1);
+                txtViewRight.setTextColor(Color.parseColor("#333333"));
+                lineRow.addView(txtViewRight);
+
+                LinearLayout.LayoutParams layoutParamsR = (LayoutParams) txtViewRight.getLayoutParams();
+                layoutParamsR.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+                layoutParamsR.setMargins(0, 20, 20, 0);
+
+                txtViewRight.setClickable(true);
+                txtViewRight.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         itemClickListener.onItemClick(index);
@@ -115,7 +154,7 @@ public class VerticalScrolledListview extends LinearLayout {
                              * 此处必须这么处理，先removeview子view，解除与父类关系，再添加进去
                              * 否则会报错java.lang.IllegalStateException
                              */
-                            TextView newView = (TextView) viewGroup.getChildAt(0);
+                            LinearLayout newView = (LinearLayout) viewGroup.getChildAt(0);
                             viewGroup.removeView(viewGroup.getChildAt(0));
                             viewGroup.addView(newView);
                         }

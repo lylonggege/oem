@@ -126,11 +126,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     layout="@layout/company_factory_tab_viewgrounp"></include>
-
             </RelativeLayout>
-
-
-
 
             <com.scwang.smartrefresh.layout.SmartRefreshLayout
                 android:id="@+id/refresh_layout"
@@ -153,18 +149,15 @@
                             android:id="@+id/recycview"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
-
                         </com.zhangying.oem1688.custom.MyRecycleView>
 
                         <com.zhangying.oem1688.custom.MyRecycleView
                             android:id="@+id/goodsrecycview"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
+                            android:layout_height="match_parent"
+                            android:paddingHorizontal="@dimen/dp_5">
                         </com.zhangying.oem1688.custom.MyRecycleView>
                     </RelativeLayout>
-
-
                 </androidx.core.widget.NestedScrollView>
 
                 <com.scwang.smartrefresh.layout.footer.ClassicsFooter

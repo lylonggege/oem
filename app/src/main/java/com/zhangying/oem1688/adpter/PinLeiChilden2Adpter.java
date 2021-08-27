@@ -22,14 +22,13 @@ public class PinLeiChilden2Adpter extends BaseRecyclerAdapter<SitetopinfoBean.Re
     public void setJumPage(IJumPage jumPage) {
         this.jumPage = jumPage;
     }
-
     private IJumPage jumPage;
+
     private Context context;
 
     public void setStoreid(String storeid) {
         this.storeid = storeid;
     }
-
     private String storeid;
 
     @Override
@@ -47,7 +46,7 @@ public class PinLeiChilden2Adpter extends BaseRecyclerAdapter<SitetopinfoBean.Re
                 int stype = 1;
                 String sid = storeid + "_" + item.getCateid();
                 JumpViewPage jumpViewPage = new JumpViewPage();
-                jumpViewPage.intentActivity(context, stype, sid, item.getCatename());
+                jumpViewPage.intentActivity(context, stype, sid, item.getCatename(), "工厂");
                 jumPage.success();
             }
         });

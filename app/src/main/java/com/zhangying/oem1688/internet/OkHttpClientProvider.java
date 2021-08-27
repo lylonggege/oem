@@ -62,6 +62,8 @@ public class OkHttpClientProvider {
                         .retryOnConnectionFailure(true)
                         .addInterceptor(new ParamsInterceptor())
                         .addInterceptor(new LoggerInterceptor())
+                        .addInterceptor(new AddCookiesInterceptor())
+                        .addInterceptor(new ReceivedCookiesInterceptor())
 //                        .addInterceptor(new Interceptor() {
 //                            @Override
 //                            public Response intercept(Chain chain) throws IOException {

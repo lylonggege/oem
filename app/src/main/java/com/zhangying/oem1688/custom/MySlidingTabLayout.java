@@ -428,6 +428,8 @@ public class MySlidingTabLayout extends HorizontalScrollView implements ViewPage
                         if(isSelect){
                             tab_title.getPaint().setStyle(Paint.Style.FILL_AND_STROKE);
                             tab_title.getPaint().setStrokeWidth(1.0f);
+                        }else {
+                            tab_title.getPaint().setStyle(Paint.Style.FILL);
                         }
                     }
                 }

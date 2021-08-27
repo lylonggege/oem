@@ -10,8 +10,6 @@ import java.util.regex.Pattern;
 
 
 public class MyUtilsWebView {
-
-
     private final static Pattern ATTR_PATTERN = Pattern.compile("<img[^<>]*?\\ssrc=['\"]?(.*?)['\"]?\\s.*?>", Pattern.CASE_INSENSITIVE);
     //替换body里面的图片路径问题
     public static String getAbsSource(String source, String bigpath) {
@@ -43,7 +41,7 @@ public class MyUtilsWebView {
                 "    <meta name=\"viewport\" content=\"initial-scale=1, maximum-scale=1,\n" +
                 "    user-scalable=no, width=device-width\"/>\n" +
                 "    <style>" +
-                "       body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td,hr,button,article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{margin:0;padding:0}" +
+                "       body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td,hr,button,article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{margin:0;padding:0;font-size:15px;color:#333333;}" +
                 "       p{\n" +
                 "            word-wrap : break-word;\n" +
                 "            max-height: none!important;\n" +

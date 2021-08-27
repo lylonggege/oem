@@ -91,7 +91,7 @@ public class PinLeiPopu extends PositionPopupView {
             }
         });
         pinLeiChilden1Adpter.refresh(catelist.get(0).getChildren());
-        pinLeiChilden1Adpter.setStoreid(catelist.get(0).getCateid()+"");
+        pinLeiChilden1Adpter.setStoreid(catelist.get(0).getCateid());
         content_tv_1.setText(catelist.get(0).getCatename());
         MyRecycleView_1.setAdapter(pinLeiChilden1Adpter);
         MyRecycleView_2.setAdapter(pinLeiChilden2Adpter);
@@ -108,10 +108,12 @@ public class PinLeiPopu extends PositionPopupView {
                     for (int i = 0; i < catelist.size(); i++) {
                         if (i == position) {
                             catelist.get(position).setaBoolean(true);
+
+                            int maxId = getMaxCate(catelist,catelistBean.getCateid());
                             //设置子类
                             List<SitetopinfoBean.RetvalBean.childrenBean> children = catelist.get(position).getChildren();
                             pinLeiChilden1Adpter.refresh(children);
-                            pinLeiChilden1Adpter.setStoreid(catelist.get(position).getCateid()+"");
+                            pinLeiChilden1Adpter.setStoreid(maxId);
                         } else {
                             catelist.get(i).setaBoolean(false);
                         }
@@ -125,7 +127,7 @@ public class PinLeiPopu extends PositionPopupView {
                             //设置子类
                             List<SitetopinfoBean.RetvalBean.childrenBean> children = catelist.get(position).getChildren();
                             pinLeiChilden2Adpter.refresh(children);
-                            pinLeiChilden1Adpter.setStoreid(catelist.get(position).getCateid()+"");
+                            pinLeiChilden1Adpter.setStoreid(catelist.get(position).getCateid());
                         } else {
                             catelist.get(i).setaBoolean(false);
                         }
@@ -139,10 +141,33 @@ public class PinLeiPopu extends PositionPopupView {
         MyRecycleView_left.setAdapter(pinLeiAdpter);
     }
 
+    private int getMaxCate(List<SitetopinfoBean.RetvalBean.CatelistBean> catelist, int itemId){
+        int maxId = 0;
+        for (int i = 0; i < catelist.size(); i++) {
+            SitetopinfoBean.RetvalBean.CatelistBean cateBean = catelist.get(i);
+            if (itemId == cateBean.getCateid()) {
+                break;
+            }
+
+            //设置子类
+            List<SitetopinfoBean.RetvalBean.childrenBean> children = catelist.get(i).getChildren();
+            for (int j = 0; j < children.size(); i++) {
+                SitetopinfoBean.RetvalBean.childrenBean childBean = children.get(i);
+                if (itemId== childBean.getCateid()) {
+                    maxId = cateBean.getCateid();
+                    break;
+                }
+            }
+
+            if (maxId > 0)break;
+        }
+
+        return maxId;
+    }
+
     @Override
     protected void onCreate() {
         super.onCreate();
         if (msitetopinfoBean == null)return;
-
     }
 }

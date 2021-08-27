@@ -2,6 +2,7 @@ package com.zhangying.oem1688.adpter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
 import android.view.View;
 import android.widget.ImageView;
@@ -43,6 +44,9 @@ public class MoreProstoreAdpter extends BaseRecyclerAdapter<MoreProstoreBean.Ret
         company_loge_iv.setVisibility(View.GONE);
         TextView companynameTv = holder.findViewById(R.id.companyname_tv);
         companynameTv.setText(retval.getStorename());
+        companynameTv.getPaint().setStyle(Paint.Style.FILL_AND_STROKE);
+        companynameTv.getPaint().setStrokeWidth(0.5f);
+
         TextView companynameAuthtagTv = holder.findViewById(R.id.companyname_authtag_tv);
         companynameAuthtagTv.setText(retval.getAuthtag());
         TextView companyStoretimeTv = holder.findViewById(R.id.company_storetime_tv);

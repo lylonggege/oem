@@ -21,6 +21,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.core.BasePopupView;
+import com.lxj.xpopup.enums.PopupAnimation;
 import com.lxj.xpopup.interfaces.OnConfirmListener;
 import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.xuexiang.xui.widget.imageview.RadiusImageView;
@@ -31,6 +33,7 @@ import com.zhangying.oem1688.bean.FactoryDetailBean;
 import com.zhangying.oem1688.custom.FenLeiRealization;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
+import com.zhangying.oem1688.onterface.BaseValidateCredentials;
 import com.zhangying.oem1688.onterface.BaseView;
 import com.zhangying.oem1688.popu.GoodsDetailPopu;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
@@ -40,6 +43,7 @@ import com.zhangying.oem1688.util.MD5Util;
 import com.zhangying.oem1688.util.ToastUtil;
 import com.zhangying.oem1688.util.TokenUtils;
 import com.zhangying.oem1688.util.WeiXinActivity;
+import com.zhangying.oem1688.view.activity.entry.LoginActivity;
 import com.zhangying.oem1688.view.fragment.home.FactoryDetailClassFragment;
 import com.zhangying.oem1688.view.fragment.home.FactoryDetailFragment;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
@@ -49,12 +53,14 @@ import java.util.HashMap;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static com.xuexiang.xui.utils.WidgetUtils.getMessageLoader;
+
 
 /**
  * 店铺详情
  */
 
-public class FactoryDetailActivity extends BaseActivity {
+public class FactoryDetailActivity extends BaseActivity implements BaseView {
 
     @BindView(R.id.rootView_shop_b_dp_ll)
     LinearLayout rootView_shop_b_dp_ll;
@@ -78,10 +84,11 @@ public class FactoryDetailActivity extends BaseActivity {
     TextView navTitle;
     private Fragment factoryDetailClassFragment,factoryDetailFragment;
 
-
     private static String mcid;
     private FactoryDetailBean.RetvalBean retval;
     private boolean ishomne = true;
+    private BaseValidateCredentials fenLeiRealization;
+    private static int tabIndex;
 
     @Override
     protected int getLayoutId() {
@@ -93,11 +100,13 @@ public class FactoryDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setHomeCateSate(ishomne);
         AppManagerUtil.getInstance().addHomeActivity(this);
+        fenLeiRealization = new FenLeiRealization(this, this);
         showLoading();
 
-        selectTab(0);
-        HashMapSingleton.getInstance().clear();
-        HashMapSingleton.getInstance().put("ly", "app");
+        if (tabIndex == 1){
+            setHomeCateSate(false);
+        }
+        HashMapSingleton.getInstance().reload();
         HashMapSingleton.getInstance().put("cid", mcid);
         RemoteRepository.getInstance()
                 .get_store(HashMapSingleton.getInstance())
@@ -107,6 +116,14 @@ public class FactoryDetailActivity extends BaseActivity {
                     protected void success(FactoryDetailBean data) {
                         dissmissLoading();
                         retval = data.getRetval();
+
+                        //切换到首页
+                        selectTab(tabIndex);
+
+                        //已收藏
+                        if (retval.getHas_collect() == 1){
+                            rootView_shop_b_sc_ll.setSelected(true);
+                        }
                         navTitle.setText(retval.getStore_name());
                     }
 
@@ -118,15 +135,11 @@ public class FactoryDetailActivity extends BaseActivity {
                 });
     }
 
-
     @OnClick({R.id.rootView_shop_b_sp_ll, R.id.rootview_shoucang_tv,
             R.id.rootView_shop_b_sc_ll, R.id.rootView_phone,
-            R.id.rootView_line, R.id.rootView_shop_b_dp_ll,R.id.bacK_RL})
+            R.id.rootView_line, R.id.rootView_shop_b_dp_ll,R.id.bacK_RL,R.id.imageView2,R.id.textView})
     public void onClick(View view) {
         switch (view.getId()) {
-//            case R.id.textView:
-//                SearchActivity.simpleActivity(this);
-//                break;
             case R.id.bacK_RL://返回
                 finish();
                 break;
@@ -143,9 +156,11 @@ public class FactoryDetailActivity extends BaseActivity {
                 }
                 break;
             case R.id.rootview_shoucang_tv:
-
                 break;
             case R.id.rootView_shop_b_sc_ll:
+                boolean hasLogin = LoginActivity.simpleActivity(this);
+                if (!hasLogin){ break; }
+
                 int has_collect = retval.getHas_collect();
                 if (has_collect == 0) {
                     storecollect();
@@ -153,7 +168,7 @@ public class FactoryDetailActivity extends BaseActivity {
                     drop_collect();
                 }
                 break;
-            case R.id.rootView_phone:
+            case R.id.rootView_phone://拨打电话
                 new XPopup.Builder(this)
                         .hasShadowBg(true)
                         .asConfirm("提示", retval.getEndbtn3() + "    " + retval.getTel(),
@@ -186,8 +201,8 @@ public class FactoryDetailActivity extends BaseActivity {
             case R.id.rootView_line:
                 WeiXinActivity.init(this);
                 break;
-            case R.id.message_LL:
-                new XPopup.Builder(this)
+            case R.id.message_LL://打开留言弹窗
+                BasePopupView popView = new XPopup.Builder(this)
                         .setPopupCallback(new XPopupCallback() {
                             @Override
                             public void onCreated() {
@@ -214,30 +229,14 @@ public class FactoryDetailActivity extends BaseActivity {
                             }
                         })
                         .dismissOnTouchOutside(true)
-                        .asCustom(new GoodsDetailPopu(this))
-                        .show();
-
+                        .asCustom(new GoodsDetailPopu(this));
+                popView.popupInfo.popupAnimation = PopupAnimation.ScaleAlphaFromCenter;
+                popView.show();
                 break;
-            case R.id.imageView2:
-                FenLeiRealization fenLeiRealization = new FenLeiRealization(this, new BaseView() {
-                    @Override
-                    public void showloading() {
-                        showLoading();
-                    }
-
-                    @Override
-                    public void hidenloading() {
-                        dissmissLoading();
-                    }
-
-                    @Override
-                    public void success(Object o) {
-
-                    }
-                });
-                fenLeiRealization.realization();
+            case R.id.imageView2://顶部导航右侧显示全部品类
+                fenLeiRealization.validateCredentials();
                 break;
-            case R.id.textView:
+            case R.id.textView://打开搜索框
                 SearchActivity.simpleActivity(this);
                 break;
         }
@@ -246,6 +245,13 @@ public class FactoryDetailActivity extends BaseActivity {
     public static void simpleActivity(Context context, String cid) {
         Intent intent = new Intent(context, FactoryDetailActivity.class);
         mcid = cid;
+        context.startActivity(intent);
+    }
+
+    public static void simpleActivity(Context context, String cid, int tIndex) {
+        Intent intent = new Intent(context, FactoryDetailActivity.class);
+        mcid = cid;
+        tabIndex = tIndex;
         context.startActivity(intent);
     }
 
@@ -274,19 +280,13 @@ public class FactoryDetailActivity extends BaseActivity {
         }
     }
 
-
+    //添加收藏
     private void storecollect() {
         showLoading();
-        long timestamp = System.currentTimeMillis() / 1000;
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("id", retval.getStore_id());
-        map.put("token", TokenUtils.getToken());
-        map.put("timestamp", timestamp);
-        String url = timestamp + TokenUtils.getToken() + "&^%$RSTUih09135ZST)(*";
-        String md5Str = MD5Util.getMD5Str(url);
-        map.put("sign", md5Str);
+        HashMapSingleton.getInstance().reload();
+        HashMapSingleton.getInstance().put("id", retval.getStore_id());
         RemoteRepository.getInstance()
-                .storecollect(map)
+                .storecollect(HashMapSingleton.getInstance())
                 .subscribeWith(new DefaultDisposableSubscriber<BaseBean>() {
 
                     @Override
@@ -295,7 +295,7 @@ public class FactoryDetailActivity extends BaseActivity {
                         if (data.isDone()) {
                             ToastUtil.showToast("收藏成功");
                             retval.setHas_collect(1);
-                            rootView_shop_b_sp_ll.setSelected(true);
+                            rootView_shop_b_sc_ll.setSelected(true);
                         }
                     }
 
@@ -307,18 +307,13 @@ public class FactoryDetailActivity extends BaseActivity {
                 });
     }
 
+    //取消收藏
     private void drop_collect() {
         showLoading();
-        long timestamp = System.currentTimeMillis() / 1000;
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("id", retval.getStore_id());
-        map.put("timestamp", timestamp);
-        map.put("token", TokenUtils.getToken());
-        String url = timestamp + TokenUtils.getToken() + "&^%$RSTUih09135ZST)(*";
-        String md5Str = MD5Util.getMD5Str(url);
-        map.put("sign", md5Str);
+        HashMapSingleton.getInstance().reload();
+        HashMapSingleton.getInstance().put("id", retval.getStore_id());
         RemoteRepository.getInstance()
-                .drop_collect(map)
+                .drop_collect(HashMapSingleton.getInstance())
                 .subscribeWith(new DefaultDisposableSubscriber<BaseBean>() {
 
                     @Override
@@ -374,6 +369,7 @@ public class FactoryDetailActivity extends BaseActivity {
                 if (factoryDetailFragment == null) {
                     factoryDetailFragment = new FactoryDetailFragment();
                     Bundle bundle = new Bundle();
+                    bundle.putSerializable("mcobj",retval);
                     bundle.putString("mcid",mcid);
                     factoryDetailFragment.setArguments(bundle);
                     transaction.add(R.id.fragment_container, factoryDetailFragment);
@@ -408,5 +404,20 @@ public class FactoryDetailActivity extends BaseActivity {
         if (factoryDetailFragment != null) {
             transaction.hide(factoryDetailFragment);
         }
+    }
+
+    @Override
+    public void showloading() {
+
+    }
+
+    @Override
+    public void hidenloading() {
+
+    }
+
+    @Override
+    public void success(Object o) {
+
     }
 }

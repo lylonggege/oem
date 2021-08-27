@@ -11,6 +11,7 @@ import com.zhangying.oem1688.bean.FactoryGCateBean;
 import com.zhangying.oem1688.bean.FactoryGoodsBean;
 import com.zhangying.oem1688.bean.GoodsdetailBean;
 import com.zhangying.oem1688.bean.HomeBena;
+import com.zhangying.oem1688.bean.HomeGoodsBean;
 import com.zhangying.oem1688.bean.HomeTabBean;
 import com.zhangying.oem1688.bean.ListCollectBean;
 import com.zhangying.oem1688.bean.MemberInfoBean;
@@ -190,6 +191,10 @@ public class RemoteRepository {
 
     public Flowable<MoreProstoreBean> moreprostore(HashMap<String, Object> body) {
         return serverApi.moreprostore(body);
+    }
+
+    public Flowable<HomeGoodsBean> home_goods_more(HashMap<String, Object> body) {
+        return serverApi.home_goods_more(body);
     }
 
     public Flowable<ListHistoryBean> list_history(HashMap<String, Object> body) {
