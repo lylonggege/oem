@@ -16,17 +16,23 @@ import com.zhangying.oem1688.custom.JumpViewPage;
 import com.zhangying.oem1688.onterface.IJumPage;
 import com.zhangying.oem1688.util.GlideUtil;
 
+import java.util.List;
+
 public class PinLeiChilden1Adpter extends BaseRecyclerAdapter<SitetopinfoBean.RetvalBean.childrenBean> {
+    private IJumPage jumPage;
     public void setJumPage(IJumPage jumPage) {
         this.jumPage = jumPage;
     }
 
+    private int storeid;
     public void setStoreid(int storeid) {
         this.storeid = storeid;
     }
-    private int storeid;
 
-    private IJumPage jumPage;
+    private List<SitetopinfoBean.RetvalBean.CatelistBean> catelist;
+    public void setCatelist(List<SitetopinfoBean.RetvalBean.CatelistBean> catelist) {
+        this.catelist = catelist;
+    }
 
     public PinLeiChilden1Adpter(Context context) {
         this.context = context;
@@ -49,16 +55,42 @@ public class PinLeiChilden1Adpter extends BaseRecyclerAdapter<SitetopinfoBean.Re
         rootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int stype = 1;
-                String sid = item.getCateid() + "_" + 0;
-                if (0 != storeid){
-                    sid = storeid + "_" + item.getCateid();
+                String sid = null;
+                int maxId = getMaxCate(item.getCateid());
+                if (maxId > 0){
+                    sid = maxId + "_" + item.getCateid();
+                }else {
+                    sid = item.getCateid() + "_" + 0;
                 }
+
                 JumpViewPage jumpViewPage = new JumpViewPage();
-                jumpViewPage.intentActivity(context, stype, sid, item.getCatename(), "工厂");
+                jumpViewPage.intentActivity(context, 1, sid, item.getCatename(), "工厂");
                 jumPage.success();
             }
         });
+    }
 
+    private int getMaxCate(int itemId){
+        int maxId = 0;
+        for (int i = 0; i < catelist.size(); i++) {
+            SitetopinfoBean.RetvalBean.CatelistBean cateBean = catelist.get(i);
+            if (itemId == cateBean.getCateid()) {
+                break;
+            }
+
+            //设置子类
+            List<SitetopinfoBean.RetvalBean.childrenBean> children = catelist.get(i).getChildren();
+            for (int j = 0; j < children.size(); i++) {
+                SitetopinfoBean.RetvalBean.childrenBean childBean = children.get(i);
+                if (itemId== childBean.getCateid()) {
+                    maxId = cateBean.getCateid();
+                    break;
+                }
+            }
+
+            if (maxId > 0)break;
+        }
+
+        return maxId;
     }
 }

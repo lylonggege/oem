@@ -4,7 +4,7 @@
     <!-- rectangle 表示为矩形 -->
 
     <!-- 填充的颜色 -->
-    <solid android:color="#fefefe" />
+    <solid android:color="#FcFcFc" />
 
     <!-- 边框的颜色和粗细 -->
     <stroke

@@ -151,6 +151,7 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
     private boolean ishomne = true;
     private BaseValidateCredentials fenLeiRealization;
     private GoodsDetailPopu msgPop;
+    private boolean isToCall = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -323,44 +324,11 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
                 finish();
                 break;
             case R.id.message_LL://打开留言层留言
-                if (msgPop == null){
-                    msgPop = new GoodsDetailPopu(this);
-                    msgPop.setMessageLister(new BaseMessageListener() {
-                        @Override
-                        public boolean submit(String name, String phone) {
-                            return doSubmitMessage(name,phone,false);
-                        }
-                    });
-                }
-                BasePopupView popView = new XPopup.Builder(this)
-                        .setPopupCallback(new XPopupCallback() {
-                            @Override
-                            public void onCreated() {
-                            }
-
-                            @Override
-                            public void beforeShow() {
-                            }
-
-                            @Override
-                            public void onShow() {
-                            }
-
-                            @Override
-                            public void onDismiss() {
-                            }
-
-                            @Override
-                            public boolean onBackPressed() {
-                                return false;
-                            }
-                        })
-                        .dismissOnTouchOutside(true)
-                        .asCustom(msgPop);
-                popView.popupInfo.popupAnimation = PopupAnimation.ScaleAlphaFromCenter;
-                popView.show();
+                isToCall = false;
+                doShowMessagePop();
                 break;
             case R.id.submit_tv://界面提交留言
+                isToCall = false;
                 doSubmitMessage(nameEt.getText().toString(),phoneEt.getText().toString(),true);
                 break;
             case R.id.rootView_shop_b_dp_ll://工厂首页
@@ -378,33 +346,7 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
                 }
                 break;
             case R.id.rootView_phone:
-                new XPopup.Builder(this)
-                        .hasShadowBg(true)
-                        .asConfirm("提示", store_data.getEndbtn3() + "    " + store_data.getTel(),
-                                "取消", "拨打",
-                                new OnConfirmListener() {
-                                    @Override
-                                    public void onConfirm() {
-                                        AutoForcePermissionUtils.requestPermissions(GoodsDetailActivity.this, new AutoForcePermissionUtils.PermissionCallback() {
-
-                                            @Override
-                                            public void onPermissionGranted() {
-                                                Intent intent = new Intent(Intent.ACTION_CALL);
-                                                Uri data = Uri.parse("tel:" + store_data.getTel());
-                                                intent.setData(data);
-                                                startActivity(intent);
-                                            }
-
-                                            @Override
-                                            public void onPermissionDenied() {
-                                                ToastUtil.showToast("拨打电话权限被拒绝，请手动拨打！");
-                                            }
-                                        }, Manifest.permission.CALL_PHONE);
-
-                                    }
-                                }, null, false)
-                        .show();
-
+                canCallPhone();
                 break;
             case R.id.rootView_line://打开微信客服
                 WeiXinActivity.init(this);
@@ -416,6 +358,90 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
                 SearchActivity.simpleActivity(this);
                 break;
         }
+    }
+
+    //vip直接拨打，非vip打开留言弹窗，留言后拨打
+    private void canCallPhone(){
+        isToCall = true;
+        GoodsdetailBean.RetvalBean.StoreDataBean store = goodsdetailBean.getRetval().getStore_data();
+        if (store.getIsvip() == 1){//是vip
+            doCallPhone();
+        }else {//非vip打开留言弹窗
+            String callTip = store.getCalltip();
+            if (!StringUtils.isEmity(callTip)) ToastUtil.showToast(callTip);
+            doShowMessagePop();
+        }
+    }
+
+    //拨打电话
+    private void doCallPhone(){
+        GoodsdetailBean.RetvalBean.StoreDataBean store = goodsdetailBean.getRetval().getStore_data();
+        new XPopup.Builder(this)
+                .hasShadowBg(true)
+                .asConfirm("提示", store.getEndbtn3() + "    " + store.getTel(),
+                        "取消", "拨打",
+                        new OnConfirmListener() {
+                            @Override
+                            public void onConfirm() {
+                                AutoForcePermissionUtils.requestPermissions(GoodsDetailActivity.this, new AutoForcePermissionUtils.PermissionCallback() {
+
+                                    @Override
+                                    public void onPermissionGranted() {
+                                        Intent intent = new Intent(Intent.ACTION_CALL);
+                                        Uri data = Uri.parse("tel:" + store.getTel());
+                                        intent.setData(data);
+                                        startActivity(intent);
+                                    }
+
+                                    @Override
+                                    public void onPermissionDenied() {
+                                        ToastUtil.showToast("拨打电话权限被拒绝，请手动拨打！");
+                                    }
+                                }, Manifest.permission.CALL_PHONE);
+
+                            }
+                        }, null, false)
+                .show();
+    }
+
+    //显示留言弹窗
+    private void doShowMessagePop(){
+        if (msgPop == null){
+            msgPop = new GoodsDetailPopu(this);
+            msgPop.setMessageLister(new BaseMessageListener() {
+                @Override
+                public boolean submit(String name, String phone) {
+                    return doSubmitMessage(name,phone,false);
+                }
+            });
+        }
+        BasePopupView popView = new XPopup.Builder(this)
+                .setPopupCallback(new XPopupCallback() {
+                    @Override
+                    public void onCreated() {
+                    }
+
+                    @Override
+                    public void beforeShow() {
+                    }
+
+                    @Override
+                    public void onShow() {
+                    }
+
+                    @Override
+                    public void onDismiss() {
+                    }
+
+                    @Override
+                    public boolean onBackPressed() {
+                        return false;
+                    }
+                })
+                .dismissOnTouchOutside(true)
+                .asCustom(msgPop);
+        popView.popupInfo.popupAnimation = PopupAnimation.ScaleAlphaFromCenter;
+        popView.show();
     }
 
     private boolean doSubmitMessage(String name, String phone, boolean chkCate){
@@ -526,6 +552,11 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
     public void success(Object o) {
         BaseBean bean = (BaseBean) o;
         ToastUtil.showToast(bean.getMsg());
+
+        //拨打电话调用
+        if (isToCall){
+            doCallPhone();
+        }
     }
 
     @Override

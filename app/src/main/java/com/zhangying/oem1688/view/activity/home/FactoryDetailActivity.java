@@ -30,6 +30,7 @@ import com.zhangying.oem1688.bean.FactoryDetailBean;
 import com.zhangying.oem1688.custom.FenLeiRealization;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
+import com.zhangying.oem1688.onterface.BaseMessageListener;
 import com.zhangying.oem1688.onterface.BaseValidateCredentials;
 import com.zhangying.oem1688.onterface.BaseView;
 import com.zhangying.oem1688.popu.GoodsDetailPopu;
@@ -37,6 +38,7 @@ import com.zhangying.oem1688.singleton.GlobalEntitySingleton;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
 import com.zhangying.oem1688.util.AppManagerUtil;
 import com.zhangying.oem1688.util.AutoForcePermissionUtils;
+import com.zhangying.oem1688.util.StringUtils;
 import com.zhangying.oem1688.util.ToastUtil;
 import com.zhangying.oem1688.util.WeiXinActivity;
 import com.zhangying.oem1688.view.activity.entry.LoginActivity;
@@ -84,6 +86,7 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
     private boolean ishomne = true;
     private BaseValidateCredentials fenLeiRealization;
     private static int tabIndex;
+    private GoodsDetailPopu msgPop;
 
     @Override
     protected int getLayoutId() {
@@ -166,67 +169,13 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
                 }
                 break;
             case R.id.rootView_phone://拨打电话
-                new XPopup.Builder(this)
-                        .hasShadowBg(true)
-                        .asConfirm("提示", retval.getEndbtn3() + "    " + retval.getTel(),
-                                "取消", "拨打",
-                                new OnConfirmListener() {
-                                    @Override
-
-                                    public void onConfirm() {
-                                        AutoForcePermissionUtils.requestPermissions(FactoryDetailActivity.this, new AutoForcePermissionUtils.PermissionCallback() {
-                                            @Override
-                                            public void onPermissionGranted() {
-                                                Intent intent = new Intent(Intent.ACTION_CALL);
-                                                Uri data = Uri.parse("tel:" + retval.getTel());
-                                                intent.setData(data);
-                                                startActivity(intent);
-                                            }
-
-                                            @Override
-                                            public void onPermissionDenied() {
-                                                ToastUtil.showToast("拨打电话权限被拒绝，请手动拨打！");
-                                            }
-                                        }, Manifest.permission.CALL_PHONE);
-
-                                    }
-                                }, null, false)
-                        .show();
+                canCallPhone();
                 break;
             case R.id.rootView_line:
                 WeiXinActivity.init(this);
                 break;
             case R.id.message_LL://打开留言弹窗
-                BasePopupView popView = new XPopup.Builder(this)
-                        .setPopupCallback(new XPopupCallback() {
-                            @Override
-                            public void onCreated() {
-
-                            }
-
-                            @Override
-                            public void beforeShow() {
-
-                            }
-
-                            @Override
-                            public void onShow() {
-
-                            }
-
-                            @Override
-                            public void onDismiss() {
-                            }
-
-                            @Override
-                            public boolean onBackPressed() {
-                                return true;
-                            }
-                        })
-                        .dismissOnTouchOutside(true)
-                        .asCustom(new GoodsDetailPopu(this));
-                popView.popupInfo.popupAnimation = PopupAnimation.ScaleAlphaFromCenter;
-                popView.show();
+                doShowMessagePop();
                 break;
             case R.id.imageView2://顶部导航右侧显示全部品类
                 fenLeiRealization.validateCredentials();
@@ -248,6 +197,145 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
         mcid = cid;
         tabIndex = tIndex;
         context.startActivity(intent);
+    }
+
+    //显示留言弹窗
+    private void doShowMessagePop(){
+        if (msgPop == null){
+            msgPop = new GoodsDetailPopu(this);
+            msgPop.setMessageLister(new BaseMessageListener() {
+                @Override
+                public boolean submit(String name, String phone) {
+                    return doSubmitMessage(name, phone);
+                }
+            });
+        }
+        BasePopupView popView = new XPopup.Builder(this)
+                .setPopupCallback(new XPopupCallback() {
+                    @Override
+                    public void onCreated() {
+                    }
+
+                    @Override
+                    public void beforeShow() {
+                    }
+
+                    @Override
+                    public void onShow() {
+                    }
+
+                    @Override
+                    public void onDismiss() {
+                    }
+
+                    @Override
+                    public boolean onBackPressed() {
+                        return true;
+                    }
+                })
+                .dismissOnTouchOutside(true)
+                .asCustom(msgPop);
+        popView.popupInfo.popupAnimation = PopupAnimation.ScaleAlphaFromCenter;
+        popView.show();
+    }
+
+    /**
+     * 提交留言到服务器
+     * @param name 姓名
+     * @param phone 电话
+     */
+    private boolean doSubmitMessage(String name, String phone){
+        if (StringUtils.isEmity(name)){
+            ToastUtil.showToast("请填写姓名");
+            return false;
+        }
+
+        if (StringUtils.isEmity(phone)){
+            ToastUtil.showToast("请填写电话");
+            return false;
+        }
+
+        showLoading();
+        HashMapSingleton.getInstance().reload();
+        HashMapSingleton.getInstance().put("uname", name);
+        HashMapSingleton.getInstance().put("utel", phone);
+        HashMapSingleton.getInstance().put("lycomId", retval.getStore_id());
+        HashMapSingleton.getInstance().put("lylm", "store");
+        HashMapSingleton.getInstance().put("id", retval.getStore_id());
+        HashMapSingleton.getInstance().put("lyagent", "7");
+        HashMapSingleton.getInstance().put("lycate", "");
+
+        //提交服务器
+        RemoteRepository.getInstance()
+                .add_message(HashMapSingleton.getInstance())
+                .subscribeWith(new DefaultDisposableSubscriber<BaseBean>() {
+                    @Override
+                    protected void success(BaseBean data) {
+                        dissmissLoading();
+                        if (data.isDone()){
+                            ToastUtil.showToast("留言成功");
+
+                            //非vip留言成功后拨打电话
+                            doCallPhone();
+                        }else {
+                            ToastUtil.showToast(data.getMsg());
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        super.onError(t);
+                        dissmissLoading();
+                    }
+                });
+        return true;
+    }
+
+    //vip直接拨打，非vip打开留言弹窗，留言后拨打
+    private void canCallPhone(){
+        if (retval.getIsvip() == 1){//是vip
+            doCallPhone();
+        }else {//非vip打开留言弹窗
+            String callTip = retval.getCalltip();
+            if (!StringUtils.isEmity(callTip)) ToastUtil.showToast(callTip);
+            doShowMessagePop();
+        }
+    }
+
+    //拨打电话
+    private void doCallPhone(){
+        String tel = retval.getTel();
+        if (StringUtils.isEmity(tel)){
+            ToastUtil.showToast("哎呦!工厂还未设置电话");
+            return;
+        }
+
+        new XPopup.Builder(this)
+                .hasShadowBg(true)
+                .asConfirm("提示", retval.getEndbtn3() + "    " + tel,
+                        "取消", "拨打",
+                        new OnConfirmListener() {
+                            @Override
+
+                            public void onConfirm() {
+                                AutoForcePermissionUtils.requestPermissions(FactoryDetailActivity.this, new AutoForcePermissionUtils.PermissionCallback() {
+                                    @Override
+                                    public void onPermissionGranted() {
+                                        Intent intent = new Intent(Intent.ACTION_CALL);
+                                        Uri data = Uri.parse("tel:" + tel);
+                                        intent.setData(data);
+                                        startActivity(intent);
+                                    }
+
+                                    @Override
+                                    public void onPermissionDenied() {
+                                        ToastUtil.showToast("拨打电话权限被拒绝，请手动拨打！");
+                                    }
+                                }, Manifest.permission.CALL_PHONE);
+
+                            }
+                        }, null, false)
+                .show();
     }
 
     private static class BannerViewHolder implements MZViewHolder<FactoryDetailBean.RetvalBean.slidesBean> {
