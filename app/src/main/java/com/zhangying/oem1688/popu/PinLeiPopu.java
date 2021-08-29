@@ -20,7 +20,10 @@ import com.zhangying.oem1688.adpter.PinLeiChilden2Adpter;
 import com.zhangying.oem1688.bean.SitetopinfoBean;
 import com.zhangying.oem1688.custom.MyRecycleView;
 import com.zhangying.oem1688.onterface.BaseInterfacePosition;
+import com.zhangying.oem1688.onterface.BaseView;
 import com.zhangying.oem1688.onterface.IJumPage;
+import com.zhangying.oem1688.view.activity.home.NewProductFactoryActivity;
+import com.zhangying.oem1688.view.fragment.ProductFragment;
 
 import java.util.List;
 
@@ -33,6 +36,10 @@ public class PinLeiPopu extends PositionPopupView {
     private PinLeiChilden2Adpter pinLeiChilden2Adpter;
     private LinearLayout type_ll_1, type_ll_2;
     private TextView content_tv_1, content_tv_2;
+    private BaseView parentView;
+    public void setParentView(BaseView parentView) {
+        this.parentView = parentView;
+    }
 
 
     public PinLeiPopu(@NonNull Context context, SitetopinfoBean sitetopinfoBean) {
@@ -78,7 +85,9 @@ public class PinLeiPopu extends PositionPopupView {
 
         pinLeiChilden1Adpter = new PinLeiChilden1Adpter(mcontext);
         pinLeiChilden1Adpter.setCatelist(catelist);
+        pinLeiChilden1Adpter.setParentView(parentView);
         pinLeiChilden2Adpter = new PinLeiChilden2Adpter(mcontext);
+        pinLeiChilden2Adpter.setParentView(parentView);
         pinLeiChilden1Adpter.setJumPage(new IJumPage() {
             @Override
             public void success() {

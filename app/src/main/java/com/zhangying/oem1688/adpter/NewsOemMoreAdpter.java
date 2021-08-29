@@ -107,7 +107,7 @@ public class NewsOemMoreAdpter extends BaseRecyclerAdapter<OemNewsMoreBean.Retva
                     content_tv.setText(item.getNtitle());
                     ncate_tv.setText(item.getNcate());
                     ntime_tv.setText(item.getNtime());
-                    nhits_tv.setText(item.getNtime());
+                    nhits_tv.setText(item.getNhits());
                 }
             } else {
                 myRecycleView_type1.setVisibility(View.GONE);

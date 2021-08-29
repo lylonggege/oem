@@ -1,6 +1,5 @@
 package com.zhangying.oem1688.view.activity;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -8,7 +7,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -17,21 +15,11 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.base.BaseActivity;
-import com.zhangying.oem1688.bean.BaseBean;
 import com.zhangying.oem1688.bean.EvenBusBean;
-import com.zhangying.oem1688.bean.HomeBena;
 import com.zhangying.oem1688.bean.HomeTabBean;
-import com.zhangying.oem1688.bean.ListCollectBean;
-import com.zhangying.oem1688.bean.SitetopinfoBean;
-import com.zhangying.oem1688.db.StuDBHelper;
-import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
-import com.zhangying.oem1688.internet.RemoteRepository;
-import com.zhangying.oem1688.mvp.home.TabberView;
 import com.zhangying.oem1688.mvp.home.TabberPresenter;
 import com.zhangying.oem1688.mvp.home.TabberPresenterImpl;
-import com.zhangying.oem1688.singleton.HashMapSingleton;
-import com.zhangying.oem1688.util.ToastUtil;
-import com.zhangying.oem1688.view.fragment.FactoryFragment;
+import com.zhangying.oem1688.mvp.home.TabberView;
 import com.zhangying.oem1688.view.fragment.HomeFragment;
 import com.zhangying.oem1688.view.fragment.MyFragment;
 import com.zhangying.oem1688.view.fragment.NewsFragment;
@@ -41,16 +29,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.HashMap;
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.OnClick;
-
-import static com.zhangying.oem1688.constant.BuildConfig.CATEBID;
-import static com.zhangying.oem1688.constant.BuildConfig.CATESID;
-import static com.zhangying.oem1688.constant.BuildConfig.COMPANY_FACTORY_TYPE;
-import static com.zhangying.oem1688.constant.BuildConfig.DAIGONGPINGLEI;
 
 public class MainActivity extends BaseActivity implements TabberView {
 

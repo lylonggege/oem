@@ -31,7 +31,10 @@ public class FactoryProductPersenterImpl implements BasePresenter, BaseFinishLis
 
     @Override
     public void validateCredentials() {
-        baseView.showloading();
+        if ("1".equals(moreProstoreBeanmvp.getPage())){
+            baseView.showloading();
+        }
+
         mfactoryProductNewModel.getData(moreProstoreBeanmvp, this);
     }
 }

@@ -55,6 +55,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -300,6 +303,7 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
         GoodsDetailTuijianAdpter goodsDetailTuijianAdpter = new GoodsDetailTuijianAdpter(this);
         goodsDetailTuijianAdpter.refresh(goods.getOgoods());
         WidgetUtils.initGridRecyclerView(tuijianRecycleView, 3, DensityUtils.dp2px(5));
+        tuijianRecycleView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         tuijianRecycleView.setAdapter(goodsDetailTuijianAdpter);
     }
 
@@ -316,12 +320,15 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
     @OnClick({R.id.bacK_RL,R.id.submit_tv, R.id.rootView_shop_b_dp_ll,
             R.id.rootView_shop_b_sp_ll, R.id.rootView_shop_b_sc_ll,
             R.id.rootView_phone, R.id.rootView_line, R.id.message_LL
-            , R.id.imageView2, R.id.textView})
+            , R.id.imageView2, R.id.textView,R.id.rootView})
     public void onClick(View view) {
         GoodsdetailBean.RetvalBean.StoreDataBean store_data = goodsdetailBean.getRetval().getStore_data();
         switch (view.getId()) {
             case R.id.bacK_RL://返回
                 finish();
+                break;
+            case R.id.rootView:
+                FactoryDetailActivity.simpleActivity(this,goodsdetailBean.getRetval().getGoods().getStore_id());
                 break;
             case R.id.message_LL://打开留言层留言
                 isToCall = false;

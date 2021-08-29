@@ -12,6 +12,7 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.xuexiang.xui.utils.WidgetUtils;
+import com.xuexiang.xui.widget.dialog.DialogLoader;
 import com.xuexiang.xui.widget.dialog.LoadingDialog;
 import com.xuexiang.xui.widget.picker.widget.OptionsPickerView;
 import com.xuexiang.xui.widget.picker.widget.builder.OptionsPickerBuilder;
@@ -97,6 +98,7 @@ public class ProductFragment extends BaseFragment implements BaseView {
     private HomeGoodAdpter home_goodAdpter;
     private List<HomeBena.RetvalBean.SgoodsListBean.GoodsBean> getGoods = new ArrayList<>();
     private BaseValidateCredentials fenLeiRealization;
+    LoadingDialog loading;
 
     @Override
     protected int getLayoutId() {
@@ -184,6 +186,7 @@ public class ProductFragment extends BaseFragment implements BaseView {
                         companychildrenTv.setText(minText);
                     }
 
+                    page = 1;
                     moredata();
                     return false;
                 })
@@ -212,6 +215,7 @@ public class ProductFragment extends BaseFragment implements BaseView {
                     }else {
                         factorychildrenTv.setText(mTimeOption1_address[options1][options2]);
                     }
+                    page = 1;
                     moredata();
                     return false;
                 })
@@ -230,12 +234,15 @@ public class ProductFragment extends BaseFragment implements BaseView {
 
     @Override
     public void showloading() {
-        showLoading();
+        loading = new LoadingDialog(getActivity());
+        loading.show();
+        //showLoading();
     }
 
     @Override
     public void hidenloading() {
-        dissmissLoading();
+        loading.dismiss();
+        //dissmissLoading();
     }
 
 
@@ -371,6 +378,22 @@ public class ProductFragment extends BaseFragment implements BaseView {
                 moredata();
             }
         });
+    }
+
+    //外部调用刷新
+    public void reloadData(String id,String name){
+        companychildrenTv.setText(name);
+        String[] ids = id.split("_");
+        String moptions1 = ids[0];
+        String moptions2 = "0";
+        if (ids.length == 2) {
+            moptions2 = ids[1];
+        }
+        page = 1;
+
+        cateSelected.set(0,Integer.parseInt(moptions1) + "");
+        cateSelected.set(1,Integer.parseInt(moptions2) + "");
+        moredata();
     }
 
     private void moredata() {
