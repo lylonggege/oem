@@ -23,10 +23,13 @@ import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.xuexiang.xui.widget.dialog.LoadingDialog;
 import com.xuexiang.xui.widget.imageview.RadiusImageView;
 import com.xuexiang.xui.widget.toast.XToast;
+import com.xuexiang.xutil.tip.ToastUtils;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.base.BaseActivity;
 import com.zhangying.oem1688.bean.BaseBean;
+import com.zhangying.oem1688.bean.EvenBusMessageBean;
 import com.zhangying.oem1688.bean.FactoryDetailBean;
+import com.zhangying.oem1688.constant.BuildConfig;
 import com.zhangying.oem1688.custom.FenLeiRealization;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
@@ -50,6 +53,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -79,7 +87,7 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
     TextView rootview_shoucang_tv;
     @BindView(R.id.title_TV)
     TextView navTitle;
-    private Fragment factoryDetailClassFragment,factoryDetailFragment;
+    private Fragment factoryDetailClassFragment, factoryDetailFragment;
 
     private static String mcid;
     private FactoryDetailBean.RetvalBean retval;
@@ -97,13 +105,14 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHomeCateSate(ishomne);
+        EventBus.getDefault().register(this);
         AppManagerUtil.getInstance().addHomeActivity(this);
         fenLeiRealization = new FenLeiRealization(this, this);
 
         LoadingDialog loading = new LoadingDialog(this);
         loading.show();
 
-        if (tabIndex == 1){
+        if (tabIndex == 1) {
             setHomeCateSate(false);
         }
         HashMapSingleton.getInstance().reload();
@@ -121,7 +130,7 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
                         selectTab(tabIndex);
 
                         //已收藏
-                        if (retval.getHas_collect() == 1){
+                        if (retval.getHas_collect() == 1) {
                             rootView_shop_b_sc_ll.setSelected(true);
                         }
                         navTitle.setText(retval.getStore_name());
@@ -137,7 +146,7 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
 
     @OnClick({R.id.rootView_shop_b_sp_ll, R.id.rootview_shoucang_tv,
             R.id.rootView_shop_b_sc_ll, R.id.rootView_phone,
-            R.id.rootView_line, R.id.rootView_shop_b_dp_ll,R.id.bacK_RL,R.id.imageView2,R.id.textView})
+            R.id.rootView_line, R.id.rootView_shop_b_dp_ll, R.id.bacK_RL, R.id.imageView2, R.id.textView})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bacK_RL://返回
@@ -158,8 +167,10 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
             case R.id.rootview_shoucang_tv:
                 break;
             case R.id.rootView_shop_b_sc_ll:
-                boolean hasLogin = LoginActivity.simpleActivity(this);
-                if (!hasLogin){ break; }
+                boolean hasLogin = LoginActivity.simpleActivity(this, BuildConfig.FACTORY_ENTER_TYPE);
+                if (!hasLogin) {
+                    break;
+                }
 
                 int has_collect = retval.getHas_collect();
                 if (has_collect == 0) {
@@ -377,7 +388,7 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
                     protected void success(BaseBean data) {
                         dissmissLoading();
                         if (data.isDone()) {
-                            ToastUtil.showToast("收藏成功");
+                            ToastUtils.toast("收藏成功");
                             retval.setHas_collect(1);
                             rootView_shop_b_sc_ll.setSelected(true);
                         }
@@ -391,7 +402,7 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
                 });
     }
 
-    public FactoryDetailBean.RetvalBean getFactoryBean(){
+    public FactoryDetailBean.RetvalBean getFactoryBean() {
         return retval;
     }
 
@@ -406,9 +417,8 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
                     @Override
                     protected void success(BaseBean data) {
                         dissmissLoading();
-                        ToastUtil.showToast(data.getMsg());
                         if (data.isDone()) {
-                            ToastUtil.showToast("取消收藏成功");
+                            ToastUtils.toast("取消收藏成功");
                             retval.setHas_collect(0);
                             rootView_shop_b_sc_ll.setSelected(false);
                         }
@@ -426,6 +436,7 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
     protected void onDestroy() {
         super.onDestroy();
         AppManagerUtil.getInstance().finishhomeActivity(this);
+        EventBus.getDefault().unregister(this);
     }
 
     private void setHomeCateSate(Boolean b) {
@@ -455,7 +466,7 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
                 if (factoryDetailFragment == null) {
                     factoryDetailFragment = new FactoryDetailFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putString("mcid",mcid);
+                    bundle.putString("mcid", mcid);
                     factoryDetailFragment.setArguments(bundle);
                     GlobalEntitySingleton.getInstance().setFactoryDetail(retval);
                     transaction.add(R.id.fragment_container, factoryDetailFragment);
@@ -468,7 +479,7 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
                 if (factoryDetailClassFragment == null) {
                     factoryDetailClassFragment = new FactoryDetailClassFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putString("mcid",mcid);
+                    bundle.putString("mcid", mcid);
                     factoryDetailClassFragment.setArguments(bundle);
                     transaction.add(R.id.fragment_container, factoryDetailClassFragment);
                 } else {
@@ -506,4 +517,23 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
     public void success(Object o) {
 
     }
+
+
+    //登录成功后路由返回数据
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void eventData(EvenBusMessageBean message) {
+        if (message != null) {
+            if (message.getType() == 2) {
+                int has_collect = retval.getHas_collect();
+                if (has_collect == 0) {
+                    storecollect();
+                } else {
+                    drop_collect();
+                }
+            }
+
+        }
+    }
+
+
 }
