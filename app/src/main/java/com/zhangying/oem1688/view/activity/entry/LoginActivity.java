@@ -4,15 +4,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.xuexiang.xui.XUI;
 import com.xuexiang.xui.utils.CountDownButtonHelper;
 import com.xuexiang.xui.utils.KeyboardUtils;
 import com.xuexiang.xui.utils.StatusBarUtils;
@@ -24,14 +28,17 @@ import com.xuexiang.xutil.app.ActivityUtils;
 import com.xuexiang.xutil.common.RandomUtils;
 import com.xuexiang.xutil.common.StringUtils;
 import com.xuexiang.xutil.display.Colors;
+import com.xuexiang.xutil.tip.ToastUtils;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.base.BaseActivity;
 import com.zhangying.oem1688.bean.BaseBean;
+import com.zhangying.oem1688.bean.EvenBusMessageBean;
 import com.zhangying.oem1688.bean.PhoneloginBean;
 import com.zhangying.oem1688.constant.BuildConfig;
 import com.zhangying.oem1688.internet.ApiService;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
+import com.zhangying.oem1688.util.KeyboardUtil;
 import com.zhangying.oem1688.util.LogUtil;
 import com.zhangying.oem1688.util.MD5Util;
 import com.zhangying.oem1688.util.ToastUtil;
@@ -40,6 +47,7 @@ import com.zhangying.oem1688.view.activity.MainActivity;
 import com.zhangying.oem1688.view.activity.home.FactoryDetailActivity;
 import com.zhangying.oem1688.view.activity.my.ResetpasswordActivity;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -85,6 +93,19 @@ public class LoginActivity extends BaseActivity {
     private CountDownButtonHelper mCountDownHelper;
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private static OkHttpClient client = new OkHttpClient();
+    private int type;
+    private PhoneloginBean phoneloginBean;
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 1) {
+                if (phoneloginBean != null) {
+                    ToastUtils.toast(phoneloginBean.getMsg());
+                }
+            }
+        }
+    };
 
     @Override
     protected int getLayoutId() {
@@ -96,6 +117,7 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         StatusBarUtils.initStatusBarStyle(this, false, Colors.TRANSPARENT);
         mCountDownHelper = new CountDownButtonHelper(btnGetVerifyCode, 60);
+        type = getIntent().getIntExtra("TYPE", -1);
     }
 
     @Override
@@ -171,13 +193,14 @@ public class LoginActivity extends BaseActivity {
                 });
     }
 
-    //判断是否登录，未登录则打开登录界面
-    public static Boolean simpleActivity(Context context) {
+    //判断是否登录，未登录则打开登录界面  type 标记是那个页面进来的
+    public static Boolean simpleActivity(Context context, int type) {
         String token = TokenUtils.getToken();
         if (!StringUtils.isEmpty(token)) {
             return true;
         }
         Intent intent = new Intent(context, LoginActivity.class);
+        intent.putExtra("TYPE", type);
         context.startActivity(intent);
         return false;
     }
@@ -233,24 +256,31 @@ public class LoginActivity extends BaseActivity {
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
-
+            public void onResponse(Call call, Response response) {
+                //影藏键盘
+                KeyboardUtil.closeKeybord(etVerifyCode, LoginActivity.this);
                 try {
                     String string = response.body().string();
                     LogUtil.e("url===", string);
                     Gson gson = new Gson();
-                    PhoneloginBean phoneloginBean = gson.fromJson(string, PhoneloginBean.class);
+                    phoneloginBean = gson.fromJson(string, PhoneloginBean.class);
                     if (phoneloginBean.isDone()) {
                         PhoneloginBean.RetvalBean retval = phoneloginBean.getRetval();
                         String token = retval.getToken();
                         if (token != null) {
                             setToken(token);
-                            ActivityUtils.startActivity(MainActivity.class);
+                            EvenBusMessageBean evenBusMessageBean = new EvenBusMessageBean();
+                            evenBusMessageBean.setType(type);
+                            EventBus.getDefault().post(evenBusMessageBean);
+                            finish();
                         } else {
-                            ToastUtil.showToast("服务器异常，请稍后...");
+                            ToastUtil.showToast(phoneloginBean.getMsg());
                         }
+                    } else {
+                        handler.sendEmptyMessage(1);
                     }
                 } catch (Exception exception) {
+
                 }
             }
         });

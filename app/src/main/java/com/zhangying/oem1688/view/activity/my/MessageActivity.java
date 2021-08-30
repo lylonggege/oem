@@ -71,15 +71,9 @@ public class MessageActivity extends BaseActivity {
 
     private void initdata() {
         showLoading();
-        long timestamp = System.currentTimeMillis() / 1000;
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("timestamp", timestamp);
-        map.put("token", TokenUtils.getToken());
-        String url = timestamp + TokenUtils.getToken() + "&^%$RSTUih09135ZST)(*";
-        String md5Str = MD5Util.getMD5Str(url);
-        map.put("sign", md5Str);
+        HashMapSingleton.getInstance().reload();
         RemoteRepository.getInstance()
-                .getmemberinfo(map)
+                .getmemberinfo(HashMapSingleton.getInstance())
                 .subscribeWith(new DefaultDisposableSubscriber<MemberInfoBean>() {
 
                     @Override
@@ -147,14 +141,7 @@ public class MessageActivity extends BaseActivity {
                             @Override
                             protected void success(BaseBean data) {
                                 dissmissLoading();
-                                if (data.isDone()) {
-                                    ToastUtil.showToast(data.getMsg());
-                                    finish();
-                                } else {
-
-
-                                    ToastUtil.showToast(data.getMsg());
-                                }
+                                finish();
                             }
 
                             @Override

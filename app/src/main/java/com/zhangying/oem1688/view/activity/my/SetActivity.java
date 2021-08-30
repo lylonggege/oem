@@ -28,6 +28,7 @@ import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.util.AppManagerUtil;
 import com.zhangying.oem1688.util.CacheUtil;
 import com.zhangying.oem1688.util.ToastUtil;
+import com.zhangying.oem1688.util.TokenUtils;
 import com.zhangying.oem1688.view.activity.MainActivity;
 
 import java.util.ArrayList;
@@ -132,6 +133,7 @@ public class SetActivity extends BaseActivity {
                     @Override
                     protected void success(BaseBean data) {
                         if (data.isDone()) {
+                            TokenUtils.clearToken();
                             AppManagerUtil.getInstance().finishAllActivity();
                             ActivityUtils.startActivity(MainActivity.class);
                         }

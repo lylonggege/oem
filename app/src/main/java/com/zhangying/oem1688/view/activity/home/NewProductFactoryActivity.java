@@ -18,7 +18,6 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.xuexiang.xui.utils.WidgetUtils;
-import com.xuexiang.xui.widget.dialog.LoadingDialog;
 import com.xuexiang.xui.widget.picker.widget.OptionsPickerView;
 import com.xuexiang.xui.widget.picker.widget.builder.OptionsPickerBuilder;
 import com.zhangying.oem1688.R;
@@ -45,7 +44,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -80,16 +78,18 @@ public class NewProductFactoryActivity extends BaseActivity implements BaseView 
     private int page = 1;
     private String[] option;
     private String[][] mTimeOption1;
-    private List<CompanyFactoryBean.RetvalBean.OemcateBean>cateList;
-    private ArrayList<String> cateSelected;
-    private ArrayList<Integer> cateIndexSelected;
+    private String[] option_id;
+    private String[][] mTimeOption1_id;
+    private String moptions1;
+    private String moptions2;
 
     //地区
     private String[] option_address;
     private String[][] mTimeOption1_address;
-    private List<CompanyFactoryBean.RetvalBean.OemareaBean>areaList;
-    private ArrayList<String> areaSelected;
-    private ArrayList<Integer> areaIndexSelected;
+    private String[] option_id_address;
+    private String[][] mTimeOption1_id_address;
+    private String moptions1_address;
+    private String moptions2_address;
 
     private MoreProstoreBeanmvp moreProstoreBeanmvp;
     private int type = 1; //0是产品  1是工厂
@@ -98,7 +98,6 @@ public class NewProductFactoryActivity extends BaseActivity implements BaseView 
     private List<HomeBena.RetvalBean.SgoodsListBean.GoodsBean> getGoods = new ArrayList<>();
     private BaseValidateCredentials fenLeiRealization;
     private String name;
-    LoadingDialog loading;
 
     @Override
     protected int getLayoutId() {
@@ -109,21 +108,15 @@ public class NewProductFactoryActivity extends BaseActivity implements BaseView 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        cateSelected = new ArrayList<String>(Arrays.asList("0","0"));
-        areaSelected = new ArrayList<String>(Arrays.asList("0","0"));
-        cateIndexSelected = new ArrayList<Integer>(Arrays.asList(0,0));
-        areaIndexSelected = new ArrayList<Integer>(Arrays.asList(0,0));
-
         type = getIntent().getIntExtra("TYPE", 0);
         name = getIntent().getStringExtra("NAME");
         companychildrenTv.setText(name);
         String id = getIntent().getStringExtra("ID");
 
         String[] ids = id.split("_");
-        cateSelected.set(0,ids[0]);
+        moptions1 = ids[0];
         if (ids.length == 2) {
-            cateSelected.set(0,ids[1]);
+            moptions2 = ids[1];
         }
 
         setGoodsfactoryState(type);
@@ -144,18 +137,6 @@ public class NewProductFactoryActivity extends BaseActivity implements BaseView 
         moredata();
         initRefresh();
         EventBus.getDefault().register(this);
-    }
-
-    //外部调用刷新
-    public void reloadData(String id,String name){
-        companychildrenTv.setText(name);
-        String[] ids = id.split("_");
-        cateSelected.set(0,ids[0]);
-        if (ids.length == 2) {
-            cateSelected.set(0,ids[1]);
-        }
-        page = 1;
-        moredata();
     }
 
 
@@ -196,31 +177,16 @@ public class NewProductFactoryActivity extends BaseActivity implements BaseView 
                     return;
                 }
                 OptionsPickerView pvOptions = new OptionsPickerBuilder(NewProductFactoryActivity.this, (v, options1, options2, options3) -> {
-                    cateIndexSelected.set(0,options1);
-                    cateIndexSelected.set(1,options2);
-
-                    String minText = "";
-                    if (options1 > 0){
-                        cateSelected.set(0,cateList.get(options1).getId() + "");
-                        minText = mTimeOption1[options1][options2];
-                    }
-
-                    if (options2 == 0){
-                        String maxText = option[options1];
-                        cateSelected.set(1,"0");
-                        companychildrenTv.setText(maxText);
-                    }else {
-                        String minCate = cateList.get(options1).getChildren().get(options2 - 1).getId() + "";
-                        cateSelected.set(1,minCate);
-                        companychildrenTv.setText(minText);
-                    }
-                    page = 1;
+                    moptions1 = option_id[options1];
+                    String[] strings = mTimeOption1_id[options1];
+                    moptions2 = strings[options2];
+                    companychildrenTv.setText(option[options1]);
                     moredata();
                     return false;
                 })
                         .setTitleText("")
                         .isRestoreItem(true)
-                        .setSelectOptions(cateIndexSelected.get(0), cateIndexSelected.get(1))
+                        .setSelectOptions(0, 0)
                         .build();
                 pvOptions.setPicker(option, mTimeOption1);
                 pvOptions.show();
@@ -230,26 +196,16 @@ public class NewProductFactoryActivity extends BaseActivity implements BaseView 
                     return;
                 }
                 OptionsPickerView pvOptions_address = new OptionsPickerBuilder(NewProductFactoryActivity.this, (v, options1, options2, options3) -> {
-                    areaIndexSelected.set(0,options1);
-                    areaIndexSelected.set(1,options2);
-
-                    areaSelected.set(0, areaList.get(options1).getRegionid() + "");
-                    String minArea = areaList.get(options1).getNextList().get(options2).getRegionid() + "";
-                    areaSelected.set(0, minArea);
+                    moptions1_address = option_id_address[options1];
+                    String[] strings = mTimeOption1_id_address[options1];
+                    moptions2_address = strings[options2];
                     factorychildrenTv.setText(option_address[options1]);
-
-                    if ("0".equals(minArea)){
-                        factorychildrenTv.setText(option_address[options1]);
-                    }else {
-                        factorychildrenTv.setText(mTimeOption1_address[options1][options2]);
-                    }
-                    page = 1;
                     moredata();
                     return false;
                 })
                         .setTitleText("")
                         .isRestoreItem(true)
-                        .setSelectOptions(areaIndexSelected.get(0), areaIndexSelected.get(1))
+                        .setSelectOptions(0, 0)
                         .build();
                 pvOptions_address.setPicker(option_address, mTimeOption1_address);
                 pvOptions_address.show();
@@ -263,15 +219,12 @@ public class NewProductFactoryActivity extends BaseActivity implements BaseView 
 
     @Override
     public void showloading() {
-        loading = new LoadingDialog(this);
-        loading.show();
-//        showLoading();
+        showLoading();
     }
 
     @Override
     public void hidenloading() {
-        loading.dismiss();
-//        dissmissLoading();
+        dissmissLoading();
     }
 
 
@@ -331,6 +284,7 @@ public class NewProductFactoryActivity extends BaseActivity implements BaseView 
 
         }
 
+
     }
 
     private void initdata() {
@@ -348,47 +302,46 @@ public class NewProductFactoryActivity extends BaseActivity implements BaseView 
 
                         CompanyFactoryBean.RetvalBean retval = data.getRetval();
                         title_TV.setText(name + "OEM,ODM贴牌工厂-代工帮");
-                        cateList = retval.getOemcate();
-
-                        List<CompanyFactoryBean.RetvalBean.OemcateBean> maxList = cateList;
-                        int maxNum = maxList.size();
-                        option = new String[maxNum + 1];
-                        option[0] = "全部品类";
-
-                        mTimeOption1 = new String[maxNum + 1][];
-                        mTimeOption1[0] = new String[]{"全部"};
-
-                        int childSize = 0;
-                        List<CompanyFactoryBean.RetvalBean.OemcateBean.ChildrenBean> cateChildList = null;
-                        for (int i = 1; i <= maxNum; i++) {
-                            CompanyFactoryBean.RetvalBean.OemcateBean oemcateBean = maxList.get(i - 1);
+                        //title_TV.setTypeface(Typeface.DEFAULT_BOLD);
+                        option = new String[retval.getOemcate().size()];
+                        mTimeOption1 = new String[retval.getOemcate().size()][];
+                        option_id = new String[retval.getOemcate().size()];
+                        mTimeOption1_id = new String[retval.getOemcate().size()][];
+                        for (int i = 0; i < retval.getOemcate().size(); i++) {
+                            CompanyFactoryBean.RetvalBean.OemcateBean oemcateBean = retval.getOemcate().get(i);
                             option[i] = oemcateBean.getValue();
-
-                            cateChildList = maxList.get(i - 1).getChildren();
-                            childSize = cateChildList.size() + 1;
-                            String[] time = new String[childSize];
-                            time[0] = oemcateBean.getValue() + "全部";
-                            for (int i1 = 1; i1 <= cateChildList.size(); i1++) {
-                                time[i1] = cateChildList.get(i1 - 1).getValue();
+                            option_id[i] = oemcateBean.getId();
+                            String[] time = new String[retval.getOemcate().get(i).getChildren().size()];
+                            String[] time_id = new String[retval.getOemcate().get(i).getChildren().size()];
+                            List<CompanyFactoryBean.RetvalBean.OemcateBean.ChildrenBean> children = retval.getOemcate().get(i).getChildren();
+                            for (int i1 = 0; i1 < children.size(); i1++) {
+                                time[i1] = children.get(i1).getValue();
+                                time_id[i1] = children.get(i1).getId();
                             }
                             mTimeOption1[i] = time;
+                            mTimeOption1_id[i] = time_id;
                         }
 
-                        areaList = retval.getOemarea();
                         option_address = new String[retval.getOemarea().size()];
                         mTimeOption1_address = new String[retval.getOemarea().size()][];
-
+                        option_id_address = new String[retval.getOemarea().size()];
+                        mTimeOption1_id_address = new String[retval.getOemarea().size()][];
                         for (int i = 0; i < retval.getOemarea().size(); i++) {
                             CompanyFactoryBean.RetvalBean.OemareaBean oemareaBean = retval.getOemarea().get(i);
                             option_address[i] = oemareaBean.getRegionname();
-
+                            option_id_address[i] = oemareaBean.getRegionid() + "";
                             String[] time = new String[retval.getOemarea().get(i).getNextList().size()];
+                            String[] time_id = new String[retval.getOemarea().get(i).getNextList().size()];
                             List<CompanyFactoryBean.nextListBean> nextList = retval.getOemarea().get(i).getNextList();
                             for (int i1 = 0; i1 < nextList.size(); i1++) {
                                 time[i1] = nextList.get(i1).getRegionname();
+                                time_id[i1] = nextList.get(i1).getRegionid() + "";
                             }
                             mTimeOption1_address[i] = time;
+                            mTimeOption1_id_address[i] = time_id;
                         }
+
+
                     }
                 });
     }
@@ -416,10 +369,10 @@ public class NewProductFactoryActivity extends BaseActivity implements BaseView 
         moreProstoreBeanmvp.setLy("app");
         moreProstoreBeanmvp.setKw("");
         moreProstoreBeanmvp.setPage(page + "");
-        moreProstoreBeanmvp.setCatebid(cateSelected.get(0));
-        moreProstoreBeanmvp.setCatesid(cateSelected.get(1));
-        moreProstoreBeanmvp.setAreabid(areaSelected.get(0));
-        moreProstoreBeanmvp.setAreasid(areaSelected.get(1));
+        moreProstoreBeanmvp.setCatebid(moptions1);
+        moreProstoreBeanmvp.setCatesid(moptions2);
+        moreProstoreBeanmvp.setAreabid(moptions1_address);
+        moreProstoreBeanmvp.setAreasid(moptions2_address);
         moreProstoreBeanmvp.setItype(String.valueOf(type));
         factoryProductPersenter.saveData(moreProstoreBeanmvp);
         factoryProductPersenter.validateCredentials();
@@ -433,9 +386,9 @@ public class NewProductFactoryActivity extends BaseActivity implements BaseView 
                 setGoodsfactoryState(type);
                 companychildrenTv.setText(bean.getName());
                 String[] ids = bean.getId().split("_");
-                cateSelected.set(0,ids[0]);
+                moptions1 = ids[0];
                 if (ids.length == 2) {
-                    cateSelected.set(1,ids[1]);
+                    moptions2 = ids[1];
                 }
                 moredata();
             }

@@ -11,10 +11,7 @@ import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.bean.SitetopinfoBean;
 import com.zhangying.oem1688.custom.JumpViewPage;
-import com.zhangying.oem1688.onterface.BaseView;
 import com.zhangying.oem1688.onterface.IJumPage;
-import com.zhangying.oem1688.view.activity.home.NewProductFactoryActivity;
-import com.zhangying.oem1688.view.fragment.ProductFragment;
 
 
 public class PinLeiChilden2Adpter extends BaseRecyclerAdapter<SitetopinfoBean.RetvalBean.childrenBean> {
@@ -34,11 +31,6 @@ public class PinLeiChilden2Adpter extends BaseRecyclerAdapter<SitetopinfoBean.Re
     }
     private String storeid;
 
-    private BaseView parentView;
-    public void setParentView(BaseView parentView) {
-        this.parentView = parentView;
-    }
-
     @Override
     protected int getItemLayoutId(int viewType) {
         return R.layout.pinleipopu2;
@@ -53,16 +45,8 @@ public class PinLeiChilden2Adpter extends BaseRecyclerAdapter<SitetopinfoBean.Re
             public void onClick(View view) {
                 int stype = 1;
                 String sid = storeid + "_" + item.getCateid();
-                if (context instanceof NewProductFactoryActivity){
-                    NewProductFactoryActivity pageActivity = (NewProductFactoryActivity)context;
-                    pageActivity.reloadData(sid,item.getCatename());
-                }else if (parentView != null && parentView instanceof ProductFragment){
-                    ProductFragment pageFragment = (ProductFragment)parentView;
-                    pageFragment.reloadData(sid,item.getCatename());
-                }else {
-                    JumpViewPage jumpViewPage = new JumpViewPage();
-                    jumpViewPage.intentActivity(context, stype, sid, item.getCatename(), "工厂");
-                }
+                JumpViewPage jumpViewPage = new JumpViewPage();
+                jumpViewPage.intentActivity(context, stype, sid, item.getCatename(), "工厂");
                 jumPage.success();
             }
         });

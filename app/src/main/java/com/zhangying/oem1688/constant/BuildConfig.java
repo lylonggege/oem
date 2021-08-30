@@ -17,4 +17,8 @@ public class BuildConfig {
     public static String md5Str = MD5Util.getMD5Str(url);
     public static String PARAMETERS = "&ly=app&timestamp=" + (System.currentTimeMillis() / 1000) + "&token=" + TokenUtils.getToken() + "@sign=" + md5Str;
 
+    //进入登录activity的标记
+    public static int PRODUCT_ENTER_TYPE = 1;  //产品进入
+    public static int FACTORY_ENTER_TYPE = 2;  //公司进入
+
 }

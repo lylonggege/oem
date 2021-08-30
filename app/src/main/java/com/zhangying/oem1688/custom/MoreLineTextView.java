@@ -174,7 +174,7 @@ public class MoreLineTextView extends LinearLayout implements View.OnClickListen
         Animation animation = new Animation() {
             protected void applyTransformation(float interpolatedTime, Transformation t) {
                 //interpolatedTime:为当前动画帧对应的相对时间，值总在0-1之间,原始长度+高度差*（从0到1的渐变）即表现为动画效果
-                mTvContent.setHeight((int) (startValue + deltaValue * interpolatedTime + (isExpand ? 30 : 0)));
+                mTvContent.setHeight((int) (startValue + deltaValue * interpolatedTime));
             }
         };
         animation.setDuration(mDurationMillis);

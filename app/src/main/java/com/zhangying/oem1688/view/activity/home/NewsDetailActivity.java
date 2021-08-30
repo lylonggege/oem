@@ -33,7 +33,6 @@ import com.zhangying.oem1688.onterface.BasePresenter;
 import com.zhangying.oem1688.onterface.BaseView;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
 import com.zhangying.oem1688.util.GlideUtil;
-import com.zhangying.oem1688.util.MyUtilsWebView;
 import com.zhangying.oem1688.util.ScreenTools;
 import com.zhangying.oem1688.util.ToastUtil;
 import com.zhangying.oem1688.util.WebViewSeting;
@@ -116,9 +115,7 @@ public class NewsDetailActivity extends BaseActivity implements BaseView {
                             SpannableStringBuilder style = new SpannableStringBuilder(text);
                             style.setSpan(new ForegroundColorSpan(Color.BLUE), time.length(), text.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
                             timeTv.setText(style);
-                            String s = MyUtilsWebView.setWebViewText(newsinfo.getContent());
-                            WebViewSeting.setting(webView, NewsDetailActivity.this, s);
-
+                            WebViewSeting.setting(webView, NewsDetailActivity.this, newsinfo.getContent());
                         }
 
                         @Override
