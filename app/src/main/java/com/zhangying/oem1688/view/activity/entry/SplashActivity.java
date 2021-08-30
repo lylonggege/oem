@@ -2,6 +2,7 @@ package com.zhangying.oem1688.view.activity.entry;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.os.Bundle;
 
 import com.xuexiang.xui.widget.activity.BaseSplashActivity;
@@ -49,5 +50,6 @@ public class SplashActivity extends BaseSplashActivity {
 //        }
         ActivityUtils.startActivity(MainActivity.class);
         finish();
+        this.overridePendingTransition(0, 0);
     }
 }

@@ -33,9 +33,6 @@ public class HashMapSingleton extends HashMap {
             this.put("timestamp", timestamp);
 
             String url = timestamp + token + "&^%$RSTUih09135ZST)(*";
-            System.out.println("timestamp::" + timestamp);
-            System.out.println("token::" + timestamp);
-            System.out.println("timestamp::" + timestamp);
             String md5Str = MD5Util.getMD5Str(url);
             this.put("sign", md5Str);
         }

@@ -606,6 +606,9 @@ public class MySlidingTabLayout extends HorizontalScrollView implements ViewPage
         this.mCurrentTab = currentTab;
         try {
             mViewPager.setCurrentItem(currentTab);
+            if (mCurrentTab == 0 && mTabsContainer.getChildCount() > 0){
+                updateTabSelection(mCurrentTab);
+            }
         } catch (Exception e) {
 
         }

@@ -6,23 +6,17 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
-import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
-import android.view.ViewGroup;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
-
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.base.BaseActivity;
 import com.zhangying.oem1688.bean.BaseBean;
-import com.zhangying.oem1688.bean.GoodsdetailBean;
 import com.zhangying.oem1688.bean.NewscontBean;
 import com.zhangying.oem1688.bean.ScinfoDetailBean;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
@@ -31,7 +25,6 @@ import com.zhangying.oem1688.mvp.leave.DateBean;
 import com.zhangying.oem1688.mvp.leave.LeaveMessagePersenterImpl;
 import com.zhangying.oem1688.onterface.BasePresenter;
 import com.zhangying.oem1688.onterface.BaseView;
-import com.zhangying.oem1688.singleton.HashMapSingleton;
 import com.zhangying.oem1688.util.GlideUtil;
 import com.zhangying.oem1688.util.ScreenTools;
 import com.zhangying.oem1688.util.ToastUtil;
@@ -40,6 +33,7 @@ import com.zhangying.oem1688.util.WebViewSeting;
 import java.util.HashMap;
 import java.util.List;
 
+import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.OnClick;
 

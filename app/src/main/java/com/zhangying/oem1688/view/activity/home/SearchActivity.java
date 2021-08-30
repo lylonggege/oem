@@ -7,32 +7,24 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import androidx.annotation.Nullable;
 
 import com.xuexiang.xui.widget.dialog.DialogLoader;
 import com.xuexiang.xui.widget.flowlayout.FlowTagLayout;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.adpter.FlowTagAdapter;
 import com.zhangying.oem1688.base.BaseActivity;
-import com.zhangying.oem1688.custom.FenLeiRealization;
-import com.zhangying.oem1688.custom.MyRecycleView;
 import com.zhangying.oem1688.db.DbDao;
-import com.zhangying.oem1688.onterface.BaseView;
 import com.zhangying.oem1688.util.AppManagerUtil;
-import com.zhangying.oem1688.util.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.OnClick;
 
 public class SearchActivity extends BaseActivity implements TextView.OnEditorActionListener {
-
 
     @BindView(R.id.et_input)
     EditText et_input;
@@ -50,6 +42,10 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //初始化获取焦点
+        et_input.requestFocus();
+
         AppManagerUtil.getInstance().addHomeActivity(this);
         dbDao = new DbDao(this);
         query();
@@ -75,27 +71,11 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
         }
     }
 
-    @OnClick({R.id.et_input, R.id.clear_ll, R.id.imageView5, R.id.imageView2})
+    @OnClick({R.id.et_input, R.id.clear_ll, R.id.imageView5, R.id.imageView2,R.id.imageView})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.imageView2:
-                FenLeiRealization fenLeiRealization = new FenLeiRealization(SearchActivity.this, new BaseView() {
-                    @Override
-                    public void showloading() {
-                        showLoading();
-                    }
-
-                    @Override
-                    public void hidenloading() {
-                        dissmissLoading();
-                    }
-
-                    @Override
-                    public void success(Object o) {
-                        showloading();
-                    }
-                });
-                fenLeiRealization.realization();
+            case R.id.imageView:
+                finish();
                 break;
             case R.id.clear_ll:
                 DialogLoader.getInstance().showConfirmDialog(
@@ -115,6 +95,7 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
                         }
                 );
                 break;
+            case R.id.imageView2:
             case R.id.imageView5:
                 String searchStr = et_input.getText().toString();
                 dbDao.insertData(searchStr);

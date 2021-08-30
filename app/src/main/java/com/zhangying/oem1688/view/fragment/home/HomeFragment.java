@@ -552,7 +552,7 @@ public class HomeFragment extends BaseFragment {
         public View createView(Context context) {
             View view = LayoutInflater.from(context).inflate(R.layout.banner_item, null);
             mImageView = (RadiusImageView) view.findViewById(R.id.banner_image);
-            mImageView.setCornerRadius(10);
+            mImageView.setCornerRadius(20);
             return view;
         }
 

@@ -11,10 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.GridLayoutManager;
-
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
@@ -22,7 +18,6 @@ import com.xuexiang.xui.utils.WidgetUtils;
 import com.xuexiang.xui.widget.picker.widget.OptionsPickerView;
 import com.xuexiang.xui.widget.picker.widget.builder.OptionsPickerBuilder;
 import com.zhangying.oem1688.R;
-import com.zhangying.oem1688.adpter.CompanyFactoryTabberAdpter;
 import com.zhangying.oem1688.adpter.HomeGoodAdpter;
 import com.zhangying.oem1688.adpter.MoreProstoreAdpter;
 import com.zhangying.oem1688.base.BaseActivity;
@@ -42,6 +37,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -105,7 +103,6 @@ public class SearchResultActivity extends BaseActivity implements BaseView, Text
     private HomeGoodAdpter home_goodAdpter;
     private List<HomeBena.RetvalBean.SgoodsListBean.GoodsBean> getGoods = new ArrayList<>();
 
-
     @Override
     protected int getLayoutId() {
         return R.layout.activity_search_result;
@@ -114,6 +111,7 @@ public class SearchResultActivity extends BaseActivity implements BaseView, Text
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         kw = getIntent().getStringExtra("KW");
         et_input.setText(kw);
         //光标移动到最后
@@ -285,34 +283,33 @@ public class SearchResultActivity extends BaseActivity implements BaseView, Text
             }
 
         }
-
-
     }
 
-    @OnClick({R.id.company_rl, R.id.factory_rl, R.id.cate_ll, R.id.address_ll, R.id.imageView5})
+    @OnClick({R.id.company_rl, R.id.factory_rl, R.id.cate_ll, R.id.address_ll, R.id.imageView5,R.id.imageView2,R.id.imageView})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.company_rl:
+            case R.id.imageView://返回
+                finish();
+                break;
+            case R.id.company_rl://切换到工厂
                 page = 1;
                 Itype = 0;
                 companyTv.setSelected(true);
                 companyTvLine.setSelected(true);
                 factoryTv.setSelected(false);
                 factoryTvLine.setSelected(false);
-
                 moredata();
                 break;
-            case R.id.factory_rl:
+            case R.id.factory_rl://切换到产品
                 page = 1;
                 Itype = 1;
                 companyTv.setSelected(false);
                 companyTvLine.setSelected(false);
                 factoryTv.setSelected(true);
                 factoryTvLine.setSelected(true);
-
                 moredata();
                 break;
-            case R.id.cate_ll:
+            case R.id.cate_ll://点击品类
                 if (option == null || option.length == 0) {
                     return;
                 }
@@ -331,7 +328,7 @@ public class SearchResultActivity extends BaseActivity implements BaseView, Text
                 pvOptions.setPicker(option, mTimeOption1);
                 pvOptions.show();
                 break;
-            case R.id.address_ll:
+            case R.id.address_ll://点击地区
                 if (option_address == null || option_address.length == 0) {
                     return;
                 }
@@ -349,9 +346,9 @@ public class SearchResultActivity extends BaseActivity implements BaseView, Text
                         .build();
                 pvOptions_address.setPicker(option_address, mTimeOption1_address);
                 pvOptions_address.show();
-
                 break;
-            case R.id.imageView5:
+            case R.id.imageView2://点击搜索文字
+            case R.id.imageView5://点击搜索按钮
                 moredata();
                 break;
         }

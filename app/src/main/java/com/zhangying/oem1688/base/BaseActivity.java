@@ -1,17 +1,13 @@
 package com.zhangying.oem1688.base;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.util.AppManagerUtil;
 import com.zhangying.oem1688.util.LoadingView;
-import com.zhangying.oem1688.view.activity.home.FactoryDetailActivity;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import butterknife.ButterKnife;
 
 public abstract class BaseActivity extends AppCompatActivity {

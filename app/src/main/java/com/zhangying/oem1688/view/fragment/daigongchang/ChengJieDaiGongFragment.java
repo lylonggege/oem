@@ -20,7 +20,6 @@ import com.zhangying.oem1688.singleton.HashMapSingleton;
 import butterknife.BindView;
 
 public class ChengJieDaiGongFragment extends BaseFragment {
-
     @BindView(R.id.recycview)
     MyRecycleView recycview;
     @BindView(R.id.refresh_layout)
@@ -31,7 +30,6 @@ public class ChengJieDaiGongFragment extends BaseFragment {
     public ChengJieDaiGongFragment(String id) {
         this.id = id;
     }
-
     private String id;
 
     @Override
@@ -63,7 +61,6 @@ public class ChengJieDaiGongFragment extends BaseFragment {
                 refreshLayout.finishRefresh();
                 page = 1;
                 initdata();
-
             }
         });
     }
@@ -73,11 +70,11 @@ public class ChengJieDaiGongFragment extends BaseFragment {
         HashMapSingleton.getInstance().clear();
         HashMapSingleton.getInstance().put("ly", "app");
         HashMapSingleton.getInstance().put("cateid", id);
+        HashMapSingleton.getInstance().put("navid", 2);
         HashMapSingleton.getInstance().put("page", page);
         RemoteRepository.getInstance()
                 .more_scinfo(HashMapSingleton.getInstance())
                 .subscribeWith(new DefaultDisposableSubscriber<MoreScinfoBean>() {
-
                     @Override
                     protected void success(MoreScinfoBean data) {
                         dissmissLoading();

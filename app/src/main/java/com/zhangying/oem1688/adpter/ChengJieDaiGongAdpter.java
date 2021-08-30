@@ -6,11 +6,13 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.internal.LinkedTreeMap;
 import com.xuexiang.xui.adapter.recyclerview.BaseRecyclerAdapter;
 import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
 import com.xuexiang.xui.utils.DensityUtils;
@@ -19,9 +21,13 @@ import com.xuexiang.xui.widget.imageview.RadiusImageView;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.bean.MoreScinfoBean;
 import com.zhangying.oem1688.custom.MyRecycleView;
+import com.zhangying.oem1688.onterface.BaseImagePreview;
 import com.zhangying.oem1688.util.GlideUtil;
+import com.zhangying.oem1688.util.ImageViewInfo;
+import com.zhangying.oem1688.util.PreviewImageView;
 import com.zhangying.oem1688.view.activity.home.NewsDetailActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ChengJieDaiGongAdpter extends BaseRecyclerAdapter<MoreScinfoBean.RetvalBean.RecordListBean> {
@@ -55,13 +61,24 @@ public class ChengJieDaiGongAdpter extends BaseRecyclerAdapter<MoreScinfoBean.Re
         String cate_name = "#" + item.getNcate() + "#";
         String text = cate_name + item.getNtitle();
         SpannableStringBuilder style = new SpannableStringBuilder(text);
-        style.setSpan(new ForegroundColorSpan(Color.BLUE), 0, cate_name.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+        style.setSpan(new ForegroundColorSpan(Color.parseColor("#047cf7")), 0, cate_name.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
         company_contont_tv.setText(style);
         company_time_tv.setText(item.getNtime());
         List<String> images = item.getNimg();
         if (images != null && images.size() > 0) {
             WidgetUtils.initGridRecyclerView(company_recycleview, 3, DensityUtils.dp2px(5));
             NewsOemNimgAdpter newsOemNimgAdpter = new NewsOemNimgAdpter(context);
+            newsOemNimgAdpter.setImagePreview(new BaseImagePreview() {
+                @Override
+                public void startPosition(int position,ImageView imageView) {
+                    List<ImageViewInfo> list = new ArrayList<>();
+                    for (int i1 = 0; i1 < images.size(); i1++) {
+                        ImageViewInfo imageViewInfo = new ImageViewInfo((String) images.get(i1));
+                        list.add(imageViewInfo);
+                    }
+                    PreviewImageView.save(imageView, position, list);
+                }
+            });
             newsOemNimgAdpter.refresh(images);
             company_recycleview.setAdapter(newsOemNimgAdpter);
         }

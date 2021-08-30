@@ -47,7 +47,6 @@ import butterknife.OnClick;
  */
 public class FindProductActivity extends BaseActivity implements BaseView {
 
-
     @BindView(R.id.banner)
     MZBannerView banner;
     @BindView(R.id.parent_tab_indictor)
@@ -130,7 +129,7 @@ public class FindProductActivity extends BaseActivity implements BaseView {
                 fenLeiRealization.validateCredentials();
                 break;
             case R.id.textView:
-
+                SearchActivity.simpleActivity(this);
                 break;
 			case R.id.bacK_RL:
                 finish();
@@ -160,7 +159,6 @@ public class FindProductActivity extends BaseActivity implements BaseView {
             /**
              * 图片轮播的简单使用
              */
-
             RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) banner.getLayoutParams();
             layoutParams.width = ScreenTools.instance(this).getScreenWidth() - ScreenTools.instance(this).dip2px(20);
             layoutParams.height = layoutParams.width * 260 / 720;
@@ -184,7 +182,7 @@ public class FindProductActivity extends BaseActivity implements BaseView {
         public View createView(Context context) {
             View view = LayoutInflater.from(context).inflate(R.layout.banner_item, null);
             mImageView = (RadiusImageView) view.findViewById(R.id.banner_image);
-            mImageView.setCornerRadius(10);
+            mImageView.setCornerRadius(20);
             return view;
         }
 

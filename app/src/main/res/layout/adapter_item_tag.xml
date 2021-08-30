@@ -6,7 +6,7 @@
     <TextView
         android:id="@+id/tv_tag"
         style="@style/TextStyle.Explain"
-        android:layout_height="32dp"
+        android:layout_height="26dp"
         android:layout_marginStart="?attr/xui_config_content_spacing_horizontal"
         android:layout_marginTop="?attr/xui_config_content_spacing_horizontal"
         android:background="@drawable/bg_rect_round_tag_btn"
