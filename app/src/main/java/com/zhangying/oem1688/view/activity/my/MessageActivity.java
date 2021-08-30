@@ -16,21 +16,26 @@ import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.xuexiang.xui.widget.imageview.RadiusImageView;
+import com.xuexiang.xutil.tip.ToastUtils;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.base.BaseActivity;
 import com.zhangying.oem1688.bean.BaseBean;
 import com.zhangying.oem1688.bean.BaseBeancClass;
 import com.zhangying.oem1688.bean.CcatesJsonBean;
+import com.zhangying.oem1688.bean.EvenBusMessageBean;
 import com.zhangying.oem1688.bean.ListHistoryBean;
 import com.zhangying.oem1688.bean.MemberInfoBean;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
+import com.zhangying.oem1688.singleton.EventBusStyeSingleton;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
 import com.zhangying.oem1688.util.Base64Util;
 import com.zhangying.oem1688.util.GlideUtil;
 import com.zhangying.oem1688.util.MD5Util;
 import com.zhangying.oem1688.util.ToastUtil;
 import com.zhangying.oem1688.util.TokenUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -81,8 +86,11 @@ public class MessageActivity extends BaseActivity {
                         dissmissLoading();
                         MemberInfoBean.RetvalBean retval = data.getRetval();
                         nikeEt.setText(retval.getNickname());
-                        nameEt.setText(retval.getUser_name());
-                        companyEt.setText(retval.getPhone_mob());
+                        nikeEt.setSelection(retval.getNickname().length());
+                        nameEt.setText(retval.getReal_name());
+                        companyEt.setText(retval.getShop_name());
+                        phoneEt.setText(retval.getPhone_mob());
+                        GlideUtil.loadImage(MessageActivity.this, retval.getPortrait(), headiv);
                     }
 
                     @Override
@@ -122,26 +130,28 @@ public class MessageActivity extends BaseActivity {
                 break;
             case R.id.submit_tv:
                 showLoading();
-                HashMap<String, Object> map = new HashMap<>();
-                map.put("realname", nameEt.getText().toString() == null ? "" : nameEt.getText().toString());
-                map.put("nickname", nikeEt.getText().toString() == null ? "" : nikeEt.getText().toString());
-                map.put("phone", phoneEt.getText().toString() == null ? "" : phoneEt.getText().toString());
-                map.put("compname", companyEt.getText().toString() == null ? "" : companyEt.getText().toString());
-                map.put("portrait", path == null ? "" : path);
-                long timestamp = System.currentTimeMillis() / 1000;
-                map.put("timestamp", timestamp);
-                map.put("token", TokenUtils.getToken());
-                String url = timestamp + TokenUtils.getToken() + "&^%$RSTUih09135ZST)(*";
-                String md5Str = MD5Util.getMD5Str(url);
-                map.put("sign", md5Str);
+                HashMapSingleton.getInstance().reload();
+                HashMapSingleton.getInstance().put("realname", nameEt.getText().toString() == null ? "" : nameEt.getText().toString());
+                HashMapSingleton.getInstance().put("nickname", nikeEt.getText().toString() == null ? "" : nikeEt.getText().toString());
+                HashMapSingleton.getInstance().put("phone", phoneEt.getText().toString() == null ? "" : phoneEt.getText().toString());
+                HashMapSingleton.getInstance().put("compname", companyEt.getText().toString() == null ? "" : companyEt.getText().toString());
+                HashMapSingleton.getInstance().put("portrait", path == null ? "" : path);
                 RemoteRepository.getInstance()
-                        .edithyoem(map)
+                        .edithyoem(HashMapSingleton.getInstance())
                         .subscribeWith(new DefaultDisposableSubscriber<BaseBean>() {
 
                             @Override
                             protected void success(BaseBean data) {
                                 dissmissLoading();
-                                finish();
+                                if (data.isDone()) {
+                                    ToastUtils.toast(data.getMsg());
+                                    //跟新我的界面数据
+                                    EventBusStyeSingleton.getInstance().updateMyfragment();
+                                    finish();
+                                } else {
+                                    ToastUtils.toast(data.getMsg());
+                                }
+
                             }
 
                             @Override

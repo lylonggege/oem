@@ -4,6 +4,7 @@ import com.zhangying.oem1688.bean.FactoryDetailBean;
 
 import java.util.HashSet;
 
+//
 public class GlobalEntitySingleton extends Object {
 
     public void setFactoryDetail(FactoryDetailBean.RetvalBean factoryDetail) {

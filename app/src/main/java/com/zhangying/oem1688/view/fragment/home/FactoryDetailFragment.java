@@ -3,6 +3,7 @@ package com.zhangying.oem1688.view.fragment.home;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+
 import com.google.gson.internal.LinkedTreeMap;
 
 import androidx.core.widget.NestedScrollView;
@@ -107,8 +108,13 @@ public class FactoryDetailFragment extends BaseFragment {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
-                    nestedscrollview.fling(0);
-                    nestedscrollview.smoothScrollTo(0, 0);
+                    try {
+                        nestedscrollview.fling(0);
+                        nestedscrollview.smoothScrollTo(0, 0);
+                    } catch (NullPointerException e) {
+                        System.out.println("nestedscrollview not null ....");
+                    }
+
                     break;
             }
         }
@@ -137,14 +143,14 @@ public class FactoryDetailFragment extends BaseFragment {
 
         mcid = getArguments().getString("mcid");
         retval = GlobalEntitySingleton.getInstance().getFactoryDetail();
-        if (retval == null){//主界面已加载店铺信息
+        if (retval == null) {//主界面已加载店铺信息
             loadFactoryInfo();
-        }else {
+        } else {
             renderFactoryInfo();
         }
     }
 
-    private void loadFactoryInfo(){
+    private void loadFactoryInfo() {
         HashMapSingleton.getInstance().reload();
         HashMapSingleton.getInstance().put("cid", mcid);
         RemoteRepository.getInstance()
@@ -165,7 +171,7 @@ public class FactoryDetailFragment extends BaseFragment {
                 });
     }
 
-    private void renderFactoryInfo(){
+    private void renderFactoryInfo() {
         //初始化公司基本信息
         initCompanyBase(retval);
 
@@ -183,18 +189,22 @@ public class FactoryDetailFragment extends BaseFragment {
     }
 
     //初始化公司页面模板
-    private void initCompanySpage(FactoryDetailBean.RetvalBean retval){
+    private void initCompanySpage(FactoryDetailBean.RetvalBean retval) {
         List<FactoryDetailBean.RetvalBean.SpageBean> spage = retval.getSpage();
         imageViewGroupLL.removeAllViews();
-        int ww=ScreenTools.instance(getActivity()).getScreenWidth()-ScreenTools.instance(getActivity()).dip2px(30);
-        if (spage == null || spage.size() == 0) { return; }
+        int ww = ScreenTools.instance(getActivity()).getScreenWidth() - ScreenTools.instance(getActivity()).dip2px(30);
+        if (spage == null || spage.size() == 0) {
+            return;
+        }
 
         for (int i = 0; i < spage.size(); i++) {
             FactoryDetailBean.RetvalBean.SpageBean spageBean1 = spage.get(i);
             int ctype = spageBean1.getCtype();
             if (ctype == 1) {
                 List<Object> content = (List<Object>) spageBean1.getContent();
-                if (content.size() == 0) { continue; }
+                if (content.size() == 0) {
+                    continue;
+                }
                 List<ImageViewInfo> list = new ArrayList<>();
                 for (int i1 = 0; i1 < content.size(); i1++) {
                     LinkedTreeMap<String, Object> hashMap = (LinkedTreeMap<String, Object>) content.get(i1);
@@ -204,7 +214,7 @@ public class FactoryDetailFragment extends BaseFragment {
                     double h = Double.parseDouble(String.valueOf(hashMap.get("h")));
                     LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) imageView.getLayoutParams();
                     layoutParams.width = (int) ww;
-                    layoutParams.height = (int)(h  * layoutParams.width / w);
+                    layoutParams.height = (int) (h * layoutParams.width / w);
                     imageView.setLayoutParams(layoutParams);
                     if (getActivity() != null) {
                         GlideUtil.loadImage(getActivity(), (String) hashMap.get("url"), imageView);
@@ -221,9 +231,9 @@ public class FactoryDetailFragment extends BaseFragment {
                     });
 
                 }
-            } else if (ctype == 8){
+            } else if (ctype == 8) {
 
-            }else if (ctype == 5) {
+            } else if (ctype == 5) {
 
             }
         }
@@ -245,10 +255,10 @@ public class FactoryDetailFragment extends BaseFragment {
         //非vip设置颜色
         String sColor = retval.getScolor();
         GradientDrawable drawable = (GradientDrawable) dian.getBackground();
-        if (sColor.length() > 0){
+        if (sColor.length() > 0) {
             drawable.setStroke(2, Color.parseColor(sColor));//设置边框的宽度和颜色
             companynameAuthtagTv.setBackgroundColor(Color.parseColor(sColor));
-        }else {
+        } else {
             drawable.setStroke(2, getResources().getColor(R.color.redf04142));
         }
 
@@ -310,20 +320,21 @@ public class FactoryDetailFragment extends BaseFragment {
     private void initbanner() {
         rib_simple_usage.setSource(bannerItemData).startScroll();
     }
-    @OnClick({R.id.message_LL,R.id.submit_tv})
+
+    @OnClick({R.id.message_LL, R.id.submit_tv})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.submit_tv://界面提交留言
                 ArrayList<Integer> cateSelected = new ArrayList<Integer>();
                 List<GoodsdetailBean.RetvalBean.StoreDataBean.StoreGcatesBean> catesList = retval.getStore_gcates();
-                for (GoodsdetailBean.RetvalBean.StoreDataBean.StoreGcatesBean item:catesList) {
-                    if (item.isaBoolean())cateSelected.add(item.getId());
+                for (GoodsdetailBean.RetvalBean.StoreDataBean.StoreGcatesBean item : catesList) {
+                    if (item.isaBoolean()) cateSelected.add(item.getId());
                 }
 
-                doSubmitMessage(nameEt.getText().toString(),phoneEt.getText().toString(),TextUtils.join(",",cateSelected), true);
+                doSubmitMessage(nameEt.getText().toString(), phoneEt.getText().toString(), TextUtils.join(",", cateSelected), true);
                 break;
             case R.id.message_LL://打开留言弹出层
-                if (msgPop == null){
+                if (msgPop == null) {
                     msgPop = new GoodsDetailPopu(getActivity());
                     msgPop.setMessageLister(new BaseMessageListener() {
                         @Override
@@ -365,23 +376,24 @@ public class FactoryDetailFragment extends BaseFragment {
 
     /**
      * 提交留言到服务器
-     * @param name 姓名
-     * @param phone 电话
-     * @param cates 选择的工厂产品系列
+     *
+     * @param name    姓名
+     * @param phone   电话
+     * @param cates   选择的工厂产品系列
      * @param chkCate 检测产品系列是否选择
      */
-    private boolean doSubmitMessage(String name, String phone, String cates, boolean chkCate){
-        if (StringUtils.isEmity(name)){
+    private boolean doSubmitMessage(String name, String phone, String cates, boolean chkCate) {
+        if (StringUtils.isEmity(name)) {
             ToastUtil.showToast("请填写姓名");
             return false;
         }
 
-        if (StringUtils.isEmity(phone)){
+        if (StringUtils.isEmity(phone)) {
             ToastUtil.showToast("请填写电话");
             return false;
         }
 
-        if (chkCate && StringUtils.isEmity(cates)){
+        if (chkCate && StringUtils.isEmity(cates)) {
             ToastUtil.showToast("请填写代工系列");
             return false;
         }
@@ -403,13 +415,13 @@ public class FactoryDetailFragment extends BaseFragment {
                     @Override
                     protected void success(BaseBean data) {
                         dissmissLoading();
-                        if (data.isDone()){
+                        if (data.isDone()) {
                             ToastUtil.showToast("留言成功");
-                            if (chkCate){
+                            if (chkCate) {
                                 nameEt.setText("");
                                 phoneEt.setText("");
                             }
-                        }else {
+                        } else {
                             ToastUtil.showToast(data.getMsg());
                         }
                     }

@@ -34,7 +34,7 @@
                 android:id="@+id/name_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="波波"
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="@dimen/dp_20"></TextView>
 
@@ -68,81 +68,12 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/group_ll"
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white">
 
-                <LinearLayout
-                    android:id="@+id/release_LL"
-                    android:layout_width="@dimen/dp_0"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_20"
-                        android:text="0"
-                        android:textColor="@color/ff7506"></TextView>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:layout_marginBottom="@dimen/dp_20"
-                        android:text="我的发布"
-                        android:textColor="@color/b6"></TextView>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/collection_LL"
-                    android:layout_width="@dimen/dp_0"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_20"
-                        android:text="0"
-                        android:textColor="@color/ff7506"></TextView>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:layout_marginBottom="@dimen/dp_20"
-                        android:text="收藏店铺"
-                        android:textColor="@color/b6"></TextView>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/words_LL"
-                    android:layout_width="@dimen/dp_0"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_20"
-                        android:text="0"
-                        android:textColor="@color/ff7506"></TextView>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:layout_marginBottom="@dimen/dp_20"
-                        android:text="留言咨询"
-                        android:textColor="@color/b6"></TextView>
-                </LinearLayout>
             </LinearLayout>
 
             <!--    列表-->

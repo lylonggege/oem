@@ -359,6 +359,16 @@ public class MineinfoBean {
                 private String sname;
                 private String surl;
 
+                public String getStype() {
+                    return stype;
+                }
+
+                public void setStype(String stype) {
+                    this.stype = stype;
+                }
+
+                private String stype;
+
                 public String getNums() {
                     return nums;
                 }

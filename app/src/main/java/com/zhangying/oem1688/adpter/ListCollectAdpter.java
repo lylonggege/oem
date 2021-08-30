@@ -12,14 +12,21 @@ import com.xuexiang.xui.widget.imageview.RadiusImageView;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.bean.ListCollectBean;
 import com.zhangying.oem1688.bean.WordsBean;
+import com.zhangying.oem1688.onterface.ICallBackPosition;
 import com.zhangying.oem1688.util.GlideUtil;
 
 public class ListCollectAdpter extends BaseRecyclerAdapter<ListCollectBean.RetvalBean.RecordListBean> {
     public ListCollectAdpter(Context context) {
         this.context = context;
     }
-
     private Context context;
+
+    public void setiCallBackPosition(ICallBackPosition iCallBackPosition) {
+        this.iCallBackPosition = iCallBackPosition;
+    }
+
+    private ICallBackPosition iCallBackPosition;
+
 
     @Override
     protected int getItemLayoutId(int viewType) {
@@ -40,7 +47,7 @@ public class ListCollectAdpter extends BaseRecyclerAdapter<ListCollectBean.Retva
         Collect_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                iCallBackPosition.getPosition(position);
             }
         });
     }

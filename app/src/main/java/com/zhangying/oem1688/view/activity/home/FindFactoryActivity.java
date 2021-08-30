@@ -79,6 +79,7 @@ public class FindFactoryActivity extends BaseActivity {
     private int schannel;
     private String maxcate_Text;
     private String mincate_text;
+    private boolean isboolean;
 
 
     @Override
@@ -275,6 +276,11 @@ public class FindFactoryActivity extends BaseActivity {
                     break;
                 }
 
+                if (!isboolean || moptions1_address == null || moptions2_address == null) {
+                    ToastUtil.showToast("请选择地区");
+                    return;
+                }
+
                 HashMap<String, Object> map = new HashMap<>();
                 map.put("maxcate", maxcate);
                 map.put("mincate", mincate);
@@ -314,6 +320,7 @@ public class FindFactoryActivity extends BaseActivity {
                     return;
                 }
                 OptionsPickerView pvOptions_address = new OptionsPickerBuilder(this, (v, options1, options2, options3) -> {
+                    isboolean = true;
                     moptions1_address = option_id_address[options1];
                     String[] strings = mTimeOption1_id_address[options1];
                     moptions2_address = strings[options2];

@@ -10,8 +10,7 @@ public class MemberInfoModelImpl implements MemberInfoModel {
 
     @Override
     public void getData(MemberInfoFinishListener memberInfoFinishListener) {
-        HashMapSingleton.getInstance().clear();
-        HashMapSingleton.getInstance().put("ly", "app");
+        HashMapSingleton.getInstance().reload();
         RemoteRepository.getInstance()
                 .mineinfo(HashMapSingleton.getInstance())
                 .subscribeWith(new DefaultDisposableSubscriber<MineinfoBean>() {

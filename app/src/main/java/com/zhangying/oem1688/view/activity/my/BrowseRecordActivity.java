@@ -23,6 +23,7 @@ import com.zhangying.oem1688.custom.MyRecycleView;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.onterface.IJumPage;
+import com.zhangying.oem1688.singleton.HashMapSingleton;
 import com.zhangying.oem1688.util.MD5Util;
 import com.zhangying.oem1688.util.TokenUtils;
 
@@ -64,6 +65,7 @@ public class BrowseRecordActivity extends BaseActivity {
     private BrowseRecordAdpter browseRecordAdpter;
     private boolean iseditTv = true;
     private boolean isSelect = true;
+    private int type = 1;
 
     @Override
     protected int getLayoutId() {
@@ -116,29 +118,17 @@ public class BrowseRecordActivity extends BaseActivity {
 
     private void initdata() {
         showLoading();
-        long timestamp = System.currentTimeMillis() / 1000;
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("page", page);
-        map.put("type", 1);
-        map.put("timestamp", timestamp);
-        map.put("token", TokenUtils.getToken());
-        String url = timestamp + TokenUtils.getToken() + "&^%$RSTUih09135ZST)(*";
-        String md5Str = MD5Util.getMD5Str(url);
-        map.put("sign", md5Str);
+        HashMapSingleton.getInstance().reload();
+        HashMapSingleton.getInstance().put("page", page);
+        HashMapSingleton.getInstance().put("type", type);
         RemoteRepository.getInstance()
-                .list_history(map)
+                .list_history(HashMapSingleton.getInstance())
                 .subscribeWith(new DefaultDisposableSubscriber<ListHistoryBean>() {
 
                     @Override
                     protected void success(ListHistoryBean data) {
                         dissmissLoading();
                         List<ListHistoryBean.RetvalBean.RecordListBean> listhistory = data.getRetval().getRecordList();
-                        for (int i = 0; i < 10; i++) {
-                            ListHistoryBean.RetvalBean.RecordListBean recordListBean = new ListHistoryBean.RetvalBean.RecordListBean();
-                            recordListBean.setAdd_time("100");
-                            recordListBean.setItem_name("xooox");
-                            listhistory.add(recordListBean);
-                        }
                         if (page == 1) {
                             browseRecordAdpter.refresh(listhistory);
                         } else {
@@ -158,12 +148,16 @@ public class BrowseRecordActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.factory_rl:
+                type = 1;
+                page = 1;
                 factoryTv.setSelected(true);
                 factoryTvLine.setSelected(true);
                 companyTv.setSelected(false);
                 companyTvLine.setSelected(false);
                 break;
             case R.id.company_rl:
+                type = 1;
+                page = 1;
                 factoryTv.setSelected(false);
                 factoryTvLine.setSelected(false);
                 companyTv.setSelected(true);

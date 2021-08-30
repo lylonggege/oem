@@ -20,5 +20,6 @@ public class BuildConfig {
     //进入登录activity的标记
     public static int PRODUCT_ENTER_TYPE = 1;  //产品进入
     public static int FACTORY_ENTER_TYPE = 2;  //公司进入
+    public static int UPDATE_MYFRAGMNET_ENTER_TYPE = 3;  //刷新我的界面
 
 }

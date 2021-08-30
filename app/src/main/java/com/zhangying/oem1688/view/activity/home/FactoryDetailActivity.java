@@ -429,7 +429,6 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
 
     }
 
-
     //登录成功后路由返回数据
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void eventData(EvenBusMessageBean message) {

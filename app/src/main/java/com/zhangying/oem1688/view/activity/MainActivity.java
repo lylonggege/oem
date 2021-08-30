@@ -11,14 +11,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.xuexiang.xui.widget.activity.BaseSplashActivity;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.base.BaseActivity;
 import com.zhangying.oem1688.bean.BaseBean;
 import com.zhangying.oem1688.bean.EvenBusBean;
+import com.zhangying.oem1688.bean.EvenBusMessageBean;
 import com.zhangying.oem1688.bean.HomeBena;
 import com.zhangying.oem1688.bean.HomeTabBean;
 import com.zhangying.oem1688.bean.ListCollectBean;
@@ -29,6 +32,7 @@ import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.mvp.home.TabberView;
 import com.zhangying.oem1688.mvp.home.TabberPresenter;
 import com.zhangying.oem1688.mvp.home.TabberPresenterImpl;
+import com.zhangying.oem1688.singleton.EventBusStyeSingleton;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
 import com.zhangying.oem1688.util.ToastUtil;
 import com.zhangying.oem1688.view.fragment.FactoryFragment;
@@ -45,6 +49,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.zhangying.oem1688.constant.BuildConfig.CATEBID;
@@ -52,7 +57,7 @@ import static com.zhangying.oem1688.constant.BuildConfig.CATESID;
 import static com.zhangying.oem1688.constant.BuildConfig.COMPANY_FACTORY_TYPE;
 import static com.zhangying.oem1688.constant.BuildConfig.DAIGONGPINGLEI;
 
-public class MainActivity extends BaseActivity implements TabberView {
+public class MainActivity extends AppCompatActivity implements TabberView {
 
     @BindView(R.id.content_view)
     FrameLayout contentView;
@@ -97,7 +102,8 @@ public class MainActivity extends BaseActivity implements TabberView {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         tabberPresenter = new TabberPresenterImpl(this);
         tabberPresenter.validateCredentials();
         selectTab(1);
@@ -148,7 +154,7 @@ public class MainActivity extends BaseActivity implements TabberView {
                 if (productFragment == null) {
                     productFragment = new ProductFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putInt("TYPE",1);
+                    bundle.putInt("TYPE", 1);
                     productFragment.setArguments(bundle);
                     transaction.add(R.id.content_view, productFragment);
                 } else {
@@ -160,7 +166,7 @@ public class MainActivity extends BaseActivity implements TabberView {
                 if (productFragment2 == null) {
                     productFragment2 = new ProductFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putInt("TYPE",0);
+                    bundle.putInt("TYPE", 0);
                     productFragment2.setArguments(bundle);
                     transaction.add(R.id.content_view, productFragment2);
                 } else {
@@ -183,6 +189,10 @@ public class MainActivity extends BaseActivity implements TabberView {
                 } else {
                     transaction.show(myFragmnet);
                 }
+
+                //跟新我的界面
+                EventBusStyeSingleton.getInstance().updateMyfragment();
+
                 break;
         }
 
@@ -248,11 +258,6 @@ public class MainActivity extends BaseActivity implements TabberView {
 
     }
 
-
-    @Override
-    protected int getLayoutId() {
-        return R.layout.activity_main;
-    }
 
     @OnClick({R.id.home_line, R.id.factory_line, R.id.product_line, R.id.my_line, R.id.news_line})
     public void onClick(View view) {
