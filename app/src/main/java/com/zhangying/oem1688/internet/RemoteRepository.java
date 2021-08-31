@@ -213,5 +213,8 @@ public class RemoteRepository {
         return serverApi.ajax_logout(body);
     }
 
+    public Flowable<BaseBean> drop_history(HashMap<String, Object> body) {
+        return serverApi.drop_history(body);
+    }
 
 }

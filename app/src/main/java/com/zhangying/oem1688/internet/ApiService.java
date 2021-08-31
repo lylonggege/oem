@@ -222,5 +222,10 @@ public interface ApiService {
     @POST("?app=member&act=ajax_logout")
     Flowable<BaseBean> ajax_logout(@FieldMap HashMap<String, Object> hashMap);
 
+    //  删除浏览足迹
+    @FormUrlEncoded
+    @POST("?app=default&act=drop_history")
+    Flowable<BaseBean> drop_history(@FieldMap HashMap<String, Object> hashMap);
+
 
 }
