@@ -26,6 +26,7 @@ import com.zhangying.oem1688.mvp.leave.LeaveMessagePersenterImpl;
 import com.zhangying.oem1688.onterface.BasePresenter;
 import com.zhangying.oem1688.onterface.BaseView;
 import com.zhangying.oem1688.util.GlideUtil;
+import com.zhangying.oem1688.util.MyUtilsWebView;
 import com.zhangying.oem1688.util.ScreenTools;
 import com.zhangying.oem1688.util.ToastUtil;
 import com.zhangying.oem1688.util.WebViewSeting;
@@ -87,6 +88,7 @@ public class NewsDetailActivity extends BaseActivity implements BaseView {
 
     private void newscont() {
         HashMap<String, Object> hashMap = new HashMap<>();
+        String blueColor = "#025BDE";
         if (type == 1) {
             hashMap.put("ly", "app");
             hashMap.put("nid", nid);
@@ -107,9 +109,10 @@ public class NewsDetailActivity extends BaseActivity implements BaseView {
                             String time = newsinfo.getAdd_time() + "    ";
                             String text = time + retval.getNewsnav().getStitle();
                             SpannableStringBuilder style = new SpannableStringBuilder(text);
-                            style.setSpan(new ForegroundColorSpan(Color.BLUE), time.length(), text.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                            style.setSpan(new ForegroundColorSpan(Color.parseColor(blueColor)), time.length(), text.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
                             timeTv.setText(style);
-                            WebViewSeting.setting(webView, NewsDetailActivity.this, newsinfo.getContent());
+                            String s = MyUtilsWebView.setWebViewText(newsinfo.getContent());
+                            WebViewSeting.setting(webView, NewsDetailActivity.this, s);
                         }
 
                         @Override
@@ -137,10 +140,10 @@ public class NewsDetailActivity extends BaseActivity implements BaseView {
                                 String time = retval.getAdd_time() + "    ";
                                 String text = time + retval.getCompname();
                                 SpannableStringBuilder style = new SpannableStringBuilder(text);
-                                style.setSpan(new ForegroundColorSpan(Color.BLUE), time.length(), text.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                                style.setSpan(new ForegroundColorSpan(Color.parseColor(blueColor)), time.length(), text.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
                                 timeTv.setText(style);
                                 List<ScinfoDetailBean.RetvalBean.ImagesBean> images = retval.getImages();
-                                if (images.size() > 0) {
+                                if (images != null && images.size() > 0) {
                                     for (int i = 0; i < images.size(); i++) {
                                         ScinfoDetailBean.RetvalBean.ImagesBean imagesBean = images.get(i);
                                         ImageView imageView = new ImageView(NewsDetailActivity.this);
@@ -155,12 +158,11 @@ public class NewsDetailActivity extends BaseActivity implements BaseView {
                                 companynameTv.setText("公司:  " + retval.getCompname());
                                 companyliaxirenTv.setText("联系人:  " + retval.getName());
                                 SpannableStringBuilder stylephone = new SpannableStringBuilder("联系电话:  " + retval.getStel());
-                                stylephone.setSpan(new ForegroundColorSpan(Color.GREEN), 6, stylephone.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                                stylephone.setSpan(new ForegroundColorSpan(Color.parseColor(blueColor)), 6, stylephone.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
                                 companyphoneTv.setText(stylephone);
                             } catch (Exception e) {
                                 ToastUtil.showToast("服务器参数异常...");
                             }
-
                         }
 
                         @Override

@@ -31,8 +31,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class HomeFragment extends XBaseFragment implements TabLayout.OnTabSelectedListener, BaseView {
-
-
     @BindView(R.id.parent_tab_indictor)
     MySlidingTabLayout parentTabIndictor;
     @BindView(R.id.ViewPagerSlide)
@@ -44,7 +42,6 @@ public class HomeFragment extends XBaseFragment implements TabLayout.OnTabSelect
     private BaseValidateCredentials fenLeiRealization;
 
     //设置菜单适配器里面的recycleView
-
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_home;

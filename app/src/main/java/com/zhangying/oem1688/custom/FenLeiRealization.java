@@ -25,11 +25,12 @@ public class FenLeiRealization implements BaseValidateCredentials {
     private BaseView mbaseView;
     private Context fragmentActivity;
     private PinLeiPopu pinLeiView;
+    BasePopupView popView;
 
     public void realization() {
-        mbaseView.showloading();
         pinLeiView = new PinLeiPopu(fragmentActivity, null);
-        BasePopupView popView = new XPopup.Builder(fragmentActivity)
+        pinLeiView.setParentView(mbaseView);
+        popView = new XPopup.Builder(fragmentActivity)
                 .setPopupCallback(new XPopupCallback() {
                     @Override
                     public void onCreated() {
@@ -50,7 +51,6 @@ public class FenLeiRealization implements BaseValidateCredentials {
                                     @Override
                                     public void onError(Throwable t) {
                                         super.onError(t);
-                                        mbaseView.hidenloading();
                                     }
                                 });
                     }
@@ -83,7 +83,11 @@ public class FenLeiRealization implements BaseValidateCredentials {
 
     @Override
     public void validateCredentials() {
-        mbaseView.showloading();
+        if (popView != null){
+            popView.show();
+            return;
+        }
+
         realization();
     }
 }
