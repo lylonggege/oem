@@ -4,15 +4,10 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.xuexiang.xui.utils.WidgetUtils;
-import com.xuexiang.xui.widget.dialog.DialogLoader;
 import com.xuexiang.xui.widget.dialog.LoadingDialog;
 import com.xuexiang.xui.widget.picker.widget.OptionsPickerView;
 import com.xuexiang.xui.widget.picker.widget.builder.OptionsPickerBuilder;
@@ -34,19 +29,21 @@ import com.zhangying.oem1688.onterface.BaseValidateCredentials;
 import com.zhangying.oem1688.onterface.BaseView;
 import com.zhangying.oem1688.util.SpacesItemDecoration;
 import com.zhangying.oem1688.view.activity.home.SearchActivity;
-import com.zhangying.oem1688.view.activity.home.SearchResultActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.core.widget.NestedScrollView;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -76,6 +73,8 @@ public class ProductFragment extends BaseFragment implements BaseView {
     TextView companychildrenTv;
     @BindView(R.id.factorychildren_tv)
     TextView factorychildrenTv;
+    @BindView(R.id.listScroll)
+    NestedScrollView listScroll;
     private FactoryProductPersenterImpl factoryProductPersenter;
     private int page = 1;
     //分类
@@ -407,6 +406,10 @@ public class ProductFragment extends BaseFragment implements BaseView {
         moreProstoreBeanmvp.setItype(String.valueOf(type));
         factoryProductPersenter.saveData(moreProstoreBeanmvp);
         factoryProductPersenter.validateCredentials();
+
+        if (page == 1){
+            listScroll.smoothScrollTo(0,0);
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

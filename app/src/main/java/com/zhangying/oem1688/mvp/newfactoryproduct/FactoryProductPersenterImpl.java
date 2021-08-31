@@ -4,6 +4,7 @@ import com.zhangying.oem1688.bean.MoreProstoreBeanmvp;
 import com.zhangying.oem1688.onterface.BaseFinishListener;
 import com.zhangying.oem1688.onterface.BasePresenter;
 import com.zhangying.oem1688.onterface.BaseView;
+import com.zhangying.oem1688.util.StringUtils;
 
 public class FactoryProductPersenterImpl implements BasePresenter, BaseFinishListener {
     private FactoryProductNewModel mfactoryProductNewModel;
@@ -31,7 +32,14 @@ public class FactoryProductPersenterImpl implements BasePresenter, BaseFinishLis
 
     @Override
     public void validateCredentials() {
-        baseView.showloading();
+        String page = moreProstoreBeanmvp.getPage();
+        Integer iPage = 0;
+        if (!StringUtils.isEmity(page) && StringUtils.isNumeric(page)){
+            iPage = Integer.parseInt(page);
+        }
+
+        if (iPage == 1)baseView.showloading();
+
         mfactoryProductNewModel.getData(moreProstoreBeanmvp, this);
     }
 }

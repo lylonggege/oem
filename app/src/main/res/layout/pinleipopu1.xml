@@ -20,7 +20,7 @@
         android:layout_marginTop="@dimen/dp_5"
         android:text=""
         android:textColor="@color/b6"
-        android:textSize="@dimen/dp_16">
+        android:textSize="@dimen/dp_14">
 
     </TextView>
 </LinearLayout>

@@ -3,6 +3,7 @@ package com.zhangying.oem1688.view.activity.home;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.content.Context;
@@ -65,6 +66,8 @@ public class NewProductFactoryActivity extends BaseActivity implements BaseView 
     MyRecycleView recycleView;
     @BindView(R.id.goodsrecycview)
     MyRecycleView goodsrecycview;
+    @BindView(R.id.listScroll)
+    NestedScrollView listScroll;
     @BindView(R.id.refresh_layout)
     SmartRefreshLayout refreshLayout;
     @BindView(R.id.empty_LL)
@@ -422,6 +425,10 @@ public class NewProductFactoryActivity extends BaseActivity implements BaseView 
         moreProstoreBeanmvp.setItype(String.valueOf(type));
         factoryProductPersenter.saveData(moreProstoreBeanmvp);
         factoryProductPersenter.validateCredentials();
+
+        if (page == 1){
+            listScroll.smoothScrollTo(0,0);
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -463,8 +470,6 @@ public class NewProductFactoryActivity extends BaseActivity implements BaseView 
             factoryTv.setSelected(false);
             factoryTvLine.setSelected(false);
         }
-
-
     }
 
     @Override

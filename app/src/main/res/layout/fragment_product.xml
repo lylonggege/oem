@@ -79,6 +79,7 @@
                     android:layout_height="wrap_content" />
 
                 <androidx.core.widget.NestedScrollView
+                    android:id="@+id/listScroll"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
