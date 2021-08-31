@@ -27,6 +27,7 @@ import com.zhangying.oem1688.bean.CcatesJsonBean;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.internet.Utils;
+import com.zhangying.oem1688.singleton.EventBusStyeSingleton;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
 import com.zhangying.oem1688.util.Base64Util;
 import com.zhangying.oem1688.util.SpacesItemDecoration;
@@ -94,7 +95,7 @@ public class ReleaseActivity extends BaseActivity implements ImageSelectGridAdap
     private void initdata() {
         showLoading();
         HashMap<String, Object> map = new HashMap<>();
-        map.put("ly","app");
+        map.put("ly", "app");
         RemoteRepository.getInstance()
                 .cates_json(map)
                 .subscribeWith(new DefaultDisposableSubscriber<CcatesJsonBean>() {
@@ -214,6 +215,8 @@ public class ReleaseActivity extends BaseActivity implements ImageSelectGridAdap
                                 dissmissLoading();
                                 if (data.getMsg().equals("发布成功,等待审核!")) {
                                     ToastUtil.showToast(data.getMsg());
+                                    //跟新我的界面
+                                    EventBusStyeSingleton.getInstance().updateMyfragment();
                                     finish();
                                 } else {
                                     ToastUtil.showToast(data.getMsg());
