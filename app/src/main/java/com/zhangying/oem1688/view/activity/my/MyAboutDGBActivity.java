@@ -21,6 +21,7 @@ import com.zhangying.oem1688.bean.AboutBean;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
+import com.zhangying.oem1688.util.MyUtilsWebView;
 import com.zhangying.oem1688.util.WebViewSeting;
 import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
@@ -52,6 +53,10 @@ public class MyAboutDGBActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        webView.setHorizontalScrollBarEnabled(false);
+        webView.setVerticalScrollBarEnabled(false);
+
         bacKRL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -59,8 +64,7 @@ public class MyAboutDGBActivity extends BaseActivity {
             }
         });
         showLoading();
-        HashMapSingleton.getInstance().clear();
-        HashMapSingleton.getInstance().put("ly", "app");
+        HashMapSingleton.getInstance().reload();
         RemoteRepository.getInstance()
                 .aboutoem(HashMapSingleton.getInstance())
                 .subscribeWith(new DefaultDisposableSubscriber<AboutBean>() {
@@ -72,7 +76,8 @@ public class MyAboutDGBActivity extends BaseActivity {
                         titleTV.setText(retval.getPageinfo().getHeadtitle());
                         content_tv.setText("关于代工帮");
                         webView.setBackgroundColor(0);
-                        WebViewSeting.setting(webView, MyAboutDGBActivity.this, retval.getAboutoem());
+                        String s = MyUtilsWebView.setWebViewText(retval.getAboutoem());
+                        WebViewSeting.setting(webView, MyAboutDGBActivity.this, s);
                         try {
                             /**
                              * 图片轮播的简单使用
@@ -103,7 +108,6 @@ public class MyAboutDGBActivity extends BaseActivity {
         public View createView(Context context) {
             View view = LayoutInflater.from(context).inflate(R.layout.banner_item, null);
             mImageView = (RadiusImageView) view.findViewById(R.id.banner_image);
-            mImageView.setCornerRadius(20);
             return view;
         }
 

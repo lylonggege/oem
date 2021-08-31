@@ -20,7 +20,10 @@ import com.zhangying.oem1688.adpter.PinLeiChilden2Adpter;
 import com.zhangying.oem1688.bean.SitetopinfoBean;
 import com.zhangying.oem1688.custom.MyRecycleView;
 import com.zhangying.oem1688.onterface.BaseInterfacePosition;
+import com.zhangying.oem1688.onterface.BaseView;
 import com.zhangying.oem1688.onterface.IJumPage;
+import com.zhangying.oem1688.view.activity.home.NewProductFactoryActivity;
+import com.zhangying.oem1688.view.fragment.ProductFragment;
 
 import java.util.List;
 
@@ -33,6 +36,10 @@ public class PinLeiPopu extends PositionPopupView {
     private PinLeiChilden2Adpter pinLeiChilden2Adpter;
     private LinearLayout type_ll_1, type_ll_2;
     private TextView content_tv_1, content_tv_2;
+    private BaseView parentView;
+    public void setParentView(BaseView parentView) {
+        this.parentView = parentView;
+    }
 
 
     public PinLeiPopu(@NonNull Context context, SitetopinfoBean sitetopinfoBean) {
@@ -77,7 +84,10 @@ public class PinLeiPopu extends PositionPopupView {
         type_ll_2.setVisibility(GONE);
 
         pinLeiChilden1Adpter = new PinLeiChilden1Adpter(mcontext);
+        pinLeiChilden1Adpter.setCatelist(catelist);
+        pinLeiChilden1Adpter.setParentView(parentView);
         pinLeiChilden2Adpter = new PinLeiChilden2Adpter(mcontext);
+        pinLeiChilden2Adpter.setParentView(parentView);
         pinLeiChilden1Adpter.setJumPage(new IJumPage() {
             @Override
             public void success() {
@@ -108,12 +118,10 @@ public class PinLeiPopu extends PositionPopupView {
                     for (int i = 0; i < catelist.size(); i++) {
                         if (i == position) {
                             catelist.get(position).setaBoolean(true);
-
-                            int maxId = getMaxCate(catelist,catelistBean.getCateid());
                             //设置子类
                             List<SitetopinfoBean.RetvalBean.childrenBean> children = catelist.get(position).getChildren();
                             pinLeiChilden1Adpter.refresh(children);
-                            pinLeiChilden1Adpter.setStoreid(maxId);
+                            pinLeiChilden1Adpter.setStoreid(0);
                         } else {
                             catelist.get(i).setaBoolean(false);
                         }
@@ -139,30 +147,6 @@ public class PinLeiPopu extends PositionPopupView {
         });
         pinLeiAdpter.refresh(catelist);
         MyRecycleView_left.setAdapter(pinLeiAdpter);
-    }
-
-    private int getMaxCate(List<SitetopinfoBean.RetvalBean.CatelistBean> catelist, int itemId){
-        int maxId = 0;
-        for (int i = 0; i < catelist.size(); i++) {
-            SitetopinfoBean.RetvalBean.CatelistBean cateBean = catelist.get(i);
-            if (itemId == cateBean.getCateid()) {
-                break;
-            }
-
-            //设置子类
-            List<SitetopinfoBean.RetvalBean.childrenBean> children = catelist.get(i).getChildren();
-            for (int j = 0; j < children.size(); i++) {
-                SitetopinfoBean.RetvalBean.childrenBean childBean = children.get(i);
-                if (itemId== childBean.getCateid()) {
-                    maxId = cateBean.getCateid();
-                    break;
-                }
-            }
-
-            if (maxId > 0)break;
-        }
-
-        return maxId;
     }
 
     @Override

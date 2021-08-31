@@ -24,6 +24,7 @@ import com.zhangying.oem1688.bean.OemkefuBean;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
+import com.zhangying.oem1688.util.MyUtilsWebView;
 import com.zhangying.oem1688.util.SpacesItemDecoration;
 import com.zhangying.oem1688.util.WebViewSeting;
 import com.zhouwei.mzbanner.MZBannerView;
@@ -59,9 +60,11 @@ public class MyCustomerServiceActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        webView.setHorizontalScrollBarEnabled(false);
+        webView.setVerticalScrollBarEnabled(false);
+
         showLoading();
-        HashMapSingleton.getInstance().clear();
-        HashMapSingleton.getInstance().put("ly", "app");
+        HashMapSingleton.getInstance().reload();
         RemoteRepository.getInstance()
                 .oemkefu(HashMapSingleton.getInstance())
                 .subscribeWith(new DefaultDisposableSubscriber<OemkefuBean>() {
@@ -72,7 +75,8 @@ public class MyCustomerServiceActivity extends BaseActivity {
                         OemkefuBean.RetvalBean retval = data.getRetval();
                         titleTV.setText(retval.getPageinfo().getHeadtitle());
                         webView.setBackgroundColor(0);
-                        WebViewSeting.setting(webView, MyCustomerServiceActivity.this, retval.getOemkefucont());
+                        String s = MyUtilsWebView.setWebViewText(retval.getOemkefucont());
+                        WebViewSeting.setting(webView, MyCustomerServiceActivity.this, s);
                         try {
                             /**
                              * 图片轮播的简单使用
@@ -116,7 +120,6 @@ public class MyCustomerServiceActivity extends BaseActivity {
                     .error(R.drawable.ic_launcher_background)      //错误图
                     .diskCacheStrategy(DiskCacheStrategy.ALL);
             Glide.with(context).load(data.getAd_logo()).apply(options).into(mImageView);
-
         }
     }
 

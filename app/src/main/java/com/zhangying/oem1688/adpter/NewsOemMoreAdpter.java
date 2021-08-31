@@ -112,8 +112,6 @@ public class NewsOemMoreAdpter extends BaseRecyclerAdapter<OemNewsMoreBean.Retva
             } else {
                 myRecycleView_type1.setVisibility(View.GONE);
             }
-
-
         } else if (type == 2) {
             rootView_company.setVisibility(View.VISIBLE);
             company_recycleview.setVisibility(View.VISIBLE);

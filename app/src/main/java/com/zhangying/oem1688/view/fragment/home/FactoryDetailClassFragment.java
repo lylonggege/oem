@@ -45,6 +45,7 @@ public class FactoryDetailClassFragment extends BaseFragment {
     @BindView(R.id.refresh_layout)
     SmartRefreshLayout refreshLayout;
     private int page = 1;
+    private LoadingDialog loading;
 
     @Override
     protected int getLayoutId() {
@@ -80,8 +81,10 @@ public class FactoryDetailClassFragment extends BaseFragment {
 
     //初始化右侧产品分类视图
     private void initRightView(){
-        LoadingDialog loading = new LoadingDialog(getActivity());
-        loading.show();
+        if (page == 1){
+            loading = new LoadingDialog(getActivity());
+            loading.show();
+        }
 
         HashMapSingleton.getInstance().reload();
         HashMapSingleton.getInstance().put("id", mcid);
@@ -93,7 +96,7 @@ public class FactoryDetailClassFragment extends BaseFragment {
 
                     @Override
                     protected void success(FactoryGoodsBean data) {
-                        loading.dismiss();
+                        if (page == 1){loading.dismiss();}
                         List<FactoryGoodsBean.RetvalBean.GoodsBean> goodsList = data.getRetval().getGoodsList();
                         if (page == 1) {getGoods.clear();}
                         for (int i = 0; i < goodsList.size(); i++) {
@@ -118,7 +121,7 @@ public class FactoryDetailClassFragment extends BaseFragment {
                     @Override
                     public void onError(Throwable t) {
                         super.onError(t);
-                        loading.dismiss();
+                        if (page == 1){loading.dismiss();}
                     }
                 });
     }
