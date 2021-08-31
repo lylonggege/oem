@@ -21,9 +21,13 @@ import com.xuexiang.xui.widget.imageview.RadiusImageView;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.bean.OemNewsMoreBean;
 import com.zhangying.oem1688.custom.MyRecycleView;
+import com.zhangying.oem1688.onterface.BaseImagePreview;
 import com.zhangying.oem1688.util.GlideUtil;
+import com.zhangying.oem1688.util.ImageViewInfo;
+import com.zhangying.oem1688.util.PreviewImageView;
 import com.zhangying.oem1688.view.activity.home.NewsDetailActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NewsOemMoreAdpter extends BaseRecyclerAdapter<OemNewsMoreBean.RetvalBean> {
@@ -56,7 +60,7 @@ public class NewsOemMoreAdpter extends BaseRecyclerAdapter<OemNewsMoreBean.Retva
         TextView nhits_tv = holder.findViewById(R.id.nhits_tv);
 
         //一张新闻图片的viewid
-        ImageView image_one = holder.findViewById(R.id.image_one);
+        RadiusImageView image_one = holder.findViewById(R.id.image_one);
         TextView content_tv_image_one = holder.findViewById(R.id.content_tv_image_one);
         TextView ncate_tv_image_one = holder.findViewById(R.id.ncate_tv_image_one);
         TextView ntime_tv_image_one = holder.findViewById(R.id.ntime_tv_image_one);
@@ -107,7 +111,7 @@ public class NewsOemMoreAdpter extends BaseRecyclerAdapter<OemNewsMoreBean.Retva
                     content_tv.setText(item.getNtitle());
                     ncate_tv.setText(item.getNcate());
                     ntime_tv.setText(item.getNtime());
-                    nhits_tv.setText(item.getNtime());
+                    nhits_tv.setText(item.getNhits());
                 }
             } else {
                 myRecycleView_type1.setVisibility(View.GONE);
@@ -129,6 +133,17 @@ public class NewsOemMoreAdpter extends BaseRecyclerAdapter<OemNewsMoreBean.Retva
             if (images != null && images.size() > 0) {
                 WidgetUtils.initGridRecyclerView(company_recycleview, 3, DensityUtils.dp2px(5));
                 NewsOemNimgAdpter newsOemNimgAdpter = new NewsOemNimgAdpter(context);
+                newsOemNimgAdpter.setImagePreview(new BaseImagePreview() {
+                    @Override
+                    public void startPosition(int position,ImageView imageView) {
+                        List<ImageViewInfo> list = new ArrayList<>();
+                        for (int i1 = 0; i1 < images.size(); i1++) {
+                            ImageViewInfo imageViewInfo = new ImageViewInfo((String) images.get(i1));
+                            list.add(imageViewInfo);
+                        }
+                        PreviewImageView.save(imageView, position, list);
+                    }
+                });
                 newsOemNimgAdpter.refresh(images);
                 company_recycleview.setAdapter(newsOemNimgAdpter);
             }
