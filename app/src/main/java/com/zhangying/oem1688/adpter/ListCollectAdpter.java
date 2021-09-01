@@ -2,6 +2,7 @@ package com.zhangying.oem1688.adpter;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,11 +15,13 @@ import com.zhangying.oem1688.bean.ListCollectBean;
 import com.zhangying.oem1688.bean.WordsBean;
 import com.zhangying.oem1688.onterface.ICallBackPosition;
 import com.zhangying.oem1688.util.GlideUtil;
+import com.zhangying.oem1688.view.activity.home.FactoryDetailActivity;
 
 public class ListCollectAdpter extends BaseRecyclerAdapter<ListCollectBean.RetvalBean.RecordListBean> {
     public ListCollectAdpter(Context context) {
         this.context = context;
     }
+
     private Context context;
 
     public void setiCallBackPosition(ICallBackPosition iCallBackPosition) {
@@ -39,6 +42,14 @@ public class ListCollectAdpter extends BaseRecyclerAdapter<ListCollectBean.Retva
         RadiusImageView company_loge_iv = holder.findViewById(R.id.company_loge_iv);
         TextView company_tv = holder.findViewById(R.id.company_tv);
         TextView Collect_tv = holder.findViewById(R.id.Collect_tv);
+        LinearLayout rootView = holder.findViewById(R.id.rootView);
+        rootView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FactoryDetailActivity.simpleActivity(context, item.getStore_id());
+            }
+        });
+
 
         company_kehu_name_tv.setText(item.getStore_name());
         company_tv.setText(item.getService());

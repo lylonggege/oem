@@ -38,6 +38,7 @@ import com.zhangying.oem1688.constant.BuildConfig;
 import com.zhangying.oem1688.internet.ApiService;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
+import com.zhangying.oem1688.singleton.EventBusStyeSingleton;
 import com.zhangying.oem1688.util.KeyboardUtil;
 import com.zhangying.oem1688.util.LogUtil;
 import com.zhangying.oem1688.util.MD5Util;
@@ -206,44 +207,6 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void phonelogin(String phone, String code) {
-//        HashMap<String, Object> map = new HashMap<>();
-//        map.put("ly", "app");
-//        map.put("phone", phone);
-//        map.put("code", code);
-//        RemoteRepository.getInstance()
-//                .phonelogin(map)
-//                .subscribeWith(new DefaultDisposableSubscriber<PhoneloginBean>() {
-//
-//                    @Override
-//                    protected void success(PhoneloginBean data) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable t) {
-//                        super.onError(t);
-//
-//                    }
-//                });
-
-//        HashMap<Object, Object> map = new HashMap<>();
-//        map.put("phone",phone);
-//        map.put("code",code);
-//
-//        JSONObject  jsonObject = new JSONObject(map);
-//        try {
-//            post(BuildConfig.URL+"?app=member&act=phonelogin&ly=app",jsonObject.toString());
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        String url = "&ly=app&phone=" + phone + "&code=" + code+"&^%$RSTUih09135ZST)(*";
-//        String md5Str = MD5Util.getMD5Str(url);
-//        try {
-//            post(BuildConfig.URL+"?app=member&act=phonelogin",md5Str);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
         String path = BuildConfig.URL + "?app=member&act=phonelogin&ly=app&" + "phone=" + phone + "&code=" + code;
         // 2 request 默认是get请求
         Request request = new Request.Builder().url(path).build();
@@ -269,9 +232,15 @@ public class LoginActivity extends BaseActivity {
                         String token = retval.getToken();
                         if (token != null) {
                             setToken(token);
-                            EvenBusMessageBean evenBusMessageBean = new EvenBusMessageBean();
-                            evenBusMessageBean.setType(type);
-                            EventBus.getDefault().post(evenBusMessageBean);
+                            if (type==3){
+                                //跟新我的界面
+                                EventBusStyeSingleton.getInstance().updateMyfragment();
+                            }else {
+                                EvenBusMessageBean evenBusMessageBean = new EvenBusMessageBean();
+                                evenBusMessageBean.setType(type);
+                                EventBus.getDefault().post(evenBusMessageBean);
+                            }
+
                             finish();
                         } else {
                             ToastUtil.showToast(phoneloginBean.getMsg());

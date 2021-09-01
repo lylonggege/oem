@@ -148,10 +148,8 @@ public class ListCollectActivity extends BaseActivity {
                         dissmissLoading();
                         if (data.isDone()) {
                             //移除列表数据
-                            listCollectAdpter.delete(position);
                             ToastUtils.toast("取消收藏成功");
-                            setnullView();
-
+                            initdata();
                         }
                     }
 

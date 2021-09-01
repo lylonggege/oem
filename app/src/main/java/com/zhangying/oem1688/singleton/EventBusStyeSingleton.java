@@ -3,6 +3,8 @@ import com.zhangying.oem1688.bean.EvenBusMessageBean;
 
 import org.greenrobot.eventbus.EventBus;
 
+import static com.zhangying.oem1688.constant.BuildConfig.UPDATE_MYFRAGMNET_ENTER_TYPE;
+
 public class EventBusStyeSingleton {
 
     private static class Holer {
@@ -20,7 +22,7 @@ public class EventBusStyeSingleton {
     //跟新我的界面数据
     public void updateMyfragment() {
         EvenBusMessageBean evenBusMessageBean = new EvenBusMessageBean();
-        evenBusMessageBean.setType(3);
+        evenBusMessageBean.setType(UPDATE_MYFRAGMNET_ENTER_TYPE);
         EventBus.getDefault().post(evenBusMessageBean);
     }
 

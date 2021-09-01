@@ -29,7 +29,9 @@ import com.zhangying.oem1688.adpter.GoodsDetailOemAdpter;
 import com.zhangying.oem1688.adpter.GoodsDetailTuijianAdpter;
 import com.zhangying.oem1688.base.BaseActivity;
 import com.zhangying.oem1688.bean.BaseBean;
+import com.zhangying.oem1688.bean.EvenBusMessageBean;
 import com.zhangying.oem1688.bean.GoodsdetailBean;
+import com.zhangying.oem1688.constant.BuildConfig;
 import com.zhangying.oem1688.custom.FenLeiRealization;
 import com.zhangying.oem1688.custom.MyRecycleView;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
@@ -50,6 +52,7 @@ import com.zhangying.oem1688.util.StringUtils;
 import com.zhangying.oem1688.util.ToastUtil;
 import com.zhangying.oem1688.util.WebViewSeting;
 import com.zhangying.oem1688.util.WeiXinActivity;
+import com.zhangying.oem1688.view.activity.entry.LoginActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +60,10 @@ import java.util.List;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -336,6 +343,12 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
                 FactoryDetailActivity.simpleActivity(this,store_data.getStore_id(), 1);
                 break;
             case R.id.rootView_shop_b_sc_ll://收藏或取消收藏
+
+                boolean hasLogin = LoginActivity.simpleActivity(this, BuildConfig.PRODUCT_ENTER_TYPE);
+                if (!hasLogin) {
+                    break;
+                }
+
                 int has_collect = store_data.getHas_collect();
                 if (has_collect == 0) {
                     storecollect();
@@ -579,5 +592,22 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
             shopBSpDbTv.setSelected(true);
         }
 
+    }
+
+    //登录成功后路由返回数据
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void eventData(EvenBusMessageBean message) {
+        if (message != null) {
+            if (message.getType() == 1) {
+                GoodsdetailBean.RetvalBean.StoreDataBean store_data = goodsdetailBean.getRetval().getStore_data();
+                int has_collect = store_data.getHas_collect();
+                if (has_collect == 0) {
+                    storecollect();
+                } else {
+                    drop_collect();
+                }
+            }
+
+        }
     }
 }

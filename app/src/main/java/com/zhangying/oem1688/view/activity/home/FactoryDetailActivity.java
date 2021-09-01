@@ -374,7 +374,6 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
 
     //添加收藏
     private void storecollect() {
-        Context contxt = this;
         showLoading();
         HashMapSingleton.getInstance().reload();
         HashMapSingleton.getInstance().put("id", retval.getStore_id());

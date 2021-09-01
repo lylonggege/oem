@@ -107,7 +107,7 @@ public class MyFragment extends BaseFragment implements MemberInfoView {
             R.id.user_post_RL, R.id.user_zuji_RL, R.id.user_kefu_RL, R.id.user_about_RL,
             R.id.factorycenter1_IV, R.id.factorycenter2_IV, R.id.message_rl, R.id.user_set_RL})
     public void onClick(View view) {
-        boolean hasLogin = LoginActivity.simpleActivity(getActivity(), BuildConfig.FACTORY_ENTER_TYPE);
+        boolean hasLogin = LoginActivity.simpleActivity(getActivity(), BuildConfig.UPDATE_MYFRAGMNET_ENTER_TYPE);
         if (!hasLogin) {
             return;
         }
@@ -196,6 +196,12 @@ public class MyFragment extends BaseFragment implements MemberInfoView {
             rootView_follows_ll.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    //判断是否登录
+                    boolean hasLogin = LoginActivity.simpleActivity(getActivity(), BuildConfig.UPDATE_MYFRAGMNET_ENTER_TYPE);
+                    if (!hasLogin) {
+                        return;
+                    }
+
                     //操作类型(8：收藏店铺、9：留言咨询、10：我的店铺、11：店铺咨询
                     String stype = myfollowsBean.getStype();
                     //使用switch 有bug
