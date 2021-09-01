@@ -31,6 +31,7 @@ import com.zhangying.oem1688.view.activity.my.ListCollectActivity;
 import com.zhangying.oem1688.view.activity.my.MessageActivity;
 import com.zhangying.oem1688.view.activity.my.MyAboutDGBActivity;
 import com.zhangying.oem1688.view.activity.my.MyCustomerServiceActivity;
+import com.zhangying.oem1688.view.activity.my.ReleaseListActivity;
 import com.zhangying.oem1688.view.activity.my.SetActivity;
 import com.zhangying.oem1688.view.activity.my.WebActivity;
 import com.zhangying.oem1688.view.activity.my.WordsActivity;
@@ -117,6 +118,7 @@ public class MyFragment extends BaseFragment implements MemberInfoView {
                 MessageActivity.simpleActivity(getActivity());
                 break;
             case R.id.user_post_RL:
+                ReleaseListActivity.simpleActivity(getActivity());
                 break;
             case R.id.user_zuji_RL:
                 //足迹
@@ -199,7 +201,7 @@ public class MyFragment extends BaseFragment implements MemberInfoView {
                     //使用switch 有bug
                     if (stype.equals("2")) {
                         //我的发布
-
+                        ReleaseListActivity.simpleActivity(getActivity());
                     } else if (stype.equals("8")) {
                         //8：收藏店铺
                         ListCollectActivity.simpleActivity(getActivity());

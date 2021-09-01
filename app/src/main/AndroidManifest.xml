@@ -20,7 +20,8 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.activity.my.LabelActivity"></activity>
+        <activity android:name=".view.activity.my.ReleaseListActivity"></activity>
+        <activity android:name=".view.activity.my.LabelActivity" />
         <activity android:name=".view.activity.my.WebActivity" />
         <activity android:name=".view.activity.my.ResetpasswordActivity" />
         <activity android:name=".view.activity.my.SetActivity" />
@@ -66,7 +67,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.home.NewProductFactoryActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.home.GoodsDetailActivity"
             android:screenOrientation="portrait" />
