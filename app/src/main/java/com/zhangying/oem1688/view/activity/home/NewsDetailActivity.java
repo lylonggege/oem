@@ -39,8 +39,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class NewsDetailActivity extends BaseActivity implements BaseView {
-
-
     @BindView(R.id.title_TV)
     TextView titleTV;
     @BindView(R.id.title_contont_TV)

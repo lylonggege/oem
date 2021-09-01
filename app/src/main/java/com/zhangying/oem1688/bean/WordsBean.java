@@ -136,7 +136,7 @@ public class WordsBean {
         }
     }
 
-    public class GoodsBena {
+    public static class GoodsBena {
         private String stitle;
         private String addtime;
         private String icheck;  //审核状态(0：未审、1：已审)

@@ -206,6 +206,16 @@ public class LoginActivity extends BaseActivity {
         return false;
     }
 
+    //判断是否登录
+    public static boolean hasLogin(){
+        String token = TokenUtils.getToken();
+        if (!StringUtils.isEmpty(token)) {
+            return true;
+        }
+
+        return false;
+    }
+
     private void phonelogin(String phone, String code) {
         String path = BuildConfig.URL + "?app=member&act=phonelogin&ly=app&" + "phone=" + phone + "&code=" + code;
         // 2 request 默认是get请求

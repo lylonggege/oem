@@ -17,6 +17,8 @@ import com.zhangying.oem1688.bean.ListCollectBean;
 import com.zhangying.oem1688.bean.ListHistoryBean;
 import com.zhangying.oem1688.bean.MemberInfoBean;
 import com.zhangying.oem1688.bean.MessageListBean;
+import com.zhangying.oem1688.bean.MessagePrivBean;
+import com.zhangying.oem1688.bean.MessageViewBean;
 import com.zhangying.oem1688.bean.MineinfoBean;
 import com.zhangying.oem1688.bean.MoreProstoreBean;
 import com.zhangying.oem1688.bean.MoreScinfoBean;
@@ -97,6 +99,10 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("?app=default&act=storecollect&ly=app")
     Flowable<BaseBean> storecollect(@FieldMap HashMap<String, Object> hashMap);
+
+    //退出登录
+    @GET("?member&act=ajax_logout")
+    Flowable<BaseBean> logout(@FieldMap HashMap<String, Object> hashMap);
 
     // 取消收藏店铺
     @FormUrlEncoded
@@ -216,6 +222,14 @@ public interface ApiService {
     //Member - 公司咨询(贴牌商库)
     @GET("?app=member&act=message_list")
     Flowable<MessageListBean> message_list(@QueryMap HashMap<String, Object> hashMap);
+
+    //Member - 公司咨询(贴牌商库) - 页面权限
+    @GET("?app=xcxindex&act=wodely")
+    Flowable<MessagePrivBean> message_priv(@QueryMap HashMap<String, Object> hashMap);
+
+    //Member - 公司咨询(贴牌商库) - 详情
+    @GET("?app=member&act=message_view")
+    Flowable<MessageViewBean> message_view(@QueryMap HashMap<String, Object> hashMap);
 
     // Login - 退出登录
     @FormUrlEncoded

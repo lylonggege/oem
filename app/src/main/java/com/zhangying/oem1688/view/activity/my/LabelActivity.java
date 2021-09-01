@@ -2,7 +2,11 @@ package com.zhangying.oem1688.view.activity.my;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -20,6 +24,7 @@ import com.xuexiang.xui.utils.WidgetUtils;
 import com.xuexiang.xui.widget.picker.widget.TimePickerView;
 import com.xuexiang.xui.widget.picker.widget.builder.TimePickerBuilder;
 import com.xuexiang.xui.widget.picker.widget.listener.OnTimeSelectListener;
+import com.xuexiang.xutil.common.StringUtils;
 import com.xuexiang.xutil.data.DateUtils;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.adpter.LabelAdpter;
@@ -27,10 +32,13 @@ import com.zhangying.oem1688.adpter.LabelRightAdpter;
 import com.zhangying.oem1688.base.BaseActivity;
 import com.zhangying.oem1688.bean.HomeBena;
 import com.zhangying.oem1688.bean.MessageListBean;
+import com.zhangying.oem1688.bean.MessagePrivBean;
 import com.zhangying.oem1688.custom.MyRecycleView;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.onterface.BaseInterfacePosition;
+import com.zhangying.oem1688.onterface.IMessageView;
+import com.zhangying.oem1688.singleton.HashMapSingleton;
 import com.zhangying.oem1688.util.ToastUtil;
 
 import java.util.Date;
@@ -41,8 +49,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class LabelActivity extends BaseActivity {
-
-
     @BindView(R.id.title_TV)
     TextView titleTV;
     @BindView(R.id.new_open_tv)
@@ -95,6 +101,8 @@ public class LabelActivity extends BaseActivity {
     private String end_time = "";
     //输入的内容
     private String address = "";
+    //品牌商页面权限
+    private MessagePrivBean.RetvalBean msgPrivObj;
 
     @Override
     protected int getLayoutId() {
@@ -105,9 +113,32 @@ public class LabelActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         titleTV.setText("最新留言");
+
         labelAdpter = new LabelAdpter(this);
+        labelAdpter.setiMessageView(new IMessageView() {
+            @Override
+            public void viewPosition(int position) {
+                if (type == 2){
+                    //更新已读总数和未读总数
+                    String readNum = msgPrivObj.getViewLimitBean().getYknums();
+                    if (StringUtils.isInteger(readNum)){
+                        msgPrivObj.getViewLimitBean().setYknums((Integer.parseInt(readNum) + 1) + "");
+                    }else {
+                        msgPrivObj.getViewLimitBean().setYknums("1");
+                    }
+
+                    String unreadNum = msgPrivObj.getViewLimitBean().getWknums();
+                    if (StringUtils.isInteger(unreadNum)){
+                        msgPrivObj.getViewLimitBean().setYknums((Integer.parseInt(unreadNum) - 1) + "");
+                    }
+
+                    updateViewRemark();
+                }
+            }
+        });
         WidgetUtils.initRecyclerView(recycview);
         recycview.setAdapter(labelAdpter);
+
         //右侧的选择
         WidgetUtils.initGridRecyclerView(recycviewPopu, 3, DensityUtils.dp2px(10));
         labelRightAdpter = new LabelRightAdpter();
@@ -131,6 +162,7 @@ public class LabelActivity extends BaseActivity {
         statetv(type);
         initRefresh();
         gethome();
+        getMessagePriv();
     }
 
     @OnClick({R.id.bacK_RL, R.id.new_open_tv, R.id.read_tv, R.id.unread_tv, R.id.screen_tv, R.id.start_time_tv, R.id.end_time_tv, R.id.sure_tv, R.id.clear_tv})
@@ -139,15 +171,15 @@ public class LabelActivity extends BaseActivity {
             case R.id.bacK_RL:
                 finish();
                 break;
-            case R.id.new_open_tv:  //0
+            case R.id.new_open_tv:  //0最新公开
                 type = 0;
                 statetv(0);
                 break;
-            case R.id.read_tv:  //1
+            case R.id.read_tv:  //1已读
                 type = 1;
                 statetv(1);
                 break;
-            case R.id.unread_tv:  //2
+            case R.id.unread_tv:  //2未读
                 type = 2;
                 statetv(2);
                 break;
@@ -230,9 +262,12 @@ public class LabelActivity extends BaseActivity {
         originaltv();
         if (type == 0) {
             newOpenTv.setSelected(true);
+            contentTv.setVisibility(View.GONE);
         } else if (type == 1) {
+            contentTv.setVisibility(View.GONE);
             readTv.setSelected(true);
         } else if (type == 2) {
+            contentTv.setVisibility(View.VISIBLE);
             unreadTv.setSelected(true);
         }
         myright();
@@ -247,6 +282,51 @@ public class LabelActivity extends BaseActivity {
     public static void simpleActivity(Context context) {
         Intent intent = new Intent(context, LabelActivity.class);
         context.startActivity(intent);
+    }
+
+    //更新未读留言查看说明
+    private void updateViewRemark(){
+        MessagePrivBean.RetvalBean.ViewLimitBean viewLimitBean = msgPrivObj.getViewLimitBean();
+
+        //最新留言权限设置
+        String[] privArr = new String[]{"当天查看权限为：",viewLimitBean.getKknums()," 条/天；你今天已查看 ",viewLimitBean.getYknums(),"条 还可查看",viewLimitBean.getWknums(),"条，一个品牌商一天最多可被查看",viewLimitBean.getDaynums(),"次（上午",viewLimitBean.getAmnums(),"次，下午",viewLimitBean.getPmnums(),"次"};
+        StringBuilder sb = new StringBuilder();
+        for (String s : privArr) {
+            sb.append(s);
+        }
+
+        SpannableStringBuilder style = new SpannableStringBuilder(sb.toString());
+        Integer startIndex = 0;
+        String itemStr = "";
+        for (int i = 0;i < privArr.length; i ++){
+            itemStr = privArr[i];
+            if (StringUtils.isInteger(itemStr)){
+                style.setSpan(new ForegroundColorSpan(Color.RED), startIndex, itemStr.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+            }
+
+            startIndex += itemStr.length();
+        }
+
+        contentTv.setText(style);
+    }
+
+    //加载页面配置权限
+    private void getMessagePriv(){
+        HashMapSingleton.getInstance().reload();
+        RemoteRepository.getInstance()
+                .message_priv(HashMapSingleton.getInstance())
+                .subscribeWith(new DefaultDisposableSubscriber<MessagePrivBean>() {
+                    @Override
+                    protected void success(MessagePrivBean msgPrivBean) {
+                        msgPrivObj = msgPrivBean.getRetval();
+                        updateViewRemark();
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        super.onError(t);
+                    }
+                });
     }
 
     private void myright() {
@@ -298,7 +378,6 @@ public class LabelActivity extends BaseActivity {
                 refreshLayout.finishRefresh();
                 page = 1;
                 myright();
-
             }
         });
     }

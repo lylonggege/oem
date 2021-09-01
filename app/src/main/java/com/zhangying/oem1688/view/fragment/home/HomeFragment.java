@@ -57,6 +57,7 @@ import com.zhangying.oem1688.util.ToastUtil;
 import com.zhangying.oem1688.util.TokenUtils;
 import com.zhangying.oem1688.view.activity.home.FindFactoryActivity;
 import com.zhangying.oem1688.view.activity.home.FindProductActivity;
+import com.zhangying.oem1688.view.activity.home.NewsDetailActivity;
 import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
@@ -392,7 +393,7 @@ public class HomeFragment extends BaseFragment {
         MarqueeFactory<TextView, String> marqueeFactory1 = new SimpleNoticeMF(getContext());
         marqueeFactory1.setData(marqueeViewList);
         marqueeView.setMarqueeFactory(marqueeFactory1);
-        marqueeFactory1.setOnItemClickListener((view, holder) -> ToastUtil.showToast(holder.getData()));
+        marqueeFactory1.setOnItemClickListener((view, holder) -> NewsDetailActivity.simpleActivity(getActivity(),bean.getNlist().get(holder.getPosition()).getNid(), 1));
         marqueeView.startFlipping();
     }
 

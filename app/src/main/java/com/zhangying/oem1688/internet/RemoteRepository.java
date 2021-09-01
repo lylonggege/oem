@@ -16,6 +16,8 @@ import com.zhangying.oem1688.bean.HomeTabBean;
 import com.zhangying.oem1688.bean.ListCollectBean;
 import com.zhangying.oem1688.bean.MemberInfoBean;
 import com.zhangying.oem1688.bean.MessageListBean;
+import com.zhangying.oem1688.bean.MessagePrivBean;
+import com.zhangying.oem1688.bean.MessageViewBean;
 import com.zhangying.oem1688.bean.MineinfoBean;
 import com.zhangying.oem1688.bean.MoreProstoreBean;
 import com.zhangying.oem1688.bean.MoreScinfoBean;
@@ -172,6 +174,10 @@ public class RemoteRepository {
         return serverApi.phonelogin(body);
     }
 
+    public Flowable<BaseBean> logout(HashMap<String, Object> body) {
+        return serverApi.logout(body);
+    }
+
     public Flowable<BaseBean> pwdlogin(HashMap<String, Object> body) {
         return serverApi.pwdlogin(body);
     }
@@ -207,6 +213,14 @@ public class RemoteRepository {
 
     public Flowable<MessageListBean> message_list(HashMap<String, Object> body) {
         return serverApi.message_list(body);
+    }
+
+    public Flowable<MessagePrivBean> message_priv(HashMap<String, Object> body) {
+        return serverApi.message_priv(body);
+    }
+
+    public Flowable<MessageViewBean> message_view(HashMap<String, Object> body) {
+        return serverApi.message_view(body);
     }
 
     public Flowable<BaseBean> ajax_logout(HashMap<String, Object> body) {

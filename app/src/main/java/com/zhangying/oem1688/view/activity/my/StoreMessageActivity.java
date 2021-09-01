@@ -5,34 +5,28 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.xuexiang.xui.utils.WidgetUtils;
 import com.zhangying.oem1688.R;
-import com.zhangying.oem1688.adpter.NewsOemMoreAdpter;
+import com.zhangying.oem1688.adpter.LabelAdpter;
 import com.zhangying.oem1688.adpter.WordsAdpter;
 import com.zhangying.oem1688.base.BaseActivity;
-import com.zhangying.oem1688.bean.BaseBean;
 import com.zhangying.oem1688.bean.MessageListBean;
-import com.zhangying.oem1688.bean.OemNewsMoreBean;
 import com.zhangying.oem1688.bean.WordsBean;
 import com.zhangying.oem1688.custom.MyRecycleView;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
-import com.zhangying.oem1688.util.ToastUtil;
 
-import java.util.HashMap;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class WordsActivity extends BaseActivity {
+public class StoreMessageActivity extends BaseActivity {
     @BindView(R.id.title_TV)
     TextView titleTV;
     @BindView(R.id.recycview)
@@ -40,20 +34,22 @@ public class WordsActivity extends BaseActivity {
     @BindView(R.id.refresh_layout)
     SmartRefreshLayout refreshLayout;
     private int page = 1;
-    private WordsAdpter wordsAdpter;
+    private LabelAdpter labelAdpter;
+    private static int storeId;
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_words;
+        return R.layout.store_message;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        titleTV.setText("我的留言");
-        wordsAdpter = new WordsAdpter();
+        titleTV.setText("公司留言");
+        labelAdpter = new LabelAdpter(this);
+        labelAdpter.setStoreMsg(true);
         WidgetUtils.initRecyclerView(recycview);
-        recycview.setAdapter(wordsAdpter);
+        recycview.setAdapter(labelAdpter);
         initdata();
         initRefresh();
     }
@@ -65,24 +61,22 @@ public class WordsActivity extends BaseActivity {
 
     private void initdata() {
         showLoading();
-        reloadMineMessage();
-    }
-
-    private void reloadMineMessage(){
         HashMapSingleton.getInstance().reload();
+        HashMapSingleton.getInstance().put("lytype", "gsly");
+        HashMapSingleton.getInstance().put("storeid", storeId);
         HashMapSingleton.getInstance().put("page", page);
         RemoteRepository.getInstance()
-                .mymessage(HashMapSingleton.getInstance())
-                .subscribeWith(new DefaultDisposableSubscriber<WordsBean>() {
+                .message_list(HashMapSingleton.getInstance())
+                .subscribeWith(new DefaultDisposableSubscriber<MessageListBean>() {
 
                     @Override
-                    protected void success(WordsBean data) {
+                    protected void success(MessageListBean messageListBean) {
                         dissmissLoading();
-                        WordsBean.RetvalBean.MineagentBean mineagent = data.getRetval().getMineagent();
+                        List<MessageListBean.RetvalBean> retval = messageListBean.getRetval();
                         if (page == 1) {
-                            wordsAdpter.refresh(mineagent.getGoods());
+                            labelAdpter.refresh(retval);
                         } else {
-                            wordsAdpter.loadMore(mineagent.getGoods());
+                            labelAdpter.loadMore(retval);
                         }
                     }
 
@@ -113,8 +107,9 @@ public class WordsActivity extends BaseActivity {
         });
     }
 
-    public static void simpleActivity(Context context) {
-        Intent intent = new Intent(context, WordsActivity.class);
+    public static void simpleActivity(Context context, int iStoreId) {
+        Intent intent = new Intent(context, StoreMessageActivity.class);
+        storeId = iStoreId;
         context.startActivity(intent);
     }
 }
