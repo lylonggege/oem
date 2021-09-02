@@ -224,7 +224,7 @@ public interface ApiService {
     Flowable<MessageListBean> message_list(@QueryMap HashMap<String, Object> hashMap);
 
     //Member - 公司咨询(贴牌商库) - 页面权限
-    @GET("?app=xcxindex&act=wodely")
+    @GET("?app=member&act=wodely")
     Flowable<MessagePrivBean> message_priv(@QueryMap HashMap<String, Object> hashMap);
 
     //Member - 公司咨询(贴牌商库) - 详情

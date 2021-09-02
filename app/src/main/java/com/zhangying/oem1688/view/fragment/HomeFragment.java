@@ -41,6 +41,14 @@ public class HomeFragment extends XBaseFragment implements TabLayout.OnTabSelect
     private FragmnetPagerAdapter fragmnetPagerAdapter;
     private BaseValidateCredentials fenLeiRealization;
 
+    public int getCurrentTab(){
+        return parentTabIndictor.getCurrentTab();
+    }
+
+    public void setHomeCurrentTab(){
+        parentTabIndictor.setCurrentTab(0);
+    }
+
     //设置菜单适配器里面的recycleView
     @Override
     protected int getLayoutId() {

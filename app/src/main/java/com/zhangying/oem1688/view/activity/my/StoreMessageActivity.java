@@ -1,7 +1,9 @@
 package com.zhangying.oem1688.view.activity.my;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -9,6 +11,7 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.xuexiang.xui.utils.WidgetUtils;
+import com.xuexiang.xutil.common.StringUtils;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.adpter.LabelAdpter;
 import com.zhangying.oem1688.adpter.WordsAdpter;
@@ -18,7 +21,10 @@ import com.zhangying.oem1688.bean.WordsBean;
 import com.zhangying.oem1688.custom.MyRecycleView;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
+import com.zhangying.oem1688.onterface.ICallMobile;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
+import com.zhangying.oem1688.util.AutoForcePermissionUtils;
+import com.zhangying.oem1688.util.ToastUtil;
 
 import java.util.List;
 
@@ -47,6 +53,30 @@ public class StoreMessageActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         titleTV.setText("公司留言");
         labelAdpter = new LabelAdpter(this);
+        labelAdpter.setiCallMobile(new ICallMobile() {
+            @Override
+            public void toCall(String tel) {
+                if (StringUtils.isEmpty(tel)){
+                    return;
+                }
+
+                //判断权限并拨打电话
+                AutoForcePermissionUtils.requestPermissions(StoreMessageActivity.this, new AutoForcePermissionUtils.PermissionCallback() {
+                    @Override
+                    public void onPermissionGranted() {
+                        Intent intent = new Intent(Intent.ACTION_CALL);
+                        Uri data = Uri.parse("tel:" + tel);
+                        intent.setData(data);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onPermissionDenied() {
+                        ToastUtil.showToast("拨打电话权限被拒绝，请手动拨打！");
+                    }
+                }, Manifest.permission.CALL_PHONE);
+            }
+        });
         labelAdpter.setStoreMsg(true);
         WidgetUtils.initRecyclerView(recycview);
         recycview.setAdapter(labelAdpter);

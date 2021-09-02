@@ -171,7 +171,7 @@ public class ProductFragment extends BaseFragment implements BaseView {
 
                     String minText = "";
                     if (options1 > 0){
-                        cateSelected.set(0,cateList.get(options1).getId() + "");
+                        cateSelected.set(0,cateList.get(options1 - 1).getId() + "");
                         minText = mTimeOption1[options1][options2];
                     }
 
@@ -180,7 +180,7 @@ public class ProductFragment extends BaseFragment implements BaseView {
                         cateSelected.set(1,"0");
                         companychildrenTv.setText(maxText);
                     }else {
-                        String minCate = cateList.get(options1).getChildren().get(options2 - 1).getId() + "";
+                        String minCate = cateList.get(options1 - 1).getChildren().get(options2 - 1).getId() + "";
                         cateSelected.set(1,minCate);
                         companychildrenTv.setText(minText);
                     }

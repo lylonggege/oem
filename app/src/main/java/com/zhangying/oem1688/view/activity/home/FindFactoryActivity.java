@@ -30,6 +30,7 @@ import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.onterface.BaseInterfacePosition;
 import com.zhangying.oem1688.popu.PinLeiPopu;
+import com.zhangying.oem1688.util.StringUtils;
 import com.zhangying.oem1688.util.ToastUtil;
 
 import java.util.HashMap;
@@ -80,7 +81,6 @@ public class FindFactoryActivity extends BaseActivity {
     private String maxcate_Text;
     private String mincate_text;
     private boolean isboolean;
-
 
     @Override
     protected int getLayoutId() {
@@ -263,7 +263,6 @@ public class FindFactoryActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.send_LL:
-
                 String name = anameEt.getText().toString();
                 if (name == null || name.length() == 0) {
                     ToastUtil.showToast("请输入姓名");
@@ -282,13 +281,35 @@ public class FindFactoryActivity extends BaseActivity {
                 }
 
                 HashMap<String, Object> map = new HashMap<>();
-                map.put("maxcate", maxcate);
-                map.put("mincate", mincate);
+                String maxCateId = StringUtils.isEmity(maxcate) ? "" : maxcate;
+                String customMaxTxt = hangyeEt.getText().toString();
+                if (StringUtils.isEmity(maxCateId) && StringUtils.isEmity(customMaxTxt)){
+                    ToastUtil.showToast("没有想要的，请填写代工行业");
+                    return;
+                }
+
+                map.put("maxcate", maxCateId);
+                if (!StringUtils.isEmity(customMaxTxt)){
+                    maxcate_Text = customMaxTxt;
+                }
+
+                String minCateId = StringUtils.isEmity(mincate) ? "" : mincate;
+                String customMinTxt = cataEt.getText().toString();
+                if (StringUtils.isEmity(minCateId) && StringUtils.isEmity(customMinTxt)){
+                    ToastUtil.showToast("没有想要的，请填写代工品类");
+                    return;
+                }
+
+                map.put("mincate", minCateId);
+                if (!StringUtils.isEmity(customMinTxt)){
+                    mincate_text = customMinTxt;
+                }
                 map.put("catename", maxcate_Text + " " + mincate_text);
                 map.put("schannel", schannel);
                 map.put("province", moptions1_address);
                 map.put("city", moptions2_address);
                 map.put("regionname", regionname);
+                map.put("cfrom", "7");
                 map.put("type", 1);
                 map.put("name", name);
                 map.put("phone", phone);
@@ -315,7 +336,6 @@ public class FindFactoryActivity extends BaseActivity {
 
                 break;
             case R.id.selected_area_tv:
-
                 if (option_address == null || option_address.length == 0) {
                     return;
                 }
@@ -324,8 +344,8 @@ public class FindFactoryActivity extends BaseActivity {
                     moptions1_address = option_id_address[options1];
                     String[] strings = mTimeOption1_id_address[options1];
                     moptions2_address = strings[options2];
-                    selected_area_tv.setText(option_address[options1]);
                     regionname = option_address[options1] + " " + mTimeOption1_address[options1][options2];
+                    selected_area_tv.setText(regionname);
                     return false;
                 })
                         .setTitleText("")

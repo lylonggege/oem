@@ -16,6 +16,7 @@ import com.zhangying.oem1688.adpter.FlowTagAdapter;
 import com.zhangying.oem1688.base.BaseActivity;
 import com.zhangying.oem1688.db.DbDao;
 import com.zhangying.oem1688.util.AppManagerUtil;
+import com.zhangying.oem1688.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,14 +61,16 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
         });
         tagAdapter.addTags(tagArrayList);
         et_input.setOnEditorActionListener(this);
-
     }
 
     private void query() {
         tagArrayList.clear();
         List<String> strings = dbDao.queryData("");
+        String historyItem = "";
         for (int i = 0; i < strings.size(); i++) {
-            tagArrayList.add(strings.get(i));
+            historyItem = strings.get(i);
+            if (StringUtils.isEmity(historyItem)){continue;}
+            tagArrayList.add(historyItem);
         }
     }
 

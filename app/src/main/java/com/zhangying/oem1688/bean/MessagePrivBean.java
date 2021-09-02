@@ -29,22 +29,33 @@ public class MessagePrivBean {
     }
 
     public static class RetvalBean {
-        public Boolean getIsexpire() { return isexpire; }
-        public void setIsexpire(Boolean isexpire) { this.isexpire = isexpire; }
+        public ViewLimitBean viewquantitys;
+        public ViewLimitBean getViewquantitys() { return viewquantitys; }
+        public void setViewquantitys(ViewLimitBean viewquantitys) { this.viewquantitys = viewquantitys; }
 
-        public String getErrorinfo() { return errorinfo; }
-        public void setErrorinfo(String errorinfo) { this.errorinfo = errorinfo; }
+        private PageInfoBean pageinfo;
+        public PageInfoBean getPageinfo() { return pageinfo; }
+        public void setPageinfo(PageInfoBean pageinfo) { this.pageinfo = pageinfo; }
 
-        public List<QueryCateBean> getCateBeanList() { return cateBeanList; }
-        public void setCateBeanList(List<QueryCateBean> cateBeanList) { this.cateBeanList = cateBeanList; }
+        public static class PageInfoBean
+        {
+            private Boolean isexpire;
+            private String errorinfo;
+            private List<QueryCateBean> gcatelist;
+            private String headtitle;
 
-        public ViewLimitBean getViewLimitBean() { return viewLimitBean; }
-        public void setViewLimitBean(ViewLimitBean viewLimitBean) { this.viewLimitBean = viewLimitBean; }
+            public String getHeadtitle() { return headtitle; }
+            public void setHeadtitle(String headtitle) { this.headtitle = headtitle; }
 
-        private Boolean isexpire;
-        private String errorinfo;
-        private List<QueryCateBean> cateBeanList;
-        public ViewLimitBean viewLimitBean;
+            public List<QueryCateBean> getGcatelist() { return gcatelist; }
+            public void setGcatelist(List<QueryCateBean> gcatelist) { this.gcatelist = gcatelist; }
+
+            public Boolean getIsexpire() { return isexpire; }
+            public void setIsexpire(Boolean isexpire) { this.isexpire = isexpire; }
+
+            public String getErrorinfo() { return errorinfo; }
+            public void setErrorinfo(String errorinfo) { this.errorinfo = errorinfo; }
+        }
 
         public static class ViewLimitBean {
             public String getDaynums() {

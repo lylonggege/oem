@@ -25,6 +25,8 @@ import com.zhangying.oem1688.base.BaseActivity;
 import com.zhangying.oem1688.bean.BaseBean;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
+import com.zhangying.oem1688.singleton.HashMapSingleton;
+import com.zhangying.oem1688.singleton.MapCookieSingleton;
 import com.zhangying.oem1688.util.AppManagerUtil;
 import com.zhangying.oem1688.util.CacheUtil;
 import com.zhangying.oem1688.util.ToastUtil;
@@ -38,13 +40,10 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class SetActivity extends BaseActivity {
-
-
     @BindView(R.id.title_TV)
     TextView titleTV;
     @BindView(R.id.cache_tv)
     TextView cache_tv;
-
 
     @Override
     protected int getLayoutId() {
@@ -118,16 +117,14 @@ public class SetActivity extends BaseActivity {
                 break;
             case R.id.logoff_tv:
                 ajax_logout();
-
                 break;
         }
     }
 
     private void ajax_logout() {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("ly", "app");
+        HashMapSingleton.getInstance().reload();
         RemoteRepository.getInstance()
-                .ajax_logout(map)
+                .ajax_logout(HashMapSingleton.getInstance())
                 .subscribeWith(new DefaultDisposableSubscriber<BaseBean>() {
 
                     @Override

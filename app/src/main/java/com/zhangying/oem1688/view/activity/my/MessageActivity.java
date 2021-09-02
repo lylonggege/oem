@@ -45,8 +45,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class MessageActivity extends BaseActivity {
-
-
     @BindView(R.id.nike_et)
     EditText nikeEt;
     @BindView(R.id.name_et)

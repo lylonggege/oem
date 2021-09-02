@@ -71,7 +71,6 @@ import butterknife.OnClick;
  * 产品详情页面
  */
 public class GoodsDetailActivity extends BaseActivity implements BaseView {
-
     @BindView(R.id.title_TV)
     TextView titleTV;
     @BindView(R.id.imageView2)
@@ -157,6 +156,7 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
     private BaseValidateCredentials fenLeiRealization;
     private GoodsDetailPopu msgPop;
     private boolean isToCall = false;
+    private GoodsDetailOemAdpter goodsDetailOemAdpter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -264,7 +264,7 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
             rootViewBangLl.setVisibility(View.GONE);
         }
 
-        GoodsDetailOemAdpter goodsDetailOemAdpter = new GoodsDetailOemAdpter();
+        goodsDetailOemAdpter = new GoodsDetailOemAdpter();
         goodsDetailOemAdpter.refresh(store_data.getStore_gcates());
         WidgetUtils.initGridRecyclerView(oemRecycleView, 3, DensityUtils.dp2px(10));
         oemRecycleView.setAdapter(goodsDetailOemAdpter);
@@ -331,7 +331,7 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
                 break;
             case R.id.message_LL://打开留言层留言
                 isToCall = false;
-                doSubmitMessage(nameEt.getText().toString(),phoneEt.getText().toString(),true);
+                doShowMessagePop();
                 break;
             case R.id.submit_tv://界面提交留言
                 doSubmitMessage(nameEt.getText().toString(),phoneEt.getText().toString(),true);
@@ -343,7 +343,6 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
                 FactoryDetailActivity.simpleActivity(this,store_data.getStore_id(), 1);
                 break;
             case R.id.rootView_shop_b_sc_ll://收藏或取消收藏
-
                 boolean hasLogin = LoginActivity.simpleActivity(this, BuildConfig.PRODUCT_ENTER_TYPE);
                 if (!hasLogin) {
                     break;
@@ -476,10 +475,11 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
                     stringBuffer.add(storeGcatesBean.getId());
                 }
             }
-        }
-        if (stringBuffer.size() == 0){
-            ToastUtil.showToast("请选择代工品类");
-            return false;
+
+            if (stringBuffer.size() == 0){
+                ToastUtil.showToast("请选择代工品类");
+                return false;
+            }
         }
 
         //提交信息
@@ -564,6 +564,19 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
         BaseBean bean = (BaseBean) o;
         ToastUtil.showToast(bean.getMsg());
 
+        //清空留言姓名、电话、选择的品类
+        GoodsdetailBean.RetvalBean retval = goodsdetailBean.getRetval();
+        List<GoodsdetailBean.RetvalBean.StoreDataBean.StoreGcatesBean> store_gcates = retval.getStore_data().getStore_gcates();
+        for (int i = 0; i < store_gcates.size(); i++) {
+            GoodsdetailBean.RetvalBean.StoreDataBean.StoreGcatesBean storeGcatesBean = store_gcates.get(i);
+            if (storeGcatesBean.isaBoolean()) {
+                storeGcatesBean.setaBoolean(false);
+                goodsDetailOemAdpter.notifyItemChanged(i);
+            }
+        }
+        nameEt.setText("");
+        phoneEt.setText("");
+
         //拨打电话调用
         if (isToCall){
             doCallPhone();
@@ -607,7 +620,6 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
                     drop_collect();
                 }
             }
-
         }
     }
 }

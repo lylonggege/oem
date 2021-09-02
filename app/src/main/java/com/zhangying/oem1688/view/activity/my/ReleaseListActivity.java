@@ -32,8 +32,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class ReleaseListActivity extends BaseActivity {
-
-
     @BindView(R.id.title_TV)
     TextView titleTV;
     @BindView(R.id.recycview)
@@ -101,6 +99,8 @@ public class ReleaseListActivity extends BaseActivity {
         HashMapSingleton.getInstance().reload();
         HashMapSingleton.getInstance().put("self", 1);
         HashMapSingleton.getInstance().put("page", page);
+        HashMapSingleton.getInstance().put("self", "1");
+        HashMapSingleton.getInstance().put("navid", "2");
         RemoteRepository.getInstance()
                 .more_scinfo(HashMapSingleton.getInstance())
                 .subscribeWith(new DefaultDisposableSubscriber<MoreScinfoBean>() {

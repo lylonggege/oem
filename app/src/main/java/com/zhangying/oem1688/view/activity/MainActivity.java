@@ -3,6 +3,7 @@ package com.zhangying.oem1688.view.activity;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -97,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements TabberView {
     LinearLayout newsLine;
     private Fragment homeFragment, newsFragment, myFragmnet, productFragment, productFragment2;
     private TabberPresenter tabberPresenter;
+    private int tabIndex;
 
 
     @Override
@@ -141,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements TabberView {
         FragmentTransaction transaction = supportFragmentManager.beginTransaction();
         hintAllFragment(transaction);
         selectImaAndText(index);
+        tabIndex = index;
         switch (index) {
             case 0:
                 if (homeFragment == null) {
@@ -258,7 +261,6 @@ public class MainActivity extends AppCompatActivity implements TabberView {
 
     }
 
-
     @OnClick({R.id.home_line, R.id.factory_line, R.id.product_line, R.id.my_line, R.id.news_line})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -328,5 +330,46 @@ public class MainActivity extends AppCompatActivity implements TabberView {
         }
     }
 
+    //记录用户首次点击返回键的时间
+    private long firstTime = 0;
 
+    /**
+     * 通过监听keyUp   实现双击返回键退出程序
+     * @param keyCode
+     * @param event
+     * @return
+     */
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+            if (tabIndex > 0){//非首页，点击返回首页
+                selectTab(0);
+                return false;
+            }else {//首页，多次单击退出app
+                if (homeFragment == null){
+                    return false;
+                }
+
+                //首页不是第一个页签
+                HomeFragment tmpHomeFragment = (HomeFragment)homeFragment;
+                int iHomeTab = tmpHomeFragment.getCurrentTab();
+                if (iHomeTab > 0){
+                    tmpHomeFragment.setHomeCurrentTab();
+                    return false;
+                }
+
+                long secondTime = System.currentTimeMillis();
+                if (secondTime - firstTime > 2000) {
+                    ToastUtil.showToast("再按一次退出程序");
+                    firstTime = secondTime;
+                    return true;
+                }
+
+                System.exit(0);
+                return false;
+            }
+        }
+
+        return super.onKeyUp(keyCode, event);
+    }
 }

@@ -38,7 +38,6 @@ import butterknife.OnClick;
  */
 public class BrowseRecordActivity extends BaseActivity {
 
-
     @BindView(R.id.title_TV)
     TextView titleTV;
     @BindView(R.id.recycview)
@@ -194,7 +193,7 @@ public class BrowseRecordActivity extends BaseActivity {
                             } else {
                                 browseRecordAdpter.loadMore(listhistory);
                             }
-                            String content = "您有 <font color='red'>" + browseRecordAdpter.getData().size() + "</font> 条浏览记录</font>";
+                            String content = "您有 <font color='red'>" + data.getRetval().getTotalCount() + "</font> 条浏览记录</font>";
                             record_number_tv.setText(Html.fromHtml(content));
                         } else {
                             recycview.setVisibility(View.GONE);
@@ -204,7 +203,7 @@ public class BrowseRecordActivity extends BaseActivity {
                             } else {
                                 browseRecordGoodsAdpter.loadMore(listhistory);
                             }
-                            String content = "您有 <font color='red'>" + browseRecordGoodsAdpter.getData().size() + "</font> 条浏览记录</font>";
+                            String content = "您有 <font color='red'>" + data.getRetval().getTotalCount() + "</font> 条浏览记录</font>";
                             record_number_tv.setText(Html.fromHtml(content));
                         }
 

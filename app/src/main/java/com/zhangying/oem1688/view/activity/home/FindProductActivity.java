@@ -46,7 +46,6 @@ import butterknife.OnClick;
  承接代加工
  */
 public class FindProductActivity extends BaseActivity implements BaseView {
-
     @BindView(R.id.banner)
     MZBannerView banner;
     @BindView(R.id.parent_tab_indictor)

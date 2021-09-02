@@ -14,15 +14,14 @@
         android:layout_marginTop="@dimen/dp_20"
         android:text=""
         android:textColor="@color/ff7506"
-        android:textSize="@dimen/dp_17"
-        android:textStyle="bold"
+        android:textSize="@dimen/dp_20"
         android:visibility="visible"></TextView>
 
     <ImageView
         android:id="@+id/spic_imageview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_20"
+        android:layout_width="@dimen/dp_22"
+        android:layout_height="@dimen/dp_22"
+        android:layout_marginTop="@dimen/dp_24"
         android:background="@drawable/user_personal"
         android:visibility="gone"></ImageView>
 

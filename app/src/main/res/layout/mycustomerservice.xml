@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/tools"
     android:id="@+id/rootView"
+    android:background="@color/shadow"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -14,6 +15,7 @@
         app:cardElevation="@dimen/dp_0">
 
         <RelativeLayout
+            android:background="@drawable/customer_service"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 

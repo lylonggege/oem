@@ -44,7 +44,6 @@ import butterknife.OnClick;
  * 发布页面
  */
 public class ReleaseActivity extends BaseActivity implements ImageSelectGridAdapter.OnAddPicClickListener {
-
     @BindView(R.id.title_TV)
     TextView titleTV;
     @BindView(R.id.content_et)
@@ -195,9 +194,10 @@ public class ReleaseActivity extends BaseActivity implements ImageSelectGridAdap
                 map.put("name", name);
                 map.put("phone", phone);
                 map.put("cfrom", 7);
+                map.put("android", 1);
                 map.put("maxcate", moptions1);  //代工大品类编号.
                 map.put("mincate", moptions2);  //代工小品类编号.
-                map.put("cate_name", catetv.toString());
+                map.put("cate_name", catetv.getText().toString());
                 base64ListFile.clear();
                 if (mSelectList.size() > 0) {
                     for (LocalMedia localMedia : mSelectList) {
@@ -213,7 +213,7 @@ public class ReleaseActivity extends BaseActivity implements ImageSelectGridAdap
                             @Override
                             protected void success(BaseBean data) {
                                 dissmissLoading();
-                                if (data.getMsg().equals("发布成功,等待审核!")) {
+                                if (data.isDone()) {
                                     ToastUtil.showToast(data.getMsg());
                                     //跟新我的界面
                                     EventBusStyeSingleton.getInstance().updateMyfragment();

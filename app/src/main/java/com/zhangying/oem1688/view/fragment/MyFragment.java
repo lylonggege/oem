@@ -2,6 +2,7 @@ package com.zhangying.oem1688.view.fragment;
 
 import android.Manifest;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
@@ -55,6 +56,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import butterknife.BindView;
@@ -93,8 +95,6 @@ public class MyFragment extends BaseFragment implements MemberInfoView {
     RelativeLayout userAboutRL;
     @BindView(R.id.tv)
     TextView tv;
-    @BindView(R.id.btn_logout)
-    TextView btnLogout;
     @BindView(R.id.factorycenter1_IV)
     RadiusImageView factorycenter1IV;
     @BindView(R.id.factorycenter2_IV)
@@ -117,24 +117,17 @@ public class MyFragment extends BaseFragment implements MemberInfoView {
         EventBus.getDefault().register(this);
         memberInfoPresenter = new MemberInfoPresenterImpl(this);
         memberInfoPresenter.validateCredentials();
-
-        if (!LoginActivity.hasLogin()){
-            btnLogout.setVisibility(View.GONE);
-        }
     }
 
     @OnClick({R.id.update_TV, R.id.user_personal_RL,
             R.id.user_post_RL, R.id.user_zuji_RL, R.id.user_kefu_RL, R.id.user_about_RL,
-            R.id.factorycenter1_IV, R.id.factorycenter2_IV, R.id.message_rl, R.id.user_set_RL,R.id.btn_login})
+            R.id.factorycenter1_IV, R.id.factorycenter2_IV, R.id.message_rl, R.id.user_set_RL})
     public void onClick(View view) {
         boolean hasLogin = LoginActivity.simpleActivity(getActivity(), BuildConfig.UPDATE_MYFRAGMNET_ENTER_TYPE);
         if (!hasLogin) {
             return;
         }
         switch (view.getId()) {
-            case R.id.btn_logout://退出登录
-                doLogout();
-                break;
             case R.id.update_TV:
                 break;
             case R.id.user_personal_RL://个人信息
@@ -202,7 +195,6 @@ public class MyFragment extends BaseFragment implements MemberInfoView {
                                                 TokenUtils.clearToken();
 
                                                 //刷新本地数据
-                                                btnLogout.setVisibility(View.GONE);
                                                 memberInfoPresenter.validateCredentials();
                                             }
 
@@ -227,6 +219,16 @@ public class MyFragment extends BaseFragment implements MemberInfoView {
         dissmissLoading();
     }
 
+    private int getResId(String variableName, Class<?> c) {
+        try {
+            Field idField = c.getDeclaredField(variableName);
+            return idField.getInt(idField);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
     @Override
     public void success(MineinfoBean memberInfoBean) {
         MineinfoBean.RetvalBean retval = memberInfoBean.getRetval();
@@ -249,13 +251,18 @@ public class MyFragment extends BaseFragment implements MemberInfoView {
             myfollowsLL.setLayoutParams(layoutParams);
             LinearLayout rootView_follows_ll = myfollowsLL.findViewById(R.id.rootView_follows_ll);
             TextView nums_textview = myfollowsLL.findViewById(R.id.nums_textview);
+            nums_textview.getPaint().setStyle(Paint.Style.FILL_AND_STROKE);
+            nums_textview.getPaint().setStrokeWidth(1.2f);
+
             ImageView spic_imageview = myfollowsLL.findViewById(R.id.spic_imageview);
             TextView sname_textview = myfollowsLL.findViewById(R.id.sname_textview);
             String spic = myfollowsBean.getSpic();
             if (spic != null && spic.length() > 0) {
                 spic_imageview.setVisibility(View.VISIBLE);
                 nums_textview.setVisibility(View.GONE);
-                GlideUtil.loadImage(getActivity(), spic, spic_imageview);
+
+                spic_imageview.setBackground(getResources().getDrawable(getResId(spic,R.drawable.class)));
+                //GlideUtil.loadImage(getActivity(), spic, spic_imageview);
             } else {
                 spic_imageview.setVisibility(View.GONE);
                 nums_textview.setVisibility(View.VISIBLE);
@@ -310,10 +317,6 @@ public class MyFragment extends BaseFragment implements MemberInfoView {
             if (message.getType() == 3) {
                 if (memberInfoPresenter != null) {
                     memberInfoPresenter.validateCredentials();
-                }
-
-                if (LoginActivity.hasLogin()){
-                    btnLogout.setVisibility(View.VISIBLE);
                 }
             }
         }

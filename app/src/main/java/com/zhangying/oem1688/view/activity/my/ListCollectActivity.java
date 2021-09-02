@@ -40,7 +40,6 @@ import butterknife.OnClick;
 
 public class ListCollectActivity extends BaseActivity {
 
-
     @BindView(R.id.title_TV)
     TextView titleTV;
     @BindView(R.id.recycview)

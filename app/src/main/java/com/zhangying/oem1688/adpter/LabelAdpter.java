@@ -1,8 +1,11 @@
 package com.zhangying.oem1688.adpter;
 
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +13,8 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.OnConfirmListener;
 import com.xuexiang.xui.adapter.recyclerview.BaseRecyclerAdapter;
 import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
 import com.zhangying.oem1688.R;
@@ -17,10 +22,14 @@ import com.zhangying.oem1688.bean.MessageListBean;
 import com.zhangying.oem1688.bean.MessageViewBean;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
+import com.zhangying.oem1688.onterface.ICallMobile;
 import com.zhangying.oem1688.onterface.IMessageView;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
+import com.zhangying.oem1688.util.AutoForcePermissionUtils;
 import com.zhangying.oem1688.util.ScreenTools;
+import com.zhangying.oem1688.util.StringUtils;
 import com.zhangying.oem1688.util.ToastUtil;
+import com.zhangying.oem1688.view.activity.home.FactoryDetailActivity;
 
 import androidx.annotation.NonNull;
 
@@ -34,6 +43,9 @@ public class LabelAdpter extends BaseRecyclerAdapter<MessageListBean.RetvalBean>
     public void setType(int type) {
         this.type = type;
     }
+
+    private ICallMobile iCallMobile;
+    public void setiCallMobile(ICallMobile iCallMobile) { this.iCallMobile = iCallMobile; }
 
     //是否为公司留言
     private boolean isStoreMsg;
@@ -59,8 +71,8 @@ public class LabelAdpter extends BaseRecyclerAdapter<MessageListBean.RetvalBean>
         TextView see_tv = holder.findViewById(R.id.see_tv);
         name_tv.setText(item.getS_name());
         address_tv.setText(item.getS_areatype());
-        time_tv.setText(item.getAdd_time());
         if (type == 0) {//最新留言
+            time_tv.setText(item.getAdd_time());
             String s_view_ys = item.getS_view_ys();
             if (s_view_ys.equals("1")) {
                 see_tv.setTextColor(Color.argb(255, 35, 109, 232));
@@ -69,9 +81,12 @@ public class LabelAdpter extends BaseRecyclerAdapter<MessageListBean.RetvalBean>
             }
             see_tv.setText(item.getS_view_txt());
         } else if (type == 1){//已读留言
+            time_tv.setText(item.getS_mobile());
             see_tv.setText("详情");
             see_tv.setTextColor(Color.parseColor("#428bca"));
         }else {//未读留言
+            time_tv.setText(item.getAdd_time());
+            see_tv.setTextColor(Color.argb(255, 255, 54, 0));
             see_tv.setText(item.getS_view_nums() + item.getS_view_numtxt());
         }
 
@@ -98,7 +113,7 @@ public class LabelAdpter extends BaseRecyclerAdapter<MessageListBean.RetvalBean>
                 HashMapSingleton.getInstance().put("hvd",item.getS_view_ys());
 
                 RemoteRepository.getInstance()
-                        .message_view(null)
+                        .message_view(HashMapSingleton.getInstance())
                         .subscribeWith(new DefaultDisposableSubscriber<MessageViewBean>() {
                             @Override
                             protected void success(MessageViewBean viewBean) {
@@ -151,6 +166,16 @@ public class LabelAdpter extends BaseRecyclerAdapter<MessageListBean.RetvalBean>
             @Override
             public void onClick(View view) {
                 popupWindow.dismiss();
+            }
+        });
+
+        //拨打电话
+        phone_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (iCallMobile != null){
+                    iCallMobile.toCall(viewBean.getRetval().getS_mobile());
+                }
             }
         });
         company_tv.setText(viewBean.getRetval().getS_yixiang());

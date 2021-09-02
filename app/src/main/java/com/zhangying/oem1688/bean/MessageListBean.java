@@ -62,6 +62,10 @@ public class MessageListBean {
         private int m_store_id;
         private int s_view_nums;
         private String s_view_numtxt;
+        private String s_mobile;
+
+        public String getS_mobile() { return s_mobile; }
+        public void setS_mobile(String s_mobile) { this.s_mobile = s_mobile; }
 
         public int getAgent_id() {
             return agent_id;
