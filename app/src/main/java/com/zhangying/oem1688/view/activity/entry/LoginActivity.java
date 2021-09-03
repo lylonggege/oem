@@ -2,7 +2,6 @@ package com.zhangying.oem1688.view.activity.entry;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -10,13 +9,8 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.Toast;
-
-import androidx.annotation.Nullable;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.xuexiang.xui.XUI;
 import com.xuexiang.xui.utils.CountDownButtonHelper;
 import com.xuexiang.xui.utils.KeyboardUtils;
 import com.xuexiang.xui.utils.StatusBarUtils;
@@ -25,7 +19,6 @@ import com.xuexiang.xui.widget.button.roundbutton.RoundButton;
 import com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText;
 import com.xuexiang.xui.widget.textview.supertextview.SuperButton;
 import com.xuexiang.xutil.app.ActivityUtils;
-import com.xuexiang.xutil.common.RandomUtils;
 import com.xuexiang.xutil.common.StringUtils;
 import com.xuexiang.xutil.display.Colors;
 import com.xuexiang.xutil.tip.ToastUtils;
@@ -35,25 +28,23 @@ import com.zhangying.oem1688.bean.BaseBean;
 import com.zhangying.oem1688.bean.EvenBusMessageBean;
 import com.zhangying.oem1688.bean.PhoneloginBean;
 import com.zhangying.oem1688.constant.BuildConfig;
-import com.zhangying.oem1688.internet.ApiService;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.singleton.EventBusStyeSingleton;
 import com.zhangying.oem1688.util.KeyboardUtil;
 import com.zhangying.oem1688.util.LogUtil;
-import com.zhangying.oem1688.util.MD5Util;
 import com.zhangying.oem1688.util.ToastUtil;
 import com.zhangying.oem1688.util.TokenUtils;
 import com.zhangying.oem1688.view.activity.MainActivity;
-import com.zhangying.oem1688.view.activity.home.FactoryDetailActivity;
+import com.zhangying.oem1688.view.activity.my.MyWebActivity;
 import com.zhangying.oem1688.view.activity.my.ResetpasswordActivity;
 
 import org.greenrobot.eventbus.EventBus;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.HashMap;
 
+import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.OnClick;
 import okhttp3.Call;
@@ -67,7 +58,6 @@ import okhttp3.Response;
 import static com.zhangying.oem1688.util.TokenUtils.setToken;
 
 public class LoginActivity extends BaseActivity {
-
 
     @BindView(R.id.et_phone_number)
     MaterialEditText etPhoneNumber;
@@ -91,6 +81,8 @@ public class LoginActivity extends BaseActivity {
     ImageView weixin_iv;
     @BindView(R.id.qq_iv)
     ImageView qq_iv;
+    @BindView(R.id.btn_close)
+    ImageView btnClose;
     private CountDownButtonHelper mCountDownHelper;
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private static OkHttpClient client = new OkHttpClient();
@@ -126,33 +118,40 @@ public class LoginActivity extends BaseActivity {
         return KeyboardUtils.onDisableBackKeyDown(keyCode) && super.onKeyDown(keyCode, event);
     }
 
-    @OnClick({R.id.btn_get_verify_code, R.id.btn_login, R.id.tv_forget_password, R.id.qq_iv, R.id.weixin_iv})
+    @OnClick({R.id.btn_get_verify_code, R.id.btn_login, R.id.tv_forget_password,
+              R.id.qq_iv, R.id.weixin_iv, R.id.btn_close,R.id.tv_user_protocol,R.id.tv_privacy_protocol})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btn_get_verify_code:
+            case R.id.tv_user_protocol://用户协议
+                MyWebActivity.simpleActivity(this, BuildConfig.URL_AGREEMENT, "用户协议");
+                break;
+            case R.id.tv_privacy_protocol://隐私政策
+                MyWebActivity.simpleActivity(this, BuildConfig.URL_PRIVACY, "隐私政策");
+                break;
+            case R.id.btn_close://关闭登录
+                finish();
+                break;
+            case R.id.btn_get_verify_code://获取登录验证码
                 if (etPhoneNumber.validate()) {
                     getVerifyCode(etPhoneNumber.getEditValue());
                 }
-
                 break;
-            case R.id.btn_login:
+            case R.id.btn_login://执行登录操作
                 if (etPhoneNumber.validate()) {
                     if (etVerifyCode.validate()) {
                         loginByVerifyCode(etPhoneNumber.getEditValue(), etVerifyCode.getEditValue());
                     }
                 }
                 break;
-            case R.id.tv_forget_password:
+            case R.id.tv_forget_password://忘记密码
                 ResetpasswordActivity.simpleActivity(this, 0);
                 break;
             case R.id.weixin_iv:
-
                 break;
             case R.id.qq_iv:
                 break;
         }
     }
-
 
     /**
      * 获取验证码

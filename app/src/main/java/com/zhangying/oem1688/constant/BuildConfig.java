@@ -5,6 +5,8 @@ import com.zhangying.oem1688.util.TokenUtils;
 
 public class BuildConfig {
     public static String URL = "http://m.oem1688.cn/";
+    public static String URL_PRIVACY = URL + "?app=news&act=notice&id=45";    //用户协议
+    public static String URL_AGREEMENT = URL + "?app=news&act=notice&id=44";    //隐私政策
     public static String MD5_SPLIC = "";
     public static boolean debug = false;
     //区分选择的是工厂还是产品  6工厂  7产品

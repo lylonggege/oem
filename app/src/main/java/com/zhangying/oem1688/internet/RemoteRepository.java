@@ -26,6 +26,7 @@ import com.zhangying.oem1688.bean.NewscontBean;
 import com.zhangying.oem1688.bean.OemNewsMoreBean;
 import com.zhangying.oem1688.bean.OemkefuBean;
 import com.zhangying.oem1688.bean.PhoneloginBean;
+import com.zhangying.oem1688.bean.PrivacyBean;
 import com.zhangying.oem1688.bean.RecomendIndexBean;
 import com.zhangying.oem1688.bean.ScinfoDetailBean;
 import com.zhangying.oem1688.bean.ScinfoTopBean;
@@ -231,4 +232,7 @@ public class RemoteRepository {
         return serverApi.drop_history(body);
     }
 
+    public Flowable<PrivacyBean> get_privacy() {
+        return serverApi.get_privacy();
+    }
 }

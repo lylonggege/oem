@@ -7,21 +7,26 @@
     android:focusableInTouchMode="true"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:src="@drawable/logo"
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_50"
+        android:layout_margin="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_25">
+        <ImageView
+            android:id="@+id/btn_close"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/close"/>
+    </RelativeLayout>
+
+    <com.xuexiang.xui.widget.imageview.RadiusImageView
         android:layout_marginTop="@dimen/dp_50"
         android:layout_width="@dimen/dp_120"
         android:layout_height="@dimen/dp_120"
-        android:layout_gravity="center_horizontal" />
-
-
-    <TextView
-        style="@style/TextStyle.Title"
-        android:layout_width="match_parent"
-        android:layout_marginTop="10dp"
-        android:text="登 录"
-        android:textSize="30sp" />
-
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/logo"
+        app:riv_corner_radius="@dimen/dp_20"></com.xuexiang.xui.widget.imageview.RadiusImageView>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -53,9 +58,7 @@
                 app:met_floatingLabel="normal"
                 app:met_floatingLabelText="@string/title_phone_number"
                 app:met_regexp="@string/regex_phone_number" />
-
         </FrameLayout>
-
 
         <FrameLayout
             android:id="@+id/fl_verify_code"
@@ -98,7 +101,7 @@
                 android:textColor="@color/selector_round_button_main_theme_color"
                 android:textSize="13sp"
                 app:rb_borderColor="@color/selector_round_button_main_theme_color"
-                app:rb_borderWidth="1.5dp"
+                app:rb_borderWidth="0.5dp"
                 app:rb_radius="15dp" />
 
         </FrameLayout>
@@ -151,7 +154,8 @@
             android:layout_marginTop="@dimen/dp_20"
             android:background="@drawable/weixin"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:visibility="gone">
         </ImageView>
         <View
             android:visibility="gone"
@@ -165,10 +169,8 @@
             android:background="@drawable/qq"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-
         </ImageView>
     </LinearLayout>
-
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -187,30 +189,25 @@
                 android:layout_width="wrap_content"
                 android:text="登陆/注册代表您已阅读并同意"
                 android:textColor="@color/xui_config_color_primary_text" />
-
             <com.xuexiang.xui.widget.alpha.XUIAlphaTextView
                 android:id="@+id/tv_user_protocol"
                 style="@style/TextStyle.Explain"
                 android:layout_width="wrap_content"
                 android:text="用户协议"
                 android:textColor="?attr/colorAccent" />
-
             <TextView
                 style="@style/TextStyle.Explain"
                 android:layout_width="wrap_content"
                 android:text="和"
                 android:textColor="@color/xui_config_color_primary_text" />
-
             <com.xuexiang.xui.widget.alpha.XUIAlphaTextView
                 android:id="@+id/tv_privacy_protocol"
                 style="@style/TextStyle.Explain"
                 android:layout_width="wrap_content"
                 android:text="隐私政策"
                 android:textColor="?attr/colorAccent" />
-
         </LinearLayout>
 
     </FrameLayout>
-
 
 </LinearLayout>

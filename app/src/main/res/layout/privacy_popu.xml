@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:id="@+id/rootPrivacy"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:background="@drawable/privacy_bg"
+        android:layout_margin="@dimen/dp_30"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginVertical="@dimen/dp_15"
+                android:textStyle="bold"
+                android:text="欢迎使用代工帮"
+                android:textColor="@color/b3"
+                android:textSize="@dimen/dp_20"></TextView>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <WebView
+                android:id="@+id/webView"
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_marginVertical="@dimen/dp_15"
+                android:layout_marginHorizontal="@dimen/dp_25"
+                android:layout_height="@dimen/dp_138" />
+            <TextView
+                android:id="@+id/disagree_tv_popu"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_30"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="不同意"
+                android:textColor="@color/b9"
+                android:textSize="@dimen/dp_14"></TextView>
+            <TextView
+                android:id="@+id/agree_tv_popu"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:background="@color/app_blue"
+                android:gravity="center"
+                android:text="同意"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dp_16"
+                android:textStyle="bold"></TextView>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

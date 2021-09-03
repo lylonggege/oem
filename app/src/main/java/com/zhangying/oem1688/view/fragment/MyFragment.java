@@ -69,6 +69,10 @@ import butterknife.OnClick;
 public class MyFragment extends BaseFragment implements MemberInfoView {
     @BindView(R.id.head_imageView)
     RadiusImageView headImageView;
+    @BindView(R.id.nologin_vew)
+    TextView noLoginTipView;
+    @BindView(R.id.login_vew)
+    RelativeLayout loginTipView;
     @BindView(R.id.name_tv)
     TextView nameTv;
     @BindView(R.id.update_TV)
@@ -115,13 +119,23 @@ public class MyFragment extends BaseFragment implements MemberInfoView {
     @Override
     public void initView() {
         EventBus.getDefault().register(this);
-        memberInfoPresenter = new MemberInfoPresenterImpl(this);
-        memberInfoPresenter.validateCredentials();
+
+        //判断是否登录
+        if (LoginActivity.hasLogin()){
+            memberInfoPresenter = new MemberInfoPresenterImpl(this);
+            memberInfoPresenter.validateCredentials();
+
+            noLoginTipView.setVisibility(View.GONE);
+            loginTipView.setVisibility(View.VISIBLE);
+        }else {
+            noLoginTipView.setVisibility(View.VISIBLE);
+            loginTipView.setVisibility(View.GONE);
+        }
     }
 
     @OnClick({R.id.update_TV, R.id.user_personal_RL,
             R.id.user_post_RL, R.id.user_zuji_RL, R.id.user_kefu_RL, R.id.user_about_RL,
-            R.id.factorycenter1_IV, R.id.factorycenter2_IV, R.id.message_rl, R.id.user_set_RL})
+            R.id.factorycenter1_IV, R.id.factorycenter2_IV, R.id.message_rl, R.id.user_set_RL, R.id.nologin_vew})
     public void onClick(View view) {
         boolean hasLogin = LoginActivity.simpleActivity(getActivity(), BuildConfig.UPDATE_MYFRAGMNET_ENTER_TYPE);
         if (!hasLogin) {
@@ -170,6 +184,8 @@ public class MyFragment extends BaseFragment implements MemberInfoView {
                 break;
             case R.id.user_set_RL:
                 SetActivity.simpleActivity(getActivity());
+                break;
+            default:
                 break;
         }
     }

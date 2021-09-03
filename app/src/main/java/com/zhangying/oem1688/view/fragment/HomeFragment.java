@@ -3,12 +3,6 @@ package com.zhangying.oem1688.view.fragment;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.zhangying.oem1688.R;
@@ -24,9 +18,11 @@ import com.zhangying.oem1688.onterface.BaseView;
 import com.zhangying.oem1688.view.activity.home.SearchActivity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -116,7 +112,7 @@ public class HomeFragment extends XBaseFragment implements TabLayout.OnTabSelect
 
         if (fragmentList != null && fragmentList.size() > 0) {
             fragmnetPagerAdapter = new FragmnetPagerAdapter(getFragmentManager(), fragmentList, tabList);
-            view_pager2.setOffscreenPageLimit(fragmentList.size());
+            //view_pager2.setOffscreenPageLimit(fragmentList.size());
             view_pager2.setAdapter(fragmnetPagerAdapter);
             parentTabIndictor.setViewPager(view_pager2);
             parentTabIndictor.setCurrentTab(0);

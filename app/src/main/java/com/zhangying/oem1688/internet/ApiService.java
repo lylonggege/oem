@@ -27,6 +27,7 @@ import com.zhangying.oem1688.bean.NewscontBean;
 import com.zhangying.oem1688.bean.OemNewsMoreBean;
 import com.zhangying.oem1688.bean.OemkefuBean;
 import com.zhangying.oem1688.bean.PhoneloginBean;
+import com.zhangying.oem1688.bean.PrivacyBean;
 import com.zhangying.oem1688.bean.RecomendIndexBean;
 import com.zhangying.oem1688.bean.ScinfoDetailBean;
 import com.zhangying.oem1688.bean.ScinfoTopBean;
@@ -241,5 +242,7 @@ public interface ApiService {
     @POST("?app=default&act=drop_history")
     Flowable<BaseBean> drop_history(@FieldMap HashMap<String, Object> hashMap);
 
-
+    //用户协议
+    @GET("?app=xcxindex&act=privacy&android=1")
+    Flowable<PrivacyBean> get_privacy();
 }

@@ -87,6 +87,9 @@
             android:name=".view.activity.my.MyAboutDGBActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".view.activity.my.MyWebActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".view.activity.my.StoreMessageActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".view.activity.MainActivity" /> <!-- 今日头条适配标准尺寸 END -->

@@ -1,42 +1,38 @@
 package com.zhangying.oem1688.view.activity;
 
-import android.database.sqlite.SQLiteDatabase;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.http.SslError;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.webkit.SslErrorHandler;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
-import com.xuexiang.xui.widget.activity.BaseSplashActivity;
 import com.zhangying.oem1688.R;
-import com.zhangying.oem1688.base.BaseActivity;
-import com.zhangying.oem1688.bean.BaseBean;
 import com.zhangying.oem1688.bean.EvenBusBean;
-import com.zhangying.oem1688.bean.EvenBusMessageBean;
-import com.zhangying.oem1688.bean.HomeBena;
+import com.zhangying.oem1688.bean.GoodsdetailBean;
 import com.zhangying.oem1688.bean.HomeTabBean;
-import com.zhangying.oem1688.bean.ListCollectBean;
-import com.zhangying.oem1688.bean.SitetopinfoBean;
-import com.zhangying.oem1688.db.StuDBHelper;
+import com.zhangying.oem1688.bean.PrivacyBean;
+import com.zhangying.oem1688.constant.BuildConfig;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
-import com.zhangying.oem1688.mvp.home.TabberView;
 import com.zhangying.oem1688.mvp.home.TabberPresenter;
 import com.zhangying.oem1688.mvp.home.TabberPresenterImpl;
+import com.zhangying.oem1688.mvp.home.TabberView;
 import com.zhangying.oem1688.singleton.EventBusStyeSingleton;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
+import com.zhangying.oem1688.util.MyUtilsWebView;
 import com.zhangying.oem1688.util.ToastUtil;
-import com.zhangying.oem1688.view.fragment.FactoryFragment;
+import com.zhangying.oem1688.util.WebViewSeting;
+import com.zhangying.oem1688.view.activity.my.MyWebActivity;
 import com.zhangying.oem1688.view.fragment.HomeFragment;
 import com.zhangying.oem1688.view.fragment.MyFragment;
 import com.zhangying.oem1688.view.fragment.NewsFragment;
@@ -47,16 +43,15 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
-import java.util.List;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static com.zhangying.oem1688.constant.BuildConfig.CATEBID;
-import static com.zhangying.oem1688.constant.BuildConfig.CATESID;
-import static com.zhangying.oem1688.constant.BuildConfig.COMPANY_FACTORY_TYPE;
-import static com.zhangying.oem1688.constant.BuildConfig.DAIGONGPINGLEI;
 
 public class MainActivity extends AppCompatActivity implements TabberView {
 
@@ -96,10 +91,17 @@ public class MainActivity extends AppCompatActivity implements TabberView {
     TextView newsText;
     @BindView(R.id.news_line)
     LinearLayout newsLine;
+    @BindView(R.id.webView)
+    WebView webPrivacy;
+    @BindView(R.id.agree_tv_popu)
+    TextView btnAgreePriv;
+    @BindView(R.id.disagree_tv_popu)
+    TextView btnDisagreePriv;
+    @BindView(R.id.priLayout)
+    RelativeLayout priLayout;
     private Fragment homeFragment, newsFragment, myFragmnet, productFragment, productFragment2;
     private TabberPresenter tabberPresenter;
     private int tabIndex;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -110,7 +112,105 @@ public class MainActivity extends AppCompatActivity implements TabberView {
         tabberPresenter.validateCredentials();
         selectTab(1);
         selectTab(0);
+
+        setPrivacyView();
         EventBus.getDefault().register(this);
+    }
+
+    private void setPrivacyContent(String content){
+        String privacyInfo = String.format("<p>感谢您选择代工帮App!<br>" +
+                "我们非常重视您的个人信息和隐私保护。为了更好的保障你的个人权益，在您使用我们的产品前，请充分阅读并理解<a href=\"%s\" style=\"color:#4395ff\">《服务协议》</a>和<a href=\"%s\" style=\"color:#4395ff\">《隐私条款》</a>，特向您说明如下：<br>" +
+                "1.为给您提供发布服务，我们可能还会申请手机存储权限、摄像头权限;<br>" +
+                "2.为了信息推送和账号安全，我们会申请系统设备权限收集设备信息、日志信息;<br>" +
+                "3.我们会努力采取各种安全技术保护您的个人信息，未经您同意;我们不会从第三方获取、共享或对外提供您的信息;<br>" +
+                "4.您还可以访问、更正、删除您的个人信息，我们也将提供注销、投诉方式;", BuildConfig.URL_AGREEMENT,BuildConfig.URL_PRIVACY);
+        String s = MyUtilsWebView.setWebViewText(content, "font-size:14px;color:#666666;line-height:1.8", "\na{text-decoration:none}\n");
+        WebViewSeting.setting(webPrivacy, MainActivity.this, s);
+    }
+
+    //显示用户协议和隐私政策
+    private void setPrivacyView(){
+        //获取SharedPreferences对象
+        String STRING_KEY = "STRING_KEY";
+        Context ctx = MainActivity.this;
+        SharedPreferences sp = ctx.getSharedPreferences("SP", MODE_PRIVATE);
+        int iAgree = sp.getInt(STRING_KEY, 0);
+        if (iAgree == 1){//已同意
+            priLayout.setVisibility(View.GONE);
+        }else {
+            String privacyInfo = String.format("<p>感谢您选择代工帮App!<br>" +
+                    "我们非常重视您的个人信息和隐私保护。为了更好的保障你的个人权益，在您使用我们的产品前，请充分阅读并理解<a href=\"%s\" style=\"color:#4395ff\">《服务协议》</a>和<a href=\"%s\" style=\"color:#4395ff\">《隐私条款》</a>，特向您说明如下：<br>" +
+                    "1.为给您提供发布服务，我们可能还会申请手机存储权限、摄像头权限;<br>" +
+                    "2.为了信息推送和账号安全，我们会申请系统设备权限收集设备信息、日志信息;<br>" +
+                    "3.我们会努力采取各种安全技术保护您的个人信息，未经您同意;我们不会从第三方获取、共享或对外提供您的信息;<br>" +
+                    "4.您还可以访问、更正、删除您的个人信息，我们也将提供注销、投诉方式;", BuildConfig.URL_AGREEMENT,BuildConfig.URL_PRIVACY);
+            setPrivacyContent(privacyInfo);
+
+            //加载用户协议
+            RemoteRepository.getInstance()
+                    .get_privacy()
+                    .subscribeWith(new DefaultDisposableSubscriber<PrivacyBean>() {
+
+                        @Override
+                        protected void success(PrivacyBean data) {
+                            setPrivacyContent(data.getRetval().getInfo());
+                        }
+
+                        @Override
+                        public void onError(Throwable t) {
+                            super.onError(t);
+                        }
+                    });
+
+            Context that = this;
+            webPrivacy.setWebViewClient(new WebViewClient(){
+                @Override
+                public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                    handler.proceed();
+                }
+
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    if (url.startsWith("phone://")){
+
+                    }else if (url.startsWith("email://")){
+
+                    }else if (url.startsWith("local://")){
+
+                    }else if (url.startsWith("share://")){
+
+                    }else {
+                        MyWebActivity.simpleActivity(that, url, "");
+                    }
+                    return true;
+                }
+            });
+
+            btnAgreePriv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putInt(STRING_KEY, 1);
+                    editor.commit();
+                    priLayout.setVisibility(View.GONE);
+                }
+            });
+
+            btnDisagreePriv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    priLayout.setVisibility(View.GONE);
+                    System.exit(0);
+                }
+            });
+
+            priLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+        }
 
     }
 
@@ -135,7 +235,6 @@ public class MainActivity extends AppCompatActivity implements TabberView {
 //                    }
 //                });
 //    }
-
 
     private void selectTab(int index) {
         releaseImaAndText();
@@ -184,7 +283,6 @@ public class MainActivity extends AppCompatActivity implements TabberView {
                     transaction.show(newsFragment);
                 }
                 break;
-
             case 4:
                 if (myFragmnet == null) {
                     myFragmnet = new MyFragment();
@@ -195,7 +293,6 @@ public class MainActivity extends AppCompatActivity implements TabberView {
 
                 //跟新我的界面
                 EventBusStyeSingleton.getInstance().updateMyfragment();
-
                 break;
         }
 
@@ -237,7 +334,6 @@ public class MainActivity extends AppCompatActivity implements TabberView {
                 myIma.setSelected(true);
                 myText.setSelected(true);
                 break;
-
         }
     }
 
