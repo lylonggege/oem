@@ -5,11 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.xuexiang.xui.widget.activity.BaseSplashActivity;
 import com.xuexiang.xutil.app.ActivityUtils;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.base.BaseActivity;
+import com.zhangying.oem1688.util.ScreenTools;
 import com.zhangying.oem1688.util.SettingSPUtils;
 import com.zhangying.oem1688.util.TokenUtils;
 import com.zhangying.oem1688.view.activity.MainActivity;
@@ -29,12 +32,18 @@ public class SplashActivity extends BaseSplashActivity {
             spUtil.setIsFirstOpen(false);
             ActivityUtils.startActivity(UserGuideActivity.class);
             finish();
-
         } else {
+            ScreenTools screenTools = ScreenTools.instance(this);
+            ImageView imageView = new ImageView(this);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setLayoutParams(new ViewGroup.LayoutParams(screenTools.getScreenWidth(), screenTools.getScreenHeight()));  //设置图片宽高
+            imageView.setImageResource(R.drawable.configl_bg_spash); //图片资源
+            mWelcomeLayout.addView(imageView); //动态添加图片
+
             if (enableAlphaAnim) {
-                initSplashView(R.drawable.configl_bg_spash);
+                //initSplashView(R.drawable.configl_bg_spash);
             } else {
-                initSplashView(R.drawable.configl_bg_spash);
+                //initSplashView(R.drawable.configl_bg_spash);
             }
             startSplash(enableAlphaAnim);
         }
