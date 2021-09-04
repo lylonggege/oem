@@ -27,8 +27,10 @@ import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.mvp.home.TabberPresenter;
 import com.zhangying.oem1688.mvp.home.TabberPresenterImpl;
 import com.zhangying.oem1688.mvp.home.TabberView;
+import com.zhangying.oem1688.onterface.OnMultiClickListener;
 import com.zhangying.oem1688.singleton.EventBusStyeSingleton;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
+import com.zhangying.oem1688.util.AppUtils;
 import com.zhangying.oem1688.util.MyUtilsWebView;
 import com.zhangying.oem1688.util.ToastUtil;
 import com.zhangying.oem1688.util.WebViewSeting;
@@ -186,9 +188,9 @@ public class MainActivity extends AppCompatActivity implements TabberView {
                 }
             });
 
-            btnAgreePriv.setOnClickListener(new View.OnClickListener() {
+            btnAgreePriv.setOnClickListener(new OnMultiClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onMultiClick(View v) {
                     SharedPreferences.Editor editor = sp.edit();
                     editor.putInt(STRING_KEY, 1);
                     editor.commit();
@@ -196,17 +198,17 @@ public class MainActivity extends AppCompatActivity implements TabberView {
                 }
             });
 
-            btnDisagreePriv.setOnClickListener(new View.OnClickListener() {
+            btnDisagreePriv.setOnClickListener(new OnMultiClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onMultiClick(View v) {
                     priLayout.setVisibility(View.GONE);
                     System.exit(0);
                 }
             });
 
-            priLayout.setOnClickListener(new View.OnClickListener() {
+            priLayout.setOnClickListener(new OnMultiClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onMultiClick(View v) {
 
                 }
             });

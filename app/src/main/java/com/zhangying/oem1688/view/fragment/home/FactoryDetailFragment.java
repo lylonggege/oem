@@ -27,6 +27,7 @@ import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.xuexiang.xui.utils.DensityUtils;
 import com.xuexiang.xui.utils.WidgetUtils;
 import com.xuexiang.xui.widget.banner.widget.banner.BannerItem;
+import com.xuexiang.xui.widget.imageview.RadiusImageView;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.adpter.FactoryDetailCatesAdpter;
 import com.zhangying.oem1688.adpter.FactoryDetailTuijianAdpter;
@@ -40,9 +41,11 @@ import com.zhangying.oem1688.custom.MyRecycleView;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.onterface.BaseMessageListener;
+import com.zhangying.oem1688.onterface.OnMultiClickListener;
 import com.zhangying.oem1688.popu.GoodsDetailPopu;
 import com.zhangying.oem1688.singleton.GlobalEntitySingleton;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
+import com.zhangying.oem1688.util.AppUtils;
 import com.zhangying.oem1688.util.GlideUtil;
 import com.zhangying.oem1688.util.PreviewImageView;
 import com.zhangying.oem1688.util.ScreenTools;
@@ -60,7 +63,7 @@ import butterknife.OnClick;
 
 public class FactoryDetailFragment extends BaseFragment {
     @BindView(R.id.company_loge_iv)
-    ImageView companyLogeIv;
+    RadiusImageView companyLogeIv;
     @BindView(R.id.companyname_tv)
     TextView companynameTv;
     @BindView(R.id.companyname_authtag_tv)
@@ -223,9 +226,9 @@ public class FactoryDetailFragment extends BaseFragment {
                     ImageViewInfo imageViewInfo = new ImageViewInfo((String) hashMap.get("url"));
                     list.add(imageViewInfo);
                     int finalI = i1;
-                    imageView.setOnClickListener(new View.OnClickListener() {
+                    imageView.setOnClickListener(new OnMultiClickListener() {
                         @Override
-                        public void onClick(View v) {
+                        public void onMultiClick(View v) {
                             PreviewImageView.save(imageView, finalI, list);
                         }
                     });
@@ -323,6 +326,10 @@ public class FactoryDetailFragment extends BaseFragment {
 
     @OnClick({R.id.message_LL, R.id.submit_tv})
     public void onClick(View view) {
+        if (!AppUtils.isFastClick()){
+            return;
+        }
+
         switch (view.getId()) {
             case R.id.submit_tv://界面提交留言
                 ArrayList<Integer> cateSelected = new ArrayList<Integer>();

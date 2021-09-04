@@ -15,6 +15,7 @@ import com.xuexiang.xui.adapter.recyclerview.BaseRecyclerAdapter;
 import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.bean.OemkefuBean;
+import com.zhangying.oem1688.onterface.OnMultiClickListener;
 import com.zhangying.oem1688.util.AutoForcePermissionUtils;
 import com.zhangying.oem1688.util.ToastUtil;
 
@@ -38,9 +39,9 @@ public class MyCustomerServiceAdpter extends BaseRecyclerAdapter<OemkefuBean.Ret
         TextView phone_tv = holder.findViewById(R.id.phone_tv);
         phone_tv.setText(item.getKftel());
 
-        holder.findViewById(R.id.rootView).setOnClickListener(new View.OnClickListener() {
+        holder.findViewById(R.id.rootView).setOnClickListener(new OnMultiClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onMultiClick(View view) {
                 AutoForcePermissionUtils.requestPermissions((FragmentActivity) context, new AutoForcePermissionUtils.PermissionCallback() {
 
                     @Override

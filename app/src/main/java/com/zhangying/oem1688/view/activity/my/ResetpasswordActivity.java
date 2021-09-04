@@ -17,6 +17,7 @@ import com.zhangying.oem1688.base.BaseActivity;
 import com.zhangying.oem1688.bean.BaseBean;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
+import com.zhangying.oem1688.util.AppUtils;
 import com.zhangying.oem1688.util.ToastUtil;
 
 import java.util.HashMap;
@@ -64,6 +65,10 @@ public class ResetpasswordActivity extends BaseActivity {
 
     @OnClick({R.id.bacK_RL, R.id.logoff_tv, R.id.btn_get_verify_code})
     public void onClick(View view) {
+        if (!AppUtils.isFastClick()){
+            return;
+        }
+
         switch (view.getId()) {
             case R.id.btn_get_verify_code:
                 if (etPhoneNumber.validate()) {

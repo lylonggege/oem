@@ -22,6 +22,7 @@ import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.bean.MoreScinfoBean;
 import com.zhangying.oem1688.custom.MyRecycleView;
 import com.zhangying.oem1688.onterface.BaseImagePreview;
+import com.zhangying.oem1688.onterface.OnMultiClickListener;
 import com.zhangying.oem1688.util.GlideUtil;
 import com.zhangying.oem1688.util.ImageViewInfo;
 import com.zhangying.oem1688.util.PreviewImageView;
@@ -83,9 +84,9 @@ public class ChengJieDaiGongAdpter extends BaseRecyclerAdapter<MoreScinfoBean.Re
             company_recycleview.setAdapter(newsOemNimgAdpter);
         }
 
-        rootView_company.setOnClickListener(new View.OnClickListener() {
+        rootView_company.setOnClickListener(new OnMultiClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onMultiClick(View view) {
                 NewsDetailActivity.simpleActivity(context, Integer.parseInt(item.getNid()), Integer.parseInt(item.getType()));
             }
         });

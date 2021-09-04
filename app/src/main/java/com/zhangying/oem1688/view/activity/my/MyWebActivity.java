@@ -19,6 +19,7 @@ import com.zhangying.oem1688.base.BaseActivity;
 import com.zhangying.oem1688.bean.AboutBean;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
+import com.zhangying.oem1688.onterface.OnMultiClickListener;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
 import com.zhangying.oem1688.util.MyUtilsWebView;
 import com.zhangying.oem1688.util.WebViewSeting;
@@ -59,9 +60,9 @@ public class MyWebActivity extends BaseActivity {
         });
 
         titleTV.setText(pageTitle);
-        bacKRL.setOnClickListener(new View.OnClickListener() {
+        bacKRL.setOnClickListener(new OnMultiClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onMultiClick(View v) {
                 finish();
             }
         });

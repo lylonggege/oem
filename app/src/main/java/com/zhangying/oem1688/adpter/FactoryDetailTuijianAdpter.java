@@ -14,9 +14,11 @@ import androidx.annotation.NonNull;
 
 import com.xuexiang.xui.adapter.recyclerview.BaseRecyclerAdapter;
 import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
+import com.xuexiang.xui.widget.imageview.RadiusImageView;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.bean.FactoryDetailBean;
 import com.zhangying.oem1688.bean.GoodsdetailBean;
+import com.zhangying.oem1688.onterface.OnMultiClickListener;
 import com.zhangying.oem1688.util.GlideUtil;
 import com.zhangying.oem1688.view.activity.home.FactoryDetailActivity;
 
@@ -45,7 +47,7 @@ public class FactoryDetailTuijianAdpter extends BaseRecyclerAdapter<FactoryDetai
         layoutParams.setMargins(0, 15, 0, 0);
         companyname_rootview.setLayoutParams(layoutParams);
 
-        ImageView company_loge_iv = holder.findViewById(R.id.company_loge_iv);
+        RadiusImageView company_loge_iv = holder.findViewById(R.id.company_loge_iv);
         TextView companyname_tv = holder.findViewById(R.id.companyname_tv);
         TextView companyname_authtag_tv = holder.findViewById(R.id.companyname_authtag_tv);
         TextView company_storetime_tv = holder.findViewById(R.id.company_storetime_tv);
@@ -103,9 +105,9 @@ public class FactoryDetailTuijianAdpter extends BaseRecyclerAdapter<FactoryDetai
         }
 
         RelativeLayout rootView = holder.findViewById(R.id.rootView);
-        rootView.setOnClickListener(new View.OnClickListener() {
+        rootView.setOnClickListener(new OnMultiClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onMultiClick(View view) {
                 FactoryDetailActivity.simpleActivity(context, item.getStoreid());
             }
         });

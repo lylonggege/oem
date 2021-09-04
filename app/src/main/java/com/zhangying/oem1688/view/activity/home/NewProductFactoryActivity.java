@@ -38,6 +38,7 @@ import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.mvp.newfactoryproduct.FactoryProductPersenterImpl;
 import com.zhangying.oem1688.onterface.BaseValidateCredentials;
 import com.zhangying.oem1688.onterface.BaseView;
+import com.zhangying.oem1688.util.AppUtils;
 import com.zhangying.oem1688.util.SpacesItemDecoration;
 
 import org.greenrobot.eventbus.EventBus;
@@ -165,6 +166,10 @@ public class NewProductFactoryActivity extends BaseActivity implements BaseView 
             R.id.factory_rl, R.id.companychildren_rl,
             R.id.factoeychildren_rl, R.id.imageView5, R.id.bacK_RL})
     public void onClick(View view) {
+        if (!AppUtils.isFastClick()){
+            return;
+        }
+
         switch (view.getId()) {
             case R.id.bacK_RL:
                 finish();
@@ -205,6 +210,8 @@ public class NewProductFactoryActivity extends BaseActivity implements BaseView 
                     if (options1 > 0){
                         cateSelected.set(0,cateList.get(options1).getId() + "");
                         minText = mTimeOption1[options1][options2];
+                    }else {
+                        cateSelected.set(0,"0");
                     }
 
                     if (options2 == 0){

@@ -11,6 +11,7 @@
     、
     <com.xuexiang.xui.widget.imageview.RadiusImageView
         android:id="@+id/riv"
+        android:src="@drawable/goods_default"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:riv_corner_radius="@dimen/dp_8" />

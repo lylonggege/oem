@@ -13,6 +13,7 @@ import com.zhangying.oem1688.bean.FactoryDetailBean;
 import com.zhangying.oem1688.bean.FactoryGCateBean;
 import com.zhangying.oem1688.bean.SitetopinfoBean;
 import com.zhangying.oem1688.onterface.BaseInterfacePosition;
+import com.zhangying.oem1688.onterface.OnMultiClickListener;
 
 public class SitetopinfoLeftAdpter extends BaseRecyclerAdapter<FactoryGCateBean.RetvalBean> {
 
@@ -38,9 +39,9 @@ public class SitetopinfoLeftAdpter extends BaseRecyclerAdapter<FactoryGCateBean.
         } else {
             tv_line.setVisibility(View.INVISIBLE);
         }
-        rootView_left.setOnClickListener(new View.OnClickListener() {
+        rootView_left.setOnClickListener(new OnMultiClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onMultiClick(View view) {
                 baseInterfacePosition.getPosition(position,true,rootView_left);
             }
         });

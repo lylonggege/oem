@@ -30,6 +30,7 @@ import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.mvp.newfactoryproduct.FactoryProductPersenterImpl;
 import com.zhangying.oem1688.onterface.BaseView;
+import com.zhangying.oem1688.util.AppUtils;
 import com.zhangying.oem1688.util.KeyboardUtil;
 import com.zhangying.oem1688.util.SpacesItemDecoration;
 
@@ -287,6 +288,10 @@ public class SearchResultActivity extends BaseActivity implements BaseView, Text
 
     @OnClick({R.id.company_rl, R.id.factory_rl, R.id.cate_ll, R.id.address_ll, R.id.imageView5,R.id.imageView2,R.id.imageView})
     public void onClick(View view) {
+        if (!AppUtils.isFastClick()){
+            return;
+        }
+
         switch (view.getId()) {
             case R.id.imageView://返回
                 finish();

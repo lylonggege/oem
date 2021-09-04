@@ -13,6 +13,7 @@ import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
 import com.xuexiang.xui.widget.imageview.RadiusImageView;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.bean.FactoryDetailBean;
+import com.zhangying.oem1688.onterface.OnMultiClickListener;
 import com.zhangying.oem1688.util.GlideUtil;
 import com.zhangying.oem1688.util.ScreenTools;
 import com.zhangying.oem1688.view.activity.home.GoodsDetailActivity;
@@ -53,9 +54,9 @@ public class FactoryDetailCatesHorizontalAdpter extends BaseRecyclerAdapter<Fact
 //        }
 
         GlideUtil.loadImage(context, item.getDefault_image(), image);
-        image.setOnClickListener(new View.OnClickListener() {
+        image.setOnClickListener(new OnMultiClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onMultiClick(View view) {
                 GoodsDetailActivity.simpleActivity(context, item.getGoods_id());
             }
         });

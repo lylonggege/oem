@@ -13,6 +13,7 @@ import com.zhangying.oem1688.bean.SitetopinfoBean;
 import com.zhangying.oem1688.custom.JumpViewPage;
 import com.zhangying.oem1688.onterface.BaseView;
 import com.zhangying.oem1688.onterface.IJumPage;
+import com.zhangying.oem1688.onterface.OnMultiClickListener;
 import com.zhangying.oem1688.view.activity.home.NewProductFactoryActivity;
 import com.zhangying.oem1688.view.fragment.ProductFragment;
 
@@ -48,9 +49,9 @@ public class PinLeiChilden2Adpter extends BaseRecyclerAdapter<SitetopinfoBean.Re
     protected void bindData(@NonNull RecyclerViewHolder holder, int position, SitetopinfoBean.RetvalBean.childrenBean item) {
         TextView content_tv = holder.findViewById(R.id.content_tv);
         content_tv.setText(item.getCatename());
-        content_tv.setOnClickListener(new View.OnClickListener() {
+        content_tv.setOnClickListener(new OnMultiClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onMultiClick(View view) {
                 int stype = 1;
                 String sid = storeid + "_" + item.getCateid();
                 if (context instanceof NewProductFactoryActivity){

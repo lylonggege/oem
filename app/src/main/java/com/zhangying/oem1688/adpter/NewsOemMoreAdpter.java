@@ -22,6 +22,7 @@ import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.bean.OemNewsMoreBean;
 import com.zhangying.oem1688.custom.MyRecycleView;
 import com.zhangying.oem1688.onterface.BaseImagePreview;
+import com.zhangying.oem1688.onterface.OnMultiClickListener;
 import com.zhangying.oem1688.util.GlideUtil;
 import com.zhangying.oem1688.util.ImageViewInfo;
 import com.zhangying.oem1688.util.PreviewImageView;
@@ -80,9 +81,9 @@ public class NewsOemMoreAdpter extends BaseRecyclerAdapter<OemNewsMoreBean.Retva
         rootView_company.setVisibility(View.GONE);
 
         LinearLayout rootView = holder.findViewById(R.id.rootView);
-        rootView.setOnClickListener(new View.OnClickListener() {
+        rootView.setOnClickListener(new OnMultiClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onMultiClick(View view) {
                 NewsDetailActivity.simpleActivity(context, item.getNid(), type);
             }
         });
@@ -106,6 +107,12 @@ public class NewsOemMoreAdpter extends BaseRecyclerAdapter<OemNewsMoreBean.Retva
                     WidgetUtils.initGridRecyclerView(myRecycleView_type1, 3, DensityUtils.dp2px(5));
                     NewsOemNimgAdpter newsOemNimgAdpter = new NewsOemNimgAdpter(context);
                     newsOemNimgAdpter.refresh(nimg);
+                    newsOemNimgAdpter.setImagePreview(new BaseImagePreview() {
+                        @Override
+                        public void startPosition(int position,ImageView imageView) {
+                            NewsDetailActivity.simpleActivity(context, item.getNid(), type);
+                        }
+                    });
                     myRecycleView_type1.setAdapter(newsOemNimgAdpter);
 
                     content_tv.setText(item.getNtitle());

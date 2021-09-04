@@ -16,6 +16,7 @@ import com.zhangying.oem1688.custom.MyRecycleView;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.onterface.BaseView;
+import com.zhangying.oem1688.util.AppUtils;
 import com.zhangying.oem1688.view.activity.home.SearchActivity;
 
 import java.util.HashMap;
@@ -101,6 +102,10 @@ public class NewsFragment extends BaseFragment {
 
     @OnClick({R.id.imageView2, R.id.textView})
     public void onClick(View view) {
+        if (!AppUtils.isFastClick()){
+            return;
+        }
+
         switch (view.getId()) {
             case R.id.imageView2:
                 FenLeiRealization fenLeiRealization = new FenLeiRealization(getActivity(), new BaseView() {

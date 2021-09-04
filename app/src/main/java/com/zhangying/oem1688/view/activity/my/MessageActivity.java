@@ -29,6 +29,7 @@ import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.singleton.EventBusStyeSingleton;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
+import com.zhangying.oem1688.util.AppUtils;
 import com.zhangying.oem1688.util.Base64Util;
 import com.zhangying.oem1688.util.GlideUtil;
 import com.zhangying.oem1688.util.MD5Util;
@@ -107,6 +108,10 @@ public class MessageActivity extends BaseActivity {
 
     @OnClick({R.id.bacK_RL, R.id.head_imageView, R.id.submit_tv})
     public void onClick(View view) {
+        if (!AppUtils.isFastClick()){
+            return;
+        }
+
         switch (view.getId()) {
             case R.id.bacK_RL:
                 finish();

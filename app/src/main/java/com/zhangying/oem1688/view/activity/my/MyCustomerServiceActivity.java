@@ -24,6 +24,7 @@ import com.zhangying.oem1688.bean.OemkefuBean;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
+import com.zhangying.oem1688.util.AppUtils;
 import com.zhangying.oem1688.util.MyUtilsWebView;
 import com.zhangying.oem1688.util.SpacesItemDecoration;
 import com.zhangying.oem1688.util.WebViewSeting;
@@ -125,6 +126,10 @@ public class MyCustomerServiceActivity extends BaseActivity {
 
     @OnClick(R.id.bacK_RL)
     public void onClick() {
+        if (!AppUtils.isFastClick()){
+            return;
+        }
+
         finish();
     }
 

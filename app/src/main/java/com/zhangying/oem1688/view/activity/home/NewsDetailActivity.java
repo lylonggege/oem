@@ -25,6 +25,7 @@ import com.zhangying.oem1688.mvp.leave.DateBean;
 import com.zhangying.oem1688.mvp.leave.LeaveMessagePersenterImpl;
 import com.zhangying.oem1688.onterface.BasePresenter;
 import com.zhangying.oem1688.onterface.BaseView;
+import com.zhangying.oem1688.util.AppUtils;
 import com.zhangying.oem1688.util.GlideUtil;
 import com.zhangying.oem1688.util.MyUtilsWebView;
 import com.zhangying.oem1688.util.ScreenTools;
@@ -65,6 +66,8 @@ public class NewsDetailActivity extends BaseActivity implements BaseView {
     LinearLayout company_submit_type2;
     @BindView(R.id.images_ll)
     LinearLayout images_ll;
+    @BindView(R.id.cinfoContent)
+    TextView cinfoContent;
     private int nid;
     private int type;
     private BasePresenter basePresenter;
@@ -96,6 +99,7 @@ public class NewsDetailActivity extends BaseActivity implements BaseView {
                         @Override
                         protected void success(NewscontBean newscontBean) {
                             mnewscontBean = newscontBean;
+                            cinfoContent.setVisibility(View.GONE);
                             company_message_type2.setVisibility(View.GONE);
                             company_submit_type2.setVisibility(View.GONE);
                             images_ll.setVisibility(View.GONE);
@@ -109,7 +113,7 @@ public class NewsDetailActivity extends BaseActivity implements BaseView {
                             SpannableStringBuilder style = new SpannableStringBuilder(text);
                             style.setSpan(new ForegroundColorSpan(Color.parseColor(blueColor)), time.length(), text.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
                             timeTv.setText(style);
-                            String s = MyUtilsWebView.setWebViewText(newsinfo.getContent());
+                            String s = MyUtilsWebView.setWebViewText(newsinfo.getContent(),"font-size:16px;color:#333333;line-height:1.6","");
                             WebViewSeting.setting(webView, NewsDetailActivity.this, s);
                         }
 
@@ -129,12 +133,15 @@ public class NewsDetailActivity extends BaseActivity implements BaseView {
                         protected void success(ScinfoDetailBean newscontBean) {
                             try {
                                 mscinfoDetailBean = newscontBean;
+                                webView.setVisibility(View.GONE);
+                                cinfoContent.setVisibility(View.VISIBLE);
                                 company_message_type2.setVisibility(View.VISIBLE);
                                 company_submit_type2.setVisibility(View.VISIBLE);
                                 images_ll.setVisibility(View.VISIBLE);
                                 ScinfoDetailBean.RetvalBean retval = newscontBean.getRetval();
                                 titleTV.setText(retval.getTitle());
                                 titleContontTV.setText(retval.getTitle());
+                                cinfoContent.setText(retval.getContent());
                                 String time = retval.getAdd_time() + "    ";
                                 String text = time + retval.getCompname();
                                 SpannableStringBuilder style = new SpannableStringBuilder(text);
@@ -183,6 +190,10 @@ public class NewsDetailActivity extends BaseActivity implements BaseView {
 
     @OnClick({R.id.bacK_RL, R.id.submit_tv})
     public void onClick(View view) {
+        if (!AppUtils.isFastClick()){
+            return;
+        }
+
         switch (view.getId()) {
             case R.id.bacK_RL:
                 finish();

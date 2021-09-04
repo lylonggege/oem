@@ -42,6 +42,7 @@ import com.zhangying.oem1688.onterface.BaseInterfacePosition;
 import com.zhangying.oem1688.onterface.ICallMobile;
 import com.zhangying.oem1688.onterface.IMessageView;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
+import com.zhangying.oem1688.util.AppUtils;
 import com.zhangying.oem1688.util.AutoForcePermissionUtils;
 import com.zhangying.oem1688.util.ToastUtil;
 import com.zhangying.oem1688.view.activity.home.FactoryDetailActivity;
@@ -199,6 +200,10 @@ public class LabelActivity extends BaseActivity {
 
     @OnClick({R.id.bacK_RL, R.id.new_open_tv, R.id.read_tv, R.id.unread_tv, R.id.screen_tv, R.id.start_time_tv, R.id.end_time_tv, R.id.sure_tv, R.id.clear_tv})
     public void onClick(View view) {
+        if (!AppUtils.isFastClick()){
+            return;
+        }
+
         switch (view.getId()) {
             case R.id.bacK_RL:
                 finish();

@@ -15,6 +15,7 @@ import com.xuexiang.xui.widget.imageview.RadiusImageView;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.bean.HomeBena;
 import com.zhangying.oem1688.onterface.ICallBcak;
+import com.zhangying.oem1688.onterface.OnMultiClickListener;
 import com.zhangying.oem1688.util.GlideUtil;
 import com.zhangying.oem1688.util.ScreenTools;
 import com.zhangying.oem1688.view.activity.home.GoodsDetailActivity;
@@ -45,9 +46,9 @@ public class HomeGoodAdpter extends BaseRecyclerAdapter<HomeBena.RetvalBean.Sgoo
         TextView content_tv = (TextView) holder.findView(R.id.textView_content);
         RadiusImageView imageView = (RadiusImageView) holder.findView(R.id.imageView);
         LinearLayout rootView = holder.findViewById(R.id.rootView);
-        rootView.setOnClickListener(new View.OnClickListener() {
+        rootView.setOnClickListener(new OnMultiClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onMultiClick(View view) {
                 /**
                  * 其他界面不许需要影藏弹出框的回调
                  */

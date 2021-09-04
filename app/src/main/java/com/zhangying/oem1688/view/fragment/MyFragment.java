@@ -31,7 +31,9 @@ import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.mvp.my.MemberInfoPresenter;
 import com.zhangying.oem1688.mvp.my.MemberInfoPresenterImpl;
 import com.zhangying.oem1688.mvp.my.MemberInfoView;
+import com.zhangying.oem1688.onterface.OnMultiClickListener;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
+import com.zhangying.oem1688.util.AppUtils;
 import com.zhangying.oem1688.util.AutoForcePermissionUtils;
 import com.zhangying.oem1688.util.GlideUtil;
 import com.zhangying.oem1688.util.ScreenTools;
@@ -137,6 +139,10 @@ public class MyFragment extends BaseFragment implements MemberInfoView {
             R.id.user_post_RL, R.id.user_zuji_RL, R.id.user_kefu_RL, R.id.user_about_RL,
             R.id.factorycenter1_IV, R.id.factorycenter2_IV, R.id.message_rl, R.id.user_set_RL, R.id.nologin_vew})
     public void onClick(View view) {
+        if (!AppUtils.isFastClick()){
+            return;
+        }
+
         boolean hasLogin = LoginActivity.simpleActivity(getActivity(), BuildConfig.UPDATE_MYFRAGMNET_ENTER_TYPE);
         if (!hasLogin) {
             return;
@@ -286,9 +292,9 @@ public class MyFragment extends BaseFragment implements MemberInfoView {
             }
             sname_textview.setText(myfollowsBean.getSname());
 
-            rootView_follows_ll.setOnClickListener(new View.OnClickListener() {
+            rootView_follows_ll.setOnClickListener(new OnMultiClickListener() {
                 @Override
-                public void onClick(View view) {
+                public void onMultiClick(View view) {
                     //判断是否登录
                     boolean hasLogin = LoginActivity.simpleActivity(getActivity(), BuildConfig.UPDATE_MYFRAGMNET_ENTER_TYPE);
                     if (!hasLogin) {

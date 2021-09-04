@@ -39,6 +39,7 @@ import com.zhangying.oem1688.popu.GoodsDetailPopu;
 import com.zhangying.oem1688.singleton.GlobalEntitySingleton;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
 import com.zhangying.oem1688.util.AppManagerUtil;
+import com.zhangying.oem1688.util.AppUtils;
 import com.zhangying.oem1688.util.AutoForcePermissionUtils;
 import com.zhangying.oem1688.util.StringUtils;
 import com.zhangying.oem1688.util.ToastUtil;
@@ -147,6 +148,10 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
             R.id.rootView_shop_b_sc_ll, R.id.rootView_phone,
             R.id.rootView_line, R.id.rootView_shop_b_dp_ll, R.id.bacK_RL, R.id.imageView2, R.id.textView})
     public void onClick(View view) {
+        if (!AppUtils.isFastClick()){
+            return;
+        }
+
         switch (view.getId()) {
             case R.id.bacK_RL://返回
                 finish();

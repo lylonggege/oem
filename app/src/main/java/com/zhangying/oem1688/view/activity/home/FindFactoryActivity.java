@@ -30,6 +30,7 @@ import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.onterface.BaseInterfacePosition;
 import com.zhangying.oem1688.popu.PinLeiPopu;
+import com.zhangying.oem1688.util.AppUtils;
 import com.zhangying.oem1688.util.StringUtils;
 import com.zhangying.oem1688.util.ToastUtil;
 
@@ -258,6 +259,10 @@ public class FindFactoryActivity extends BaseActivity {
 
     @OnClick({R.id.bacK_RL, R.id.send_LL, R.id.selected_area_tv})
     public void onClick(View view) {
+        if (!AppUtils.isFastClick()){
+            return;
+        }
+
         switch (view.getId()) {
             case R.id.bacK_RL:
                 finish();

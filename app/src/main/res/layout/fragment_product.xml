@@ -48,16 +48,13 @@
                         android:textColor="@color/fff3b6"
                         android:textSize="@dimen/dp_16"
                         android:textStyle="bold">
-
                     </TextView>
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="  找工厂、找品牌商来代加工"
                         android:textColor="@color/fff3b6"
-                        android:textStyle="bold">
-
+                        android:textSize="@dimen/dp_14">
                     </TextView>
                 </LinearLayout>
                 <include

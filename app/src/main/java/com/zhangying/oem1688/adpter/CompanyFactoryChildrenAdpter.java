@@ -12,6 +12,7 @@ import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.bean.OemcateAreaBeanChildren;
 import com.zhangying.oem1688.mvp.factory.ComapanyFactoryAdpter;
+import com.zhangying.oem1688.onterface.OnMultiClickListener;
 import com.zhangying.oem1688.util.ToastUtil;
 
 public class CompanyFactoryChildrenAdpter extends BaseRecyclerAdapter<OemcateAreaBeanChildren> {
@@ -39,9 +40,9 @@ public class CompanyFactoryChildrenAdpter extends BaseRecyclerAdapter<OemcateAre
         } else {
             textView.setTextColor(Color.parseColor("#666666"));
         }
-        root_tv.setOnClickListener(new View.OnClickListener() {
+        root_tv.setOnClickListener(new OnMultiClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onMultiClick(View view) {
                 ToastUtil.showToast(item.getName());
                 comapanyFactoryAdpter.Success(null,item,position);
             }

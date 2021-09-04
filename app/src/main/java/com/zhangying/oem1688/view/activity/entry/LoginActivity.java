@@ -31,6 +31,7 @@ import com.zhangying.oem1688.constant.BuildConfig;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.singleton.EventBusStyeSingleton;
+import com.zhangying.oem1688.util.AppUtils;
 import com.zhangying.oem1688.util.KeyboardUtil;
 import com.zhangying.oem1688.util.LogUtil;
 import com.zhangying.oem1688.util.ToastUtil;
@@ -121,6 +122,10 @@ public class LoginActivity extends BaseActivity {
     @OnClick({R.id.btn_get_verify_code, R.id.btn_login, R.id.tv_forget_password,
               R.id.qq_iv, R.id.weixin_iv, R.id.btn_close,R.id.tv_user_protocol,R.id.tv_privacy_protocol})
     public void onClick(View view) {
+        if (!AppUtils.isFastClick()){
+            return;
+        }
+
         switch (view.getId()) {
             case R.id.tv_user_protocol://用户协议
                 MyWebActivity.simpleActivity(this, BuildConfig.URL_AGREEMENT, "用户协议");

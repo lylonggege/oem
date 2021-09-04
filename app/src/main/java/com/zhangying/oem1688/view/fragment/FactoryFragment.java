@@ -23,6 +23,7 @@ import com.zhangying.oem1688.mvp.factory.CompanyFactoryFinishListener;
 import com.zhangying.oem1688.mvp.factory.CompanyFactoryFragment;
 import com.zhangying.oem1688.mvp.factory.CompanyFactoryModelImpl;
 import com.zhangying.oem1688.onterface.BaseView;
+import com.zhangying.oem1688.util.AppUtils;
 import com.zhangying.oem1688.util.SpacesItemDecoration;
 import com.zhangying.oem1688.view.activity.home.SearchActivity;
 
@@ -166,6 +167,10 @@ public class FactoryFragment extends BaseFragment {
 
     @OnClick({R.id.imageView2, R.id.empty_LL,R.id.textView})
     public void onClick(View view) {
+        if (!AppUtils.isFastClick()){
+            return;
+        }
+
         switch (view.getId()) {
             case R.id.imageView2:
                 FenLeiRealization fenLeiRealization = new FenLeiRealization(getActivity(), new BaseView() {

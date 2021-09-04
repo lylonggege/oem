@@ -24,6 +24,7 @@ import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.onterface.ICallMobile;
 import com.zhangying.oem1688.onterface.IMessageView;
+import com.zhangying.oem1688.onterface.OnMultiClickListener;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
 import com.zhangying.oem1688.util.AutoForcePermissionUtils;
 import com.zhangying.oem1688.util.ScreenTools;
@@ -91,9 +92,9 @@ public class LabelAdpter extends BaseRecyclerAdapter<MessageListBean.RetvalBean>
         }
 
         RelativeLayout rootView = holder.findViewById(R.id.rootView);
-        rootView.setOnClickListener(new View.OnClickListener() {
+        rootView.setOnClickListener(new OnMultiClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onMultiClick(View view) {
                 //点击查看留言信息
                 HashMapSingleton.getInstance().reload();
                 HashMapSingleton.getInstance().put("id",item.getAgent_id());
@@ -162,17 +163,17 @@ public class LabelAdpter extends BaseRecyclerAdapter<MessageListBean.RetvalBean>
 
         name_tv.setText(viewBean.getRetval().getS_name());
         address_tv.setText(viewBean.getRetval().getS_areatype());
-        close_tv.setOnClickListener(new View.OnClickListener() {
+        close_tv.setOnClickListener(new OnMultiClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onMultiClick(View view) {
                 popupWindow.dismiss();
             }
         });
 
         //拨打电话
-        phone_tv.setOnClickListener(new View.OnClickListener() {
+        phone_tv.setOnClickListener(new OnMultiClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onMultiClick(View v) {
                 if (iCallMobile != null){
                     iCallMobile.toCall(viewBean.getRetval().getS_mobile());
                 }

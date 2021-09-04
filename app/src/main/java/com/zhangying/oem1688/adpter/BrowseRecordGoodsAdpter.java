@@ -19,6 +19,7 @@ import com.zhangying.oem1688.bean.HomeBena;
 import com.zhangying.oem1688.bean.ListHistoryBean;
 import com.zhangying.oem1688.onterface.ICallBcak;
 import com.zhangying.oem1688.onterface.IJumPage;
+import com.zhangying.oem1688.onterface.OnMultiClickListener;
 import com.zhangying.oem1688.util.GlideUtil;
 import com.zhangying.oem1688.util.ScreenTools;
 import com.zhangying.oem1688.view.activity.home.GoodsDetailActivity;
@@ -49,9 +50,9 @@ public class BrowseRecordGoodsAdpter extends BaseRecyclerAdapter<ListHistoryBean
         RelativeLayout checksign_rl = holder.findViewById(R.id.checksign_rl);
         content_tv.setText(item.getItem_name());
 
-        rootView.setOnClickListener(new View.OnClickListener() {
+        rootView.setOnClickListener(new OnMultiClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onMultiClick(View view) {
 
             }
         });
@@ -82,9 +83,9 @@ public class BrowseRecordGoodsAdpter extends BaseRecyclerAdapter<ListHistoryBean
         }
 
 
-        checksign_rl.setOnClickListener(new View.OnClickListener() {
+        checksign_rl.setOnClickListener(new OnMultiClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onMultiClick(View view) {
                 if (item.isIschecked()) {
                     item.setIschecked(false);
                 } else {

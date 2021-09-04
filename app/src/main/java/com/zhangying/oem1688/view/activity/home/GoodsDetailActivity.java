@@ -24,6 +24,7 @@ import com.lxj.xpopup.interfaces.OnConfirmListener;
 import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.xuexiang.xui.utils.DensityUtils;
 import com.xuexiang.xui.utils.WidgetUtils;
+import com.xuexiang.xui.widget.imageview.RadiusImageView;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.adpter.GoodsDetailOemAdpter;
 import com.zhangying.oem1688.adpter.GoodsDetailTuijianAdpter;
@@ -45,6 +46,7 @@ import com.zhangying.oem1688.onterface.BaseView;
 import com.zhangying.oem1688.popu.GoodsDetailPopu;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
 import com.zhangying.oem1688.util.AppManagerUtil;
+import com.zhangying.oem1688.util.AppUtils;
 import com.zhangying.oem1688.util.AutoForcePermissionUtils;
 import com.zhangying.oem1688.util.GlideUtil;
 import com.zhangying.oem1688.util.MyUtilsWebView;
@@ -84,7 +86,7 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
     @BindView(R.id.message_LL)
     LinearLayout messageLL;
     @BindView(R.id.company_loge_iv)
-    ImageView company_loge_iv;
+    RadiusImageView company_loge_iv;
     @BindView(R.id.companyname_tv)
     TextView companynameTv;
     @BindView(R.id.dian)
@@ -321,6 +323,10 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
             R.id.rootView_phone, R.id.rootView_line, R.id.message_LL
             , R.id.imageView2, R.id.textView,R.id.rootView})
     public void onClick(View view) {
+        if (!AppUtils.isFastClick()){
+            return;
+        }
+
         GoodsdetailBean.RetvalBean.StoreDataBean store_data = goodsdetailBean.getRetval().getStore_data();
         switch (view.getId()) {
             case R.id.bacK_RL://返回

@@ -15,6 +15,7 @@ import com.zhangying.oem1688.bean.SitetopinfoBean;
 import com.zhangying.oem1688.custom.JumpViewPage;
 import com.zhangying.oem1688.onterface.BaseView;
 import com.zhangying.oem1688.onterface.IJumPage;
+import com.zhangying.oem1688.onterface.OnMultiClickListener;
 import com.zhangying.oem1688.util.GlideUtil;
 import com.zhangying.oem1688.view.activity.home.NewProductFactoryActivity;
 import com.zhangying.oem1688.view.fragment.ProductFragment;
@@ -60,9 +61,9 @@ public class PinLeiChilden1Adpter extends BaseRecyclerAdapter<SitetopinfoBean.Re
         content_tv.setText(item.getCatename());
         ImageView imageView = holder.findViewById(R.id.imageView);
         GlideUtil.loadImage(context, item.getCatelogo(), imageView);
-        rootView.setOnClickListener(new View.OnClickListener() {
+        rootView.setOnClickListener(new OnMultiClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onMultiClick(View view) {
                 String sid = null;
                 int maxId = getMaxCate(item.getCateid());
                 System.out.println("cateid:" + maxId + "//itemid:" + item.getCateid());

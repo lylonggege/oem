@@ -27,6 +27,7 @@ import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.onterface.IJumPage;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
+import com.zhangying.oem1688.util.AppUtils;
 
 import java.util.List;
 
@@ -223,6 +224,10 @@ public class BrowseRecordActivity extends BaseActivity {
 
     @OnClick({R.id.factory_rl, R.id.goods_rl, R.id.edit_tv, R.id.checksign_rl, R.id.delete_rl, R.id.bacK_RL})
     public void onClick(View view) {
+        if (!AppUtils.isFastClick()){
+            return;
+        }
+
         switch (view.getId()) {
             case R.id.bacK_RL:
                 finish();

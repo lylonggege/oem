@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -29,6 +30,7 @@ import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.internet.Utils;
 import com.zhangying.oem1688.singleton.EventBusStyeSingleton;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
+import com.zhangying.oem1688.util.AppUtils;
 import com.zhangying.oem1688.util.Base64Util;
 import com.zhangying.oem1688.util.SpacesItemDecoration;
 import com.zhangying.oem1688.util.ToastUtil;
@@ -134,13 +136,31 @@ public class ReleaseActivity extends BaseActivity implements ImageSelectGridAdap
                 });
     }
 
+    /**
+     * 隐藏软键盘(只适用于Activity，不适用于Fragment)
+     */
+    private void hideSoftKeyboard(Activity activity) {
+        View view = activity.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
+
     @OnClick({R.id.bacK_RL, R.id.release_tv, R.id.cate_LL})
     public void onClick(View view) {
+        if (!AppUtils.isFastClick()){
+            return;
+        }
+
         switch (view.getId()) {
             case R.id.bacK_RL:
                 finish();
                 break;
             case R.id.cate_LL:
+                //隐藏软键盘
+                hideSoftKeyboard(this);
+
                 isboolean = true;
                 OptionsPickerView pvOptions = new OptionsPickerBuilder(ReleaseActivity.this, (v, options1, options2, options3) -> {
                     moptions1 = option_id[options1];
@@ -157,7 +177,6 @@ public class ReleaseActivity extends BaseActivity implements ImageSelectGridAdap
                 pvOptions.show();
                 break;
             case R.id.release_tv:
-
                 String content = content_et.getText().toString();
                 if (content == null || content.length() == 0) {
                     ToastUtil.showToast("请填写需求内容");

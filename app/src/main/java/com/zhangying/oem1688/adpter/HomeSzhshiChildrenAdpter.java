@@ -15,6 +15,7 @@ import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.bean.HomeBena;
 import com.zhangying.oem1688.custom.JumpViewPage;
 import com.zhangying.oem1688.custom.MyRecycleView;
+import com.zhangying.oem1688.onterface.OnMultiClickListener;
 import com.zhangying.oem1688.util.GlideUtil;
 import com.zhangying.oem1688.view.activity.home.FactoryDetailActivity;
 
@@ -38,9 +39,9 @@ public class HomeSzhshiChildrenAdpter extends BaseRecyclerAdapter<HomeBena.Retva
         content_tv.setText(item.getAd_name());
         GlideUtil.loadImage(context, item.getAd_logo(), imageView);
 
-        rootView.setOnClickListener(new View.OnClickListener() {
+        rootView.setOnClickListener(new OnMultiClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onMultiClick(View view) {
                 JumpViewPage jumpViewPage = new JumpViewPage();
                 jumpViewPage.intentActivity(context, item.getLink_type(), item.getLink_id(),"");
 

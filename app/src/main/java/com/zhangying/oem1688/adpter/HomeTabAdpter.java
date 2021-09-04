@@ -10,6 +10,7 @@ import com.xuexiang.xui.adapter.recyclerview.BaseRecyclerAdapter;
 import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.bean.HomeBena;
+import com.zhangying.oem1688.onterface.OnMultiClickListener;
 
 
 public class HomeTabAdpter extends BaseRecyclerAdapter<HomeBena.RetvalBean.SindustryBean> {
@@ -38,9 +39,9 @@ public class HomeTabAdpter extends BaseRecyclerAdapter<HomeBena.RetvalBean.Sindu
             name.setTextSize(14);
         }
 
-        rootView.setOnClickListener(new View.OnClickListener() {
+        rootView.setOnClickListener(new OnMultiClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onMultiClick(View view) {
                 mypositon = position;
                 
                 notifyDataSetChanged();

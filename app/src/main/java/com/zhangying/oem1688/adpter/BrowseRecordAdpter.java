@@ -14,6 +14,7 @@ import com.xuexiang.xui.widget.imageview.RadiusImageView;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.bean.ListHistoryBean;
 import com.zhangying.oem1688.onterface.IJumPage;
+import com.zhangying.oem1688.onterface.OnMultiClickListener;
 import com.zhangying.oem1688.util.GlideUtil;
 
 public class BrowseRecordAdpter extends BaseRecyclerAdapter<ListHistoryBean.RetvalBean.RecordListBean> {
@@ -58,9 +59,9 @@ public class BrowseRecordAdpter extends BaseRecyclerAdapter<ListHistoryBean.Retv
         }
 
 
-        checksign_rl.setOnClickListener(new View.OnClickListener() {
+        checksign_rl.setOnClickListener(new OnMultiClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onMultiClick(View view) {
                 if (item.isIschecked()) {
                     item.setIschecked(false);
                 } else {

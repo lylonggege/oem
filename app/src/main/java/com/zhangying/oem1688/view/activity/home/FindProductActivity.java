@@ -28,8 +28,10 @@ import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.onterface.BaseValidateCredentials;
 import com.zhangying.oem1688.onterface.BaseView;
+import com.zhangying.oem1688.onterface.OnMultiClickListener;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
 import com.zhangying.oem1688.util.AppManagerUtil;
+import com.zhangying.oem1688.util.AppUtils;
 import com.zhangying.oem1688.util.ScreenTools;
 import com.zhangying.oem1688.view.fragment.daigongchang.ChengJieDaiGongFragment;
 import com.zhouwei.mzbanner.MZBannerView;
@@ -76,9 +78,9 @@ public class FindProductActivity extends BaseActivity implements BaseView {
         //获取数据
         scinfo_top();
 
-        release_LL.setOnClickListener(new View.OnClickListener() {
+        release_LL.setOnClickListener(new OnMultiClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onMultiClick(View view) {
                 ReleaseActivity.simpleActivity(FindProductActivity.this);
             }
         });
@@ -123,6 +125,10 @@ public class FindProductActivity extends BaseActivity implements BaseView {
 
     @OnClick({R.id.imageView2, R.id.textView, R.id.bacK_RL})
     public void onClick(View view) {
+        if (!AppUtils.isFastClick()){
+            return;
+        }
+
         switch (view.getId()) {
             case R.id.imageView2:
                 fenLeiRealization.validateCredentials();

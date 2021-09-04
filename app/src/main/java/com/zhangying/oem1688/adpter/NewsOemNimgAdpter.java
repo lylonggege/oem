@@ -10,6 +10,7 @@ import com.xuexiang.xui.adapter.recyclerview.BaseRecyclerAdapter;
 import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.onterface.BaseImagePreview;
+import com.zhangying.oem1688.onterface.OnMultiClickListener;
 import com.zhangying.oem1688.util.GlideUtil;
 import com.zhangying.oem1688.util.PreviewImageView;
 
@@ -33,9 +34,9 @@ public class NewsOemNimgAdpter extends BaseRecyclerAdapter<String> {
     protected void bindData(@NonNull RecyclerViewHolder holder, int position, String item) {
         ImageView image = holder.findViewById(R.id.image);
         GlideUtil.loadImage(context,item,image);
-        image.setOnClickListener(new View.OnClickListener(){
+        image.setOnClickListener(new OnMultiClickListener(){
             @Override
-            public void onClick(View v) {
+            public void onMultiClick(View v) {
                 if (imagePreview == null)return;
                 imagePreview.startPosition(position, image);
             }

@@ -16,6 +16,7 @@ import com.zhangying.oem1688.adpter.FlowTagAdapter;
 import com.zhangying.oem1688.base.BaseActivity;
 import com.zhangying.oem1688.db.DbDao;
 import com.zhangying.oem1688.util.AppManagerUtil;
+import com.zhangying.oem1688.util.AppUtils;
 import com.zhangying.oem1688.util.StringUtils;
 
 import java.util.ArrayList;
@@ -76,6 +77,10 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
 
     @OnClick({R.id.et_input, R.id.clear_ll, R.id.imageView5, R.id.imageView2,R.id.imageView})
     public void onClick(View view) {
+        if (!AppUtils.isFastClick()){
+            return;
+        }
+
         switch (view.getId()) {
             case R.id.imageView:
                 finish();

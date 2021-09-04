@@ -9,21 +9,21 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.xuexiang.xui.adapter.recyclerview.BaseRecyclerAdapter;
 import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
-import com.xuexiang.xui.utils.WidgetUtils;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.bean.MoreProstoreBean;
 import com.zhangying.oem1688.custom.MyRecycleView;
+import com.zhangying.oem1688.onterface.IMessageView;
+import com.zhangying.oem1688.onterface.OnMultiClickListener;
 import com.zhangying.oem1688.view.activity.home.FactoryDetailActivity;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class MoreProstoreAdpter extends BaseRecyclerAdapter<MoreProstoreBean.RetvalBean.DataBean> {
     public MoreProstoreAdpter(Context context) {
@@ -51,29 +51,22 @@ public class MoreProstoreAdpter extends BaseRecyclerAdapter<MoreProstoreBean.Ret
         companynameAuthtagTv.setText(retval.getAuthtag());
         TextView companyStoretimeTv = holder.findViewById(R.id.company_storetime_tv);
         String storetime = retval.getStoretime();
-        //GradientDrawable drawablePre = (GradientDrawable) companynameAuthtagTv.getBackground();
         if (storetime != null && storetime.length() > 0) {
             companyStoretimeTv.setText(storetime);
             companyStoretimeTv.setVisibility(View.VISIBLE);
-
-            //float corner[] = {6,0,0,6};
-            //drawablePre.setCornerRadii(6,0,0,6);
         } else {
             companyStoretimeTv.setVisibility(View.GONE);
-            //drawablePre.setCornerRadius(6);
         }
 
         String sColor = retval.getScolor();
         LinearLayout vipView = holder.findViewById(R.id.dian);
         GradientDrawable drawable = (GradientDrawable) vipView.getBackground();
         if (sColor.length() > 0){
-            drawable.setStroke(2, Color.parseColor(sColor));//设置边框的宽度和颜色
-            //drawablePre.setColor(Color.parseColor(sColor));
             companynameAuthtagTv.setBackgroundColor(Color.parseColor(sColor));
+            drawable.setStroke(2, Color.parseColor(sColor));//设置边框的宽度和颜色
         } else {
-            drawable.setStroke(2, context.getColor(R.color.redf04142));
-            //drawablePre.setColor(context.getColor(R.color.redf04142));
             companynameAuthtagTv.setBackgroundColor(context.getColor(R.color.redf04142));
+            drawable.setStroke(2, context.getColor(R.color.redf04142));
         }
 
         TextView cateTv = holder.findViewById(R.id.cate_tv);
@@ -115,16 +108,21 @@ public class MoreProstoreAdpter extends BaseRecyclerAdapter<MoreProstoreBean.Ret
         recycview.setLayoutManager(new LinearLayoutManager(context, RecyclerView.HORIZONTAL, false));
         MoreProstoreChidrenAdpter moreProstoreChidrenAdpter = new MoreProstoreChidrenAdpter(context);
         moreProstoreChidrenAdpter.refresh(retval.getGlist());
-        recycview.setAdapter(moreProstoreChidrenAdpter);
-
-        CardView cardview = holder.findViewById(R.id.cardview);
-        cardview.setOnClickListener(new View.OnClickListener() {
+        moreProstoreChidrenAdpter.setiClickEvent(new IMessageView() {
             @Override
-            public void onClick(View view) {
+            public void viewPosition(int position) {
                 FactoryDetailActivity.simpleActivity(context, retval.getStoreid());
             }
         });
+        recycview.setAdapter(moreProstoreChidrenAdpter);
 
+        CardView cardview = holder.findViewById(R.id.cardview);
+        cardview.setOnClickListener(new OnMultiClickListener() {
+            @Override
+            public void onMultiClick(View view) {
+                FactoryDetailActivity.simpleActivity(context, retval.getStoreid());
+            }
+        });
     }
 
 

@@ -13,6 +13,7 @@ import com.zhangying.oem1688.bean.WordsBean;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
+import com.zhangying.oem1688.util.AppUtils;
 
 import java.util.HashMap;
 
@@ -43,6 +44,10 @@ public class WebActivity extends BaseActivity {
 
     @OnClick(R.id.bacK_RL)
     public void onClick() {
+        if (!AppUtils.isFastClick()){
+            return;
+        }
+
         finish();
     }
 

@@ -12,6 +12,7 @@ import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.bean.CateAreaListBean;
 import com.zhangying.oem1688.onterface.BaseInterfacePosition;
+import com.zhangying.oem1688.onterface.OnMultiClickListener;
 
 public class HomeFindFactorParentAdpter extends BaseRecyclerAdapter<CateAreaListBean.catesBean> {
 
@@ -30,9 +31,9 @@ public class HomeFindFactorParentAdpter extends BaseRecyclerAdapter<CateAreaList
     protected void bindData(@NonNull RecyclerViewHolder holder, int position, CateAreaListBean.catesBean item) {
         TextView tv_content = holder.findViewById(R.id.tv_content);
         RelativeLayout rootView = holder.findViewById(R.id.rootView);
-        rootView.setOnClickListener(new View.OnClickListener() {
+        rootView.setOnClickListener(new OnMultiClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onMultiClick(View view) {
                 if (item.isBoolean()) {
 //                    tv_content.setSelected(false);
 //                    tv_content.setTextColor(Color.parseColor("#666666"));

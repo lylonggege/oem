@@ -28,6 +28,7 @@ import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
 import com.zhangying.oem1688.singleton.MapCookieSingleton;
 import com.zhangying.oem1688.util.AppManagerUtil;
+import com.zhangying.oem1688.util.AppUtils;
 import com.zhangying.oem1688.util.CacheUtil;
 import com.zhangying.oem1688.util.ToastUtil;
 import com.zhangying.oem1688.util.TokenUtils;
@@ -71,6 +72,10 @@ public class SetActivity extends BaseActivity {
     @OnClick({R.id.bacK_RL, R.id.bangdingshouji_rl,
             R.id.re_password_rl, R.id.about_rl, R.id.contact_rl, R.id.clearcache_rl, R.id.logoff_tv})
     public void onClick(View view) {
+        if (!AppUtils.isFastClick()){
+            return;
+        }
+
         switch (view.getId()) {
             case R.id.bacK_RL:
                 finish();

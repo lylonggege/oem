@@ -27,6 +27,7 @@ import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.mvp.newfactoryproduct.FactoryProductPersenterImpl;
 import com.zhangying.oem1688.onterface.BaseValidateCredentials;
 import com.zhangying.oem1688.onterface.BaseView;
+import com.zhangying.oem1688.util.AppUtils;
 import com.zhangying.oem1688.util.SpacesItemDecoration;
 import com.zhangying.oem1688.view.activity.home.SearchActivity;
 
@@ -136,6 +137,10 @@ public class ProductFragment extends BaseFragment implements BaseView {
             R.id.factory_rl, R.id.companychildren_rl,
             R.id.factoeychildren_rl, R.id.imageView5})
     public void onClick(View view) {
+        if (!AppUtils.isFastClick()){
+            return;
+        }
+
         switch (view.getId()) {
             case R.id.imageView2:
                 fenLeiRealization.validateCredentials();
@@ -173,6 +178,8 @@ public class ProductFragment extends BaseFragment implements BaseView {
                     if (options1 > 0){
                         cateSelected.set(0,cateList.get(options1 - 1).getId() + "");
                         minText = mTimeOption1[options1][options2];
+                    }else {
+                        cateSelected.set(0,"0");
                     }
 
                     if (options2 == 0){

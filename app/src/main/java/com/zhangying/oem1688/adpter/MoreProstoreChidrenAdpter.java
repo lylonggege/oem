@@ -12,6 +12,8 @@ import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
 import com.xuexiang.xui.widget.imageview.RadiusImageView;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.bean.MoreProstoreBean;
+import com.zhangying.oem1688.onterface.IMessageView;
+import com.zhangying.oem1688.onterface.OnMultiClickListener;
 import com.zhangying.oem1688.util.GlideUtil;
 import com.zhangying.oem1688.util.ScreenTools;
 
@@ -19,6 +21,9 @@ public class MoreProstoreChidrenAdpter extends BaseRecyclerAdapter<MoreProstoreB
     public MoreProstoreChidrenAdpter(Context context) {
         this.context = context;
     }
+
+    private IMessageView iClickEvent;
+    public void setiClickEvent(IMessageView iClickEvent) { this.iClickEvent = iClickEvent; }
 
     private Context context;
 
@@ -40,5 +45,14 @@ public class MoreProstoreChidrenAdpter extends BaseRecyclerAdapter<MoreProstoreB
         layoutParams.setMargins(i10, i10, 0, i10);
         image.setCornerRadius(10);
         GlideUtil.loadImage(context, item.getDefault_image(), image);
+
+        relative.setOnClickListener(new OnMultiClickListener(){
+            @Override
+            public void onMultiClick(View view) {
+                if (iClickEvent != null){
+                    iClickEvent.viewPosition(0);
+                }
+            }
+        });
     }
 }

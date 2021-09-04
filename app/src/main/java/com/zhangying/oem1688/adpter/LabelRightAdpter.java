@@ -11,6 +11,7 @@ import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.bean.HomeBena;
 import com.zhangying.oem1688.onterface.BaseInterfacePosition;
+import com.zhangying.oem1688.onterface.OnMultiClickListener;
 
 public class LabelRightAdpter extends BaseRecyclerAdapter<HomeBena.RetvalBean.SindustryBean> {
 
@@ -37,9 +38,9 @@ public class LabelRightAdpter extends BaseRecyclerAdapter<HomeBena.RetvalBean.Si
             name_tv.setSelected(false);
             name_tv.setTextColor(Color.parseColor("#666666"));
         }
-        name_tv.setOnClickListener(new View.OnClickListener() {
+        name_tv.setOnClickListener(new OnMultiClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onMultiClick(View view) {
 
                 baseInterfacePosition.getPosition(position, true, name_tv);
             }

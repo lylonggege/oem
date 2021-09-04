@@ -23,6 +23,7 @@ import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.onterface.ICallMobile;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
+import com.zhangying.oem1688.util.AppUtils;
 import com.zhangying.oem1688.util.AutoForcePermissionUtils;
 import com.zhangying.oem1688.util.ToastUtil;
 
@@ -86,6 +87,10 @@ public class StoreMessageActivity extends BaseActivity {
 
     @OnClick(R.id.bacK_RL)
     public void onClick() {
+        if (!AppUtils.isFastClick()){
+            return;
+        }
+
         finish();
     }
 

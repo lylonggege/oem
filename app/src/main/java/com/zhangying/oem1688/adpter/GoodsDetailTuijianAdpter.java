@@ -15,6 +15,7 @@ import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
 import com.xuexiang.xui.widget.imageview.RadiusImageView;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.bean.GoodsdetailBean;
+import com.zhangying.oem1688.onterface.OnMultiClickListener;
 import com.zhangying.oem1688.util.GlideUtil;
 import com.zhangying.oem1688.util.ScreenTools;
 import com.zhangying.oem1688.view.activity.home.GoodsDetailActivity;
@@ -47,9 +48,9 @@ public class GoodsDetailTuijianAdpter extends BaseRecyclerAdapter<GoodsdetailBea
         imageView.setCornerRadius(8);
         content_tv.setText(item.getGoods_name());
         GlideUtil.loadImage(context, item.getDefault_image(), imageView);
-        rootView.setOnClickListener(new View.OnClickListener() {
+        rootView.setOnClickListener(new OnMultiClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onMultiClick(View view) {
                 GoodsDetailActivity.simpleActivity(context, item.getGoods_id());
             }
         });

@@ -235,4 +235,8 @@ public class RemoteRepository {
     public Flowable<PrivacyBean> get_privacy() {
         return serverApi.get_privacy();
     }
+
+    public Flowable<BaseBean> count_device(HashMap<String, Object> body) {
+        return serverApi.count_device(body);
+    }
 }

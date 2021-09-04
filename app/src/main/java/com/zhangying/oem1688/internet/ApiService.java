@@ -245,4 +245,9 @@ public interface ApiService {
     //用户协议
     @GET("?app=xcxindex&act=privacy&android=1")
     Flowable<PrivacyBean> get_privacy();
+
+    //Login -  统计设备标识
+    @FormUrlEncoded
+    @POST("?app=xcxindex&act=device")
+    Flowable<BaseBean> count_device(@FieldMap HashMap<String, Object> hashMap);
 }

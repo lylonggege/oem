@@ -14,6 +14,7 @@ import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.bean.ListCollectBean;
 import com.zhangying.oem1688.bean.WordsBean;
 import com.zhangying.oem1688.onterface.ICallBackPosition;
+import com.zhangying.oem1688.onterface.OnMultiClickListener;
 import com.zhangying.oem1688.util.GlideUtil;
 import com.zhangying.oem1688.view.activity.home.FactoryDetailActivity;
 
@@ -43,9 +44,9 @@ public class ListCollectAdpter extends BaseRecyclerAdapter<ListCollectBean.Retva
         TextView company_tv = holder.findViewById(R.id.company_tv);
         TextView Collect_tv = holder.findViewById(R.id.Collect_tv);
         LinearLayout rootView = holder.findViewById(R.id.rootView);
-        rootView.setOnClickListener(new View.OnClickListener() {
+        rootView.setOnClickListener(new OnMultiClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onMultiClick(View view) {
                 FactoryDetailActivity.simpleActivity(context, item.getStore_id());
             }
         });
@@ -55,9 +56,9 @@ public class ListCollectAdpter extends BaseRecyclerAdapter<ListCollectBean.Retva
         company_tv.setText(item.getService());
         GlideUtil.loadImage(context, item.getStore_logo(), company_loge_iv);
 
-        Collect_tv.setOnClickListener(new View.OnClickListener() {
+        Collect_tv.setOnClickListener(new OnMultiClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onMultiClick(View view) {
                 iCallBackPosition.getPosition(position);
             }
         });

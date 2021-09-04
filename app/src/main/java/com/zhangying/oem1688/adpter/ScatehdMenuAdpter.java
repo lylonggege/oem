@@ -12,7 +12,7 @@ import com.xuexiang.xui.adapter.recyclerview.BaseRecyclerAdapter;
 import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.bean.HomeBena;
-import com.zhangying.oem1688.custom.JumpViewPage;
+import com.zhangying.oem1688.onterface.OnMultiClickListener;
 import com.zhangying.oem1688.util.GlideUtil;
 import com.zhangying.oem1688.view.activity.home.NewProductFactoryActivity;
 
@@ -39,9 +39,9 @@ public class ScatehdMenuAdpter extends BaseRecyclerAdapter<HomeBena.RetvalBean.S
 
         int itemH = rootView.getLayoutParams().height;
         rootView.setLayoutParams(new LinearLayout.LayoutParams(this.itemW,itemH));
-        rootView.setOnClickListener(new View.OnClickListener() {
+        rootView.setOnClickListener(new OnMultiClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onMultiClick(View view) {
                 int stype;
                 if (item.getStype() == 6 || item.getStype() == 7) {
                     stype = 1;
@@ -51,8 +51,6 @@ public class ScatehdMenuAdpter extends BaseRecyclerAdapter<HomeBena.RetvalBean.S
 
                 String sid = item.getSid();
                 NewProductFactoryActivity.simpleActivity(context, sid, stype, item.getSname(),item.getSname());
-                //JumpViewPage jumpViewPage = new JumpViewPage();
-                //jumpViewPage.intentActivity(context, stype, sid, item.getSname());
             }
         });
         GlideUtil.loadImage(context, item.getSpic(), iv_apply_image);

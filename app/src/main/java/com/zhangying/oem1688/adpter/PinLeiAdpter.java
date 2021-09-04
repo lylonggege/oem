@@ -12,6 +12,7 @@ import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.bean.SitetopinfoBean;
 import com.zhangying.oem1688.onterface.BaseInterfacePosition;
+import com.zhangying.oem1688.onterface.OnMultiClickListener;
 
 public class PinLeiAdpter extends BaseRecyclerAdapter<SitetopinfoBean.RetvalBean.CatelistBean> {
 
@@ -42,9 +43,9 @@ public class PinLeiAdpter extends BaseRecyclerAdapter<SitetopinfoBean.RetvalBean
             rootView_left.setBackgroundColor(Color.parseColor("#ffffff"));
 
         }
-        rootView_left.setOnClickListener(new View.OnClickListener() {
+        rootView_left.setOnClickListener(new OnMultiClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onMultiClick(View view) {
                 baseInterfacePosition.getPosition(position, item.isaBoolean(), rootView_left);
             }
         });

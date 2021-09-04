@@ -26,8 +26,10 @@ import com.zhangying.oem1688.custom.MyRecycleView;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.onterface.ICallBackPosition;
+import com.zhangying.oem1688.onterface.OnMultiClickListener;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
 import com.zhangying.oem1688.util.AppManagerUtil;
+import com.zhangying.oem1688.util.AppUtils;
 import com.zhangying.oem1688.view.activity.MainActivity;
 import com.zhangying.oem1688.view.activity.home.NewProductFactoryActivity;
 
@@ -162,6 +164,10 @@ public class ListCollectActivity extends BaseActivity {
 
     @OnClick(R.id.bacK_RL)
     public void onClick() {
+        if (!AppUtils.isFastClick()){
+            return;
+        }
+
         finish();
     }
 
@@ -173,9 +179,9 @@ public class ListCollectActivity extends BaseActivity {
             nulldatatextview.setVisibility(View.VISIBLE);
             refreshLayout.setVisibility(View.GONE);
             nullTv.setText("你还没有关注的店铺");
-            nullTvButton.setOnClickListener(new View.OnClickListener() {
+            nullTvButton.setOnClickListener(new OnMultiClickListener() {
                 @Override
-                public void onClick(View view) {
+                public void onMultiClick(View view) {
                     EvenBusBean evenBusBean = new EvenBusBean();
                     evenBusBean.setType(1);
                     AppManagerUtil.getInstance().finishAllActivity();

@@ -22,8 +22,10 @@ import com.zhangying.oem1688.bean.MoreScinfoBean;
 import com.zhangying.oem1688.custom.MyRecycleView;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
+import com.zhangying.oem1688.onterface.OnMultiClickListener;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
 import com.zhangying.oem1688.util.AppManagerUtil;
+import com.zhangying.oem1688.util.AppUtils;
 import com.zhangying.oem1688.view.activity.home.ReleaseActivity;
 
 import org.greenrobot.eventbus.EventBus;
@@ -66,6 +68,10 @@ public class ReleaseListActivity extends BaseActivity {
 
     @OnClick({R.id.back_im, R.id.bacK_RL})
     public void onClick(View view) {
+        if (!AppUtils.isFastClick()){
+            return;
+        }
+
         switch (view.getId()) {
             case R.id.back_im:
                 finish();
@@ -138,9 +144,9 @@ public class ReleaseListActivity extends BaseActivity {
             refreshLayout.setVisibility(View.GONE);
             nullTv.setText("暂未发布相关信息");
             nullTvButton.setText("去发布");
-            nullTvButton.setOnClickListener(new View.OnClickListener() {
+            nullTvButton.setOnClickListener(new OnMultiClickListener() {
                 @Override
-                public void onClick(View view) {
+                public void onMultiClick(View view) {
                     ReleaseActivity.simpleActivity(ReleaseListActivity.this);
                     finish();
                 }

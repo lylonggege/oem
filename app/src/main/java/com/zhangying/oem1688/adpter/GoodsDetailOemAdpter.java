@@ -12,6 +12,7 @@ import com.xuexiang.xui.adapter.recyclerview.BaseRecyclerAdapter;
 import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.bean.GoodsdetailBean;
+import com.zhangying.oem1688.onterface.OnMultiClickListener;
 
 
 public class GoodsDetailOemAdpter extends BaseRecyclerAdapter<GoodsdetailBean.RetvalBean.StoreDataBean.StoreGcatesBean> {
@@ -33,9 +34,9 @@ public class GoodsDetailOemAdpter extends BaseRecyclerAdapter<GoodsdetailBean.Re
             name_tv.setSelected(false);
             name_tv.setTextColor(Color.parseColor("#666666"));
         }
-        name_tv.setOnClickListener(new View.OnClickListener() {
+        name_tv.setOnClickListener(new OnMultiClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onMultiClick(View view) {
                 if (item.isaBoolean()) {
                     item.setaBoolean(false);
                 } else {

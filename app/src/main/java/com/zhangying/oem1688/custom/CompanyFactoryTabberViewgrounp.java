@@ -14,6 +14,7 @@ import com.zhangying.oem1688.bean.CompanyFactoryBean;
 import com.zhangying.oem1688.mvp.factory.CompanyFactoryClickResult;
 import com.zhangying.oem1688.mvp.factory.CompanyFactoryFragment;
 import com.zhangying.oem1688.mvp.factory.CompanyFactoryPopup;
+import com.zhangying.oem1688.onterface.OnMultiClickListener;
 
 import java.util.List;
 
@@ -97,9 +98,9 @@ public class CompanyFactoryTabberViewgrounp extends RelativeLayout {
         /**
          * 点击产品  parentid为一级分类id  childrenid 二级分类id
          */
-        company_rl.setOnClickListener(new View.OnClickListener() {
+        company_rl.setOnClickListener(new OnMultiClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onMultiClick(View view) {
                 company_factory_type = 7;
                 companychildren_tv.setText(mname);
                 savetextviewcolor(company_factory_type);
@@ -107,9 +108,9 @@ public class CompanyFactoryTabberViewgrounp extends RelativeLayout {
             }
         });
         //点击工厂
-        factory_rl.setOnClickListener(new View.OnClickListener() {
+        factory_rl.setOnClickListener(new OnMultiClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onMultiClick(View view) {
                 company_factory_type = 6;
                 companychildren_tv.setText(mname);
                 savetextviewcolor(company_factory_type);
@@ -146,9 +147,9 @@ public class CompanyFactoryTabberViewgrounp extends RelativeLayout {
             }
         });
         //点击区域
-        area_rl.setOnClickListener(new View.OnClickListener() {
+        area_rl.setOnClickListener(new OnMultiClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onMultiClick(View view) {
                 CompanyFactoryPopup companyFactoryPopup = new CompanyFactoryPopup(context);
                 companyFactoryPopup.setType(company_factory_type, 1, area_parent_id, area_parent_position, area_childen_id, area_children_position);
                 BasePopupView show = new XPopup.Builder(getContext())

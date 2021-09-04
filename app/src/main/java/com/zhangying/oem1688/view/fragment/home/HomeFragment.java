@@ -1,24 +1,13 @@
 package com.zhangying.oem1688.view.fragment.home;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -29,7 +18,6 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.xuexiang.xui.adapter.recyclerview.GridDividerItemDecoration;
 import com.xuexiang.xui.adapter.recyclerview.XGridLayoutManager;
 import com.xuexiang.xui.utils.DensityUtils;
-import com.xuexiang.xui.utils.WidgetUtils;
 import com.xuexiang.xui.widget.imageview.RadiusImageView;
 import com.xuexiang.xui.widget.textview.marqueen.MarqueeFactory;
 import com.xuexiang.xui.widget.textview.marqueen.MarqueeView;
@@ -42,19 +30,15 @@ import com.zhangying.oem1688.adpter.ViewPagerAdapter;
 import com.zhangying.oem1688.base.BaseFragment;
 import com.zhangying.oem1688.bean.HomeBena;
 import com.zhangying.oem1688.bean.HomeGoodsBean;
-import com.zhangying.oem1688.bean.ListCollectBean;
 import com.zhangying.oem1688.bean.RecomendIndexBean;
 import com.zhangying.oem1688.custom.MyRecycleView;
 import com.zhangying.oem1688.custom.VerticalScrolledListview;
-import com.zhangying.oem1688.custom.WrapContentHeightViewPager;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
-import com.zhangying.oem1688.util.MD5Util;
+import com.zhangying.oem1688.util.AppUtils;
 import com.zhangying.oem1688.util.ScreenTools;
 import com.zhangying.oem1688.util.SpacesItemDecoration;
-import com.zhangying.oem1688.util.ToastUtil;
-import com.zhangying.oem1688.util.TokenUtils;
 import com.zhangying.oem1688.view.activity.home.FindFactoryActivity;
 import com.zhangying.oem1688.view.activity.home.FindProductActivity;
 import com.zhangying.oem1688.view.activity.home.NewsDetailActivity;
@@ -62,13 +46,14 @@ import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
 
-import org.greenrobot.eventbus.EventBus;
-
-import java.io.Console;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -359,6 +344,12 @@ public class HomeFragment extends BaseFragment {
 
         }
         VerticalScrolledListview verticalScrolledListview = new VerticalScrolledListview(context);
+        verticalScrolledListview.setOnItemClickListener(new VerticalScrolledListview.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+
+            }
+        });
         verticalScrolledListview.setPadding(0,10,0,10);
         verticalScrolledListview.setData(strings);
         lunbo_RL.addView(verticalScrolledListview);
@@ -536,6 +527,9 @@ public class HomeFragment extends BaseFragment {
 
     @OnClick({R.id.findfactory_rl, R.id.findproduct_rl})
     public void onClick(View view) {
+        if (!AppUtils.isFastClick()){
+            return;
+        }
         switch (view.getId()) {
             case R.id.findfactory_rl:
                 FindFactoryActivity.simpleActivity(getActivity());
