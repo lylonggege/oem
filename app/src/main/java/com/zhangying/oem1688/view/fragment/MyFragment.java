@@ -143,10 +143,14 @@ public class MyFragment extends BaseFragment implements MemberInfoView {
             return;
         }
 
-        boolean hasLogin = LoginActivity.simpleActivity(getActivity(), BuildConfig.UPDATE_MYFRAGMNET_ENTER_TYPE);
-        if (!hasLogin) {
-            return;
+        int tagId = view.getId();
+        if (tagId != R.id.user_kefu_RL && tagId != R.id.user_about_RL){
+            boolean hasLogin = LoginActivity.simpleActivity(getActivity(), BuildConfig.UPDATE_MYFRAGMNET_ENTER_TYPE);
+            if (!hasLogin) {
+                return;
+            }
         }
+
         switch (view.getId()) {
             case R.id.update_TV:
                 break;

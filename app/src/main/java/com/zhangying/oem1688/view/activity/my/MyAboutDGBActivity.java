@@ -18,6 +18,7 @@ import com.xuexiang.xui.widget.imageview.RadiusImageView;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.base.BaseActivity;
 import com.zhangying.oem1688.bean.AboutBean;
+import com.zhangying.oem1688.constant.BuildConfig;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.onterface.OnMultiClickListener;
@@ -29,6 +30,7 @@ import com.zhouwei.mzbanner.holder.MZHolderCreator;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class MyAboutDGBActivity extends BaseActivity {
 
@@ -44,7 +46,10 @@ public class MyAboutDGBActivity extends BaseActivity {
     TextView titleTV;
     @BindView(R.id.rootView)
     RelativeLayout rootView;
-
+    @BindView(R.id.btn_agree)
+    TextView btnAgree;
+    @BindView(R.id.btn_privacy)
+    TextView btnPrivacy;
 
     @Override
     protected int getLayoutId() {
@@ -100,6 +105,18 @@ public class MyAboutDGBActivity extends BaseActivity {
     public static void simpleActivity(Context context) {
         Intent intent = new Intent(context, MyAboutDGBActivity.class);
         context.startActivity(intent);
+    }
+
+    @OnClick({R.id.btn_privacy,R.id.btn_agree})
+    public void OnClick(View view){
+        switch (view.getId()) {
+            case R.id.btn_agree:
+                MyWebActivity.simpleActivity(this, BuildConfig.URL_AGREEMENT,  "用户协议");
+                break;
+            case R.id.btn_privacy:
+                MyWebActivity.simpleActivity(this, BuildConfig.URL_PRIVACY, "隐私政策");
+                break;
+        }
     }
 
     public static class BannerViewHolder implements MZViewHolder<AboutBean.RetvalBean.SbannerBean> {
