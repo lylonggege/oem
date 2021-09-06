@@ -25,6 +25,7 @@ import com.zhangying.oem1688.base.BaseActivity;
 import com.zhangying.oem1688.bean.BaseBean;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
+import com.zhangying.oem1688.singleton.EventBusStyeSingleton;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
 import com.zhangying.oem1688.singleton.MapCookieSingleton;
 import com.zhangying.oem1688.util.AppManagerUtil;
@@ -136,8 +137,10 @@ public class SetActivity extends BaseActivity {
                     protected void success(BaseBean data) {
                         if (data.isDone()) {
                             TokenUtils.clearToken();
-                            AppManagerUtil.getInstance().finishAllActivity();
-                            ActivityUtils.startActivity(MainActivity.class);
+                            EventBusStyeSingleton.getInstance().updateMyfragment();
+                            finish();
+                            //AppManagerUtil.getInstance().finishAllActivity();
+                            //ActivityUtils.startActivity(MainActivity.class);
                         }
                     }
 

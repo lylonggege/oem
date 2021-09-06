@@ -4,6 +4,9 @@ import android.Manifest;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.lxj.xpopup.XPopup;
@@ -120,11 +125,9 @@ public class MyFragment extends BaseFragment implements MemberInfoView {
 
     @Override
     public void initView() {
-        EventBus.getDefault().register(this);
-
         //判断是否登录
+        memberInfoPresenter = new MemberInfoPresenterImpl(this);
         if (LoginActivity.hasLogin()){
-            memberInfoPresenter = new MemberInfoPresenterImpl(this);
             memberInfoPresenter.validateCredentials();
 
             noLoginTipView.setVisibility(View.GONE);
@@ -133,6 +136,12 @@ public class MyFragment extends BaseFragment implements MemberInfoView {
             noLoginTipView.setVisibility(View.VISIBLE);
             loginTipView.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        EventBus.getDefault().register(this);
     }
 
     @OnClick({R.id.update_TV, R.id.user_personal_RL,
@@ -255,8 +264,8 @@ public class MyFragment extends BaseFragment implements MemberInfoView {
         }
     }
 
-    @Override
-    public void success(MineinfoBean memberInfoBean) {
+    //更新我的页面
+    private void updateMinePage(MineinfoBean memberInfoBean){
         MineinfoBean.RetvalBean retval = memberInfoBean.getRetval();
         mineinfo = retval.getMineinfo();
         GlideUtil.loadImage(getContext(), BuildConfig.URL + mineinfo.getCurportrait(), headImageView);
@@ -335,6 +344,11 @@ public class MyFragment extends BaseFragment implements MemberInfoView {
         }
     }
 
+    @Override
+    public void success(MineinfoBean memberInfoBean) {
+        updateMinePage(memberInfoBean);
+    }
+
     //登录成功后路由返回数据
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void eventData(EvenBusMessageBean message) {
@@ -342,7 +356,17 @@ public class MyFragment extends BaseFragment implements MemberInfoView {
             //进行了收藏操作  跟新UI
             if (message.getType() == 3) {
                 if (memberInfoPresenter != null) {
-                    memberInfoPresenter.validateCredentials();
+                    if (LoginActivity.hasLogin()){
+                        memberInfoPresenter.validateCredentials();
+
+                        noLoginTipView.setVisibility(View.GONE);
+                        loginTipView.setVisibility(View.VISIBLE);
+                    }else {
+                        headImageView.setImageResource(R.drawable.avatar); //图片资源
+                        group_ll.removeAllViews();
+                        noLoginTipView.setVisibility(View.VISIBLE);
+                        loginTipView.setVisibility(View.GONE);
+                    }
                 }
             }
         }

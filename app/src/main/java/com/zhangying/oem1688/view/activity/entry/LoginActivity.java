@@ -30,6 +30,7 @@ import com.zhangying.oem1688.bean.PhoneloginBean;
 import com.zhangying.oem1688.constant.BuildConfig;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
+import com.zhangying.oem1688.onterface.ILoginCall;
 import com.zhangying.oem1688.singleton.EventBusStyeSingleton;
 import com.zhangying.oem1688.util.AppUtils;
 import com.zhangying.oem1688.util.KeyboardUtil;
@@ -254,7 +255,6 @@ public class LoginActivity extends BaseActivity {
                                 evenBusMessageBean.setType(type);
                                 EventBus.getDefault().post(evenBusMessageBean);
                             }
-
                             finish();
                         } else {
                             ToastUtil.showToast(phoneloginBean.getMsg());
