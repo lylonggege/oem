@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.google.android.material.tabs.TabLayout;
+import com.xuexiang.xui.widget.dialog.LoadingDialog;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.adpter.FragmnetPagerAdapter;
 import com.zhangying.oem1688.base.XBaseFragment;
@@ -15,6 +16,7 @@ import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.onterface.BaseValidateCredentials;
 import com.zhangying.oem1688.onterface.BaseView;
+import com.zhangying.oem1688.singleton.GlobalEntitySingleton;
 import com.zhangying.oem1688.util.AppUtils;
 import com.zhangying.oem1688.view.activity.home.SearchActivity;
 
@@ -37,6 +39,7 @@ public class HomeFragment extends XBaseFragment implements TabLayout.OnTabSelect
     private com.zhangying.oem1688.view.fragment.home.HomeFragment homeFragment;
     private FragmnetPagerAdapter fragmnetPagerAdapter;
     private BaseValidateCredentials fenLeiRealization;
+    private LoadingDialog loading;
 
     public int getCurrentTab(){
         return parentTabIndictor.getCurrentTab();
@@ -85,13 +88,19 @@ public class HomeFragment extends XBaseFragment implements TabLayout.OnTabSelect
     }
 
     private void gethome() {
+        if (loading == null) {
+            loading = new LoadingDialog(getActivity());
+        }
+        loading.show();
+
         RemoteRepository.getInstance()
                 .gethome()
                 .subscribeWith(new DefaultDisposableSubscriber<HomeBena>() {
 
                     @Override
                     protected void success(HomeBena data) {
-
+                        loading.dismiss();
+                        GlobalEntitySingleton.getInstance().setHomeData(data);
                         HomeBena.RetvalBean retval = data.getRetval();
                         //tab
                         List<HomeBena.RetvalBean.SindustryBean> sindustry = retval.getSindustry();
@@ -100,6 +109,7 @@ public class HomeFragment extends XBaseFragment implements TabLayout.OnTabSelect
 
                     @Override
                     public void onError(Throwable t) {
+                        loading.dismiss();
                         super.onError(t);
                     }
                 });

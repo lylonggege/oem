@@ -187,7 +187,7 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
                 canCallPhone();
                 break;
             case R.id.rootView_line:
-                WeiXinActivity.init(this);
+                WeiXinActivity.openService(this);
                 break;
             case R.id.message_LL://打开留言弹窗
                 doShowMessagePop();

@@ -9,8 +9,8 @@ android {
         applicationId "com.zhangying.oem1688"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -124,6 +124,20 @@ dependencies {
     implementation 'com.github.xuexiangjys.PictureSelector:picture-core:1.0.5'
     //腾讯的键值对存储mmkv
     implementation 'com.tencent:mmkv:1.0.22'
+    api 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
 
+}
 
+buildscript {
+    repositories {
+        jcenter()       // 原有 jCenter 引用可继续保留
+        mavenCentral()
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()      // 原有 jCenter 引用可继续保留
+        mavenCentral()
+    }
 }

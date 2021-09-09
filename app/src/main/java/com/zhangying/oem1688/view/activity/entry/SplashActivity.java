@@ -32,8 +32,6 @@ public class SplashActivity extends BaseSplashActivity {
         boolean enableAlphaAnim = getIntent().getBooleanExtra(KEY_ENABLE_ALPHA_ANIM, false);
         SettingSPUtils spUtil = SettingSPUtils.getInstance();
 
-        //设备统计信息
-        createUniqueID();
         if (spUtil.isFirstOpen()) {
             spUtil.setIsFirstOpen(false);
             ActivityUtils.startActivity(UserGuideActivity.class);
@@ -54,65 +52,6 @@ public class SplashActivity extends BaseSplashActivity {
             startSplash(enableAlphaAnim);
         }
     }
-
-    private void createUniqueID(){
-        //we make this look like a valid IMEI//13 digits
-        String m_szDevIDShort = "35" +
-                Build.BOARD.length()%10 +
-                Build.BRAND.length()%10 +
-                Build.CPU_ABI.length()%10 +
-                Build.DEVICE.length()%10 +
-                Build.DISPLAY.length()%10 +
-                Build.HOST.length()%10 +
-                Build.ID.length()%10 +
-                Build.MANUFACTURER.length()%10 +
-                Build.MODEL.length()%10 +
-                Build.PRODUCT.length()%10 +
-                Build.TAGS.length()%10 +
-                Build.TYPE.length()%10 +
-                Build.USER.length()%10;
-
-        //统计设备
-        HashMap<String,Object> hashMap = new HashMap<String,Object>();
-        hashMap.put("did",m_szDevIDShort);
-        hashMap.put("dtype","2");
-        hashMap.put("ctype",Build.MODEL);
-        hashMap.put("cversion",android.os.Build.VERSION.SDK_INT);
-
-        PackageInfo packInfo = getPackageInfo(this);
-        hashMap.put("aversion",packInfo != null ? packInfo.versionCode : "");
-        RemoteRepository.getInstance()
-                .count_device(hashMap)
-                .subscribeWith(new DefaultDisposableSubscriber<BaseBean>() {
-                    @Override
-                    protected void success(BaseBean newscontBean) {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable t) {
-                        super.onError(t);
-
-                    }
-                });
-    }
-
-    private PackageInfo getPackageInfo(Context context) {
-        PackageInfo pi = null;
-
-        try {
-            PackageManager pm = context.getPackageManager();
-            pi = pm.getPackageInfo(context.getPackageName(),
-                    PackageManager.GET_CONFIGURATIONS);
-
-            return pi;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return pi;
-    }
-
 
     @Override
     protected void onSplashFinished() {

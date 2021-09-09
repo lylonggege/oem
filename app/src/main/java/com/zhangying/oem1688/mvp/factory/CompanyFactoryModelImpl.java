@@ -26,6 +26,7 @@ public class CompanyFactoryModelImpl implements CompamyFactoryModel {
                         }
                     });
         } else if (company_factory_type == 6){
+            System.out.println("getStoreLists2");
             RemoteRepository.getInstance()
                     .getstorelists(HashMapSingleton.getInstance())
                     .subscribeWith(new DefaultDisposableSubscriber<CompanyFactoryBean>() {

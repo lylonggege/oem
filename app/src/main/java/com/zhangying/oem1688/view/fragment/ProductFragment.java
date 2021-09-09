@@ -309,6 +309,7 @@ public class ProductFragment extends BaseFragment implements BaseView {
     }
 
     private void initdata() {
+        System.out.println("getStoreLists1");
         LoadingDialog loading = new LoadingDialog(getActivity());
         loading.show();
 

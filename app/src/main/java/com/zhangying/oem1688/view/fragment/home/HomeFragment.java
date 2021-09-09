@@ -1,6 +1,7 @@
 package com.zhangying.oem1688.view.fragment.home;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -35,6 +36,7 @@ import com.zhangying.oem1688.custom.MyRecycleView;
 import com.zhangying.oem1688.custom.VerticalScrolledListview;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
+import com.zhangying.oem1688.singleton.GlobalEntitySingleton;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
 import com.zhangying.oem1688.util.AppUtils;
 import com.zhangying.oem1688.util.ScreenTools;
@@ -194,11 +196,18 @@ public class HomeFragment extends BaseFragment {
             }
         }
 
-        int pageTotalW = pageLine1.getWidth();//页码总数指示器长度
+        //int pageTotalW = pageLine1.getWidth();//页码总数指示器长度
+        int pageTotalW = 240;//页码总数指示器长度
+        RelativeLayout.LayoutParams rlp1 = (RelativeLayout.LayoutParams) pageLine1.getLayoutParams();
+        rlp1.width = pageTotalW;
+        pageLine1.setLayoutParams(rlp1);
 
         //获取滚动页码的布局
         RelativeLayout.LayoutParams rlp2 = (RelativeLayout.LayoutParams) pageLine2.getLayoutParams();
         rlp2.width = pageTotalW / pages;
+        System.out.println("cateid:"+cate_id);
+        System.out.println("pageTotalW:"+pageTotalW);
+        System.out.println("pages:"+pages);
         pageLine2.setLayoutParams(rlp2);
 
         List<HomeBena.RetvalBean.ScatehdBean> scatehdBeansList = new ArrayList<>();
@@ -262,33 +271,20 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void gethome(HashMapSingleton instance, int type) {
+        HomeBena homeEntity = GlobalEntitySingleton.getInstance().getHomeData();
+        if (homeEntity != null){
+            renderHomeIndex(homeEntity, type);
+            return;
+        }
+
+        //网络请求
         RemoteRepository.getInstance()
                 .gethome()
                 .subscribeWith(new DefaultDisposableSubscriber<HomeBena>() {
 
                     @Override
                     protected void success(HomeBena data) {
-                        HomeBena.RetvalBean retval = data.getRetval();
-                        //banner
-                        List<HomeBena.RetvalBean.SbannerBean> sbanner = retval.getSbanner();
-                        initbanner(sbanner);
-
-                        //头条 文字滚动
-                        HomeBena.RetvalBean.SnewslistBean snewslistBean = retval.getSnewslist();
-                        initmarqueeView(snewslistBean);
-
-                        //zhshlist
-                        List<HomeBena.RetvalBean.SzhshlistBean> szhshlist = retval.getSzhshlist();
-                        initszhshlist(szhshlist, type);
-
-                        //初始化fragment
-                        initCateFragment(data.getRetval().getScatehd());
-                        //多条文字轮播
-                        initScinfolist(retval.getScinfolist());
-
-                        //加载更多
-                        more_name_tv.setText(retval.getSgoodsList().getGtitle());
-                        initgoosList(retval.getSgoodsList());
+                        renderHomeIndex(data, type);
                     }
 
                     @Override
@@ -296,6 +292,32 @@ public class HomeFragment extends BaseFragment {
                         super.onError(t);
                     }
                 });
+    }
+
+    private void renderHomeIndex(HomeBena homeEntity, int type){
+        HomeBena.RetvalBean retval = homeEntity.getRetval();
+        //顶部轮播图
+        List<HomeBena.RetvalBean.SbannerBean> sbanner = retval.getSbanner();
+        initbanner(sbanner);
+
+        //头条文字滚动
+        HomeBena.RetvalBean.SnewslistBean snewslistBean = retval.getSnewslist();
+        initmarqueeView(snewslistBean);
+
+        //广告位列表
+        List<HomeBena.RetvalBean.SzhshlistBean> szhshlist = retval.getSzhshlist();
+        initszhshlist(szhshlist, type);
+
+        //初始化fragment
+        initCateFragment(homeEntity.getRetval().getScatehd());
+        //多条文字轮播
+        initScinfolist(retval.getScinfolist());
+
+        //加载更多
+        more_name_tv.setText(retval.getSgoodsList().getGtitle());
+        //initgoosList(retval.getSgoodsList());
+        bindGoodsAdapter();
+        loadMoreGoods();
     }
 
     private void getrecomendindex(HashMapSingleton instance, int type) {
@@ -386,6 +408,12 @@ public class HomeFragment extends BaseFragment {
         marqueeView.setMarqueeFactory(marqueeFactory1);
         marqueeFactory1.setOnItemClickListener((view, holder) -> NewsDetailActivity.simpleActivity(getActivity(),bean.getNlist().get(holder.getPosition()).getNid(), 1));
         marqueeView.startFlipping();
+
+        List<TextView> mViews = marqueeFactory1.getMarqueeViews();
+        for (TextView tx:mViews){
+            tx.setTextSize(14);
+            tx.setTextColor(Color.parseColor("#666666"));
+        }
     }
 
     private void initbanner(List<HomeBena.RetvalBean.SbannerBean> sbanner) {
@@ -430,7 +458,6 @@ public class HomeFragment extends BaseFragment {
 
     //加载更多商品
     private void loadMoreGoods() {
-        System.out.println("loadMoreGoods1");
         HashMapSingleton.getInstance().reload();
         HashMapSingleton.getInstance().put("page", page);
         HashMapSingleton.getInstance().put("recomid", "999");

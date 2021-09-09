@@ -47,7 +47,7 @@ import retrofit2.http.QueryMap;
 public interface ApiService {
 
 
-    @GET("?app=xcxindex&act=index&ly=app")
+    @GET("?app=xcxindex&act=index&ly=app&android=1")
         // App首页数据返回(接口数据参照页面从上至下的顺序)
     Flowable<HomeBena> gethome();
 

@@ -1,7 +1,9 @@
 package com.zhangying.oem1688.view.activity.my;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
@@ -14,6 +16,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.OnConfirmListener;
 import com.xuexiang.xui.utils.CountDownButtonHelper;
 import com.xuexiang.xui.widget.button.roundbutton.RoundButton;
 import com.xuexiang.xui.widget.dialog.materialdialog.DialogAction;
@@ -30,10 +34,12 @@ import com.zhangying.oem1688.singleton.HashMapSingleton;
 import com.zhangying.oem1688.singleton.MapCookieSingleton;
 import com.zhangying.oem1688.util.AppManagerUtil;
 import com.zhangying.oem1688.util.AppUtils;
+import com.zhangying.oem1688.util.AutoForcePermissionUtils;
 import com.zhangying.oem1688.util.CacheUtil;
 import com.zhangying.oem1688.util.ToastUtil;
 import com.zhangying.oem1688.util.TokenUtils;
 import com.zhangying.oem1688.view.activity.MainActivity;
+import com.zhangying.oem1688.view.activity.home.FactoryDetailActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -95,7 +101,6 @@ public class SetActivity extends BaseActivity {
                 break;
             case R.id.clearcache_rl:
                 CacheUtil.clearAllCache(this);
-
                 CookieSyncManager.createInstance(this);
                 CookieManager cookieManager = CookieManager.getInstance();
                 cookieManager.setAcceptCookie(true);
@@ -122,7 +127,17 @@ public class SetActivity extends BaseActivity {
                 }
                 break;
             case R.id.logoff_tv:
-                ajax_logout();
+                new XPopup.Builder(this)
+                        .hasShadowBg(true)
+                        .asConfirm("提示", "退出后将不能查看留言信息，确定退出登录吗?",
+                                "取消", "确定",
+                                new OnConfirmListener() {
+                                    @Override
+                                    public void onConfirm() {
+                                        ajax_logout();
+                                    }
+                                }, null, false)
+                        .show();
                 break;
         }
     }

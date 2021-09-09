@@ -352,24 +352,21 @@ public class MyFragment extends BaseFragment implements MemberInfoView {
     //登录成功后路由返回数据
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void eventData(EvenBusMessageBean message) {
-        if (message != null) {
-            //进行了收藏操作  跟新UI
-            if (message.getType() == 3) {
-                if (memberInfoPresenter != null) {
-                    if (LoginActivity.hasLogin()){
-                        memberInfoPresenter.validateCredentials();
+        if (message == null || message.getType() != 3) { return; }
+        if (memberInfoPresenter == null) {return;}
 
-                        noLoginTipView.setVisibility(View.GONE);
-                        loginTipView.setVisibility(View.VISIBLE);
-                    }else {
-                        headImageView.setImageResource(R.drawable.avatar); //图片资源
-                        group_ll.removeAllViews();
-                        noLoginTipView.setVisibility(View.VISIBLE);
-                        loginTipView.setVisibility(View.GONE);
-                    }
-                }
-            }
+        if (LoginActivity.hasLogin()){
+            memberInfoPresenter.validateCredentials();
+
+            noLoginTipView.setVisibility(View.GONE);
+            loginTipView.setVisibility(View.VISIBLE);
+            return;
         }
+
+        headImageView.setImageResource(R.drawable.avatar); //图片资源
+        group_ll.removeAllViews();
+        noLoginTipView.setVisibility(View.VISIBLE);
+        loginTipView.setVisibility(View.GONE);
     }
 
     @Override

@@ -15,6 +15,8 @@ public class BuildConfig {
     public static String CATESID = "CATESID";
     public static String DAIGONGPINGLEI = "DAIGONGPINGLEI"; //代工品类标记
 
+    public static String WX_APPID = "wx309c1651b07c82f7";
+
     public static String url = (System.currentTimeMillis() / 1000) + TokenUtils.getToken() + "&^%$RSTUih09135ZST)(*";
     public static String md5Str = MD5Util.getMD5Str(url);
     public static String PARAMETERS = "&ly=app&timestamp=" + (System.currentTimeMillis() / 1000) + "&token=" + TokenUtils.getToken() + "@sign=" + md5Str;

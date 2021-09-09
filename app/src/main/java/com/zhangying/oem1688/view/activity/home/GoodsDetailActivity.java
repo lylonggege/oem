@@ -365,7 +365,7 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
                 canCallPhone();
                 break;
             case R.id.rootView_line://打开微信客服
-                WeiXinActivity.init(this);
+                WeiXinActivity.openService(this);
                 break;
             case R.id.imageView2://顶部导航右侧显示平台全部分类
                 fenLeiRealization.validateCredentials();

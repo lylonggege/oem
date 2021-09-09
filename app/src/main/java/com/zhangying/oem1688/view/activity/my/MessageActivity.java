@@ -173,6 +173,7 @@ public class MessageActivity extends BaseActivity {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case PictureConfig.CHOOSE_REQUEST:
+                case PictureConfig.REQUEST_CAMERA:
                     // 图片选择
                     mSelectList = PictureSelector.obtainMultipleResult(data);
                     if (mSelectList.size() > 0) {

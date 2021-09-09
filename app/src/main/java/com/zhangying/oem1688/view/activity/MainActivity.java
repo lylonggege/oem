@@ -1,8 +1,14 @@
 package com.zhangying.oem1688.view.activity;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.http.SslError;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -16,7 +22,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.tencent.mm.opensdk.constants.ConstantsAPI;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.zhangying.oem1688.R;
+import com.zhangying.oem1688.bean.BaseBean;
 import com.zhangying.oem1688.bean.EvenBusBean;
 import com.zhangying.oem1688.bean.GoodsdetailBean;
 import com.zhangying.oem1688.bean.HomeTabBean;
@@ -104,6 +114,8 @@ public class MainActivity extends AppCompatActivity implements TabberView {
     private Fragment homeFragment, newsFragment, myFragmnet, productFragment, productFragment2;
     private TabberPresenter tabberPresenter;
     private int tabIndex;
+    // IWXAPI 是第三方app和微信通信的openApi接口
+    private IWXAPI api;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -112,20 +124,35 @@ public class MainActivity extends AppCompatActivity implements TabberView {
         ButterKnife.bind(this);
         tabberPresenter = new TabberPresenterImpl(this);
         tabberPresenter.validateCredentials();
-        selectTab(1);
+        //selectTab(1);
+        //默认选中第一项
         selectTab(0);
 
+        //导入隐私政策
         setPrivacyView();
         EventBus.getDefault().register(this);
     }
 
+    //要使你的程序启动后微信终端能响应你的程序，必须在代码中向微信终端注册你的 id
+    private void regToWx() {
+        // 通过WXAPIFactory工厂，获取IWXAPI的实例
+        api = WXAPIFactory.createWXAPI(this, BuildConfig.WX_APPID, true);
+
+        // 将应用的appId注册到微信
+        api.registerApp(BuildConfig.WX_APPID);
+
+        //建议动态监听微信启动广播进行注册到微信
+        registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                // 将该app注册到微信
+                api.registerApp(BuildConfig.WX_APPID);
+            }
+        }, new IntentFilter(ConstantsAPI.ACTION_REFRESH_WXAPP));
+
+    }
+
     private void setPrivacyContent(String content){
-        String privacyInfo = String.format("<p>感谢您选择代工帮App!<br>" +
-                "我们非常重视您的个人信息和隐私保护。为了更好的保障你的个人权益，在您使用我们的产品前，请充分阅读并理解<a href=\"%s\" style=\"color:#4395ff\">《服务协议》</a>和<a href=\"%s\" style=\"color:#4395ff\">《隐私条款》</a>，特向您说明如下：<br>" +
-                "1.为给您提供发布服务，我们可能还会申请手机存储权限、摄像头权限;<br>" +
-                "2.为了信息推送和账号安全，我们会申请系统设备权限收集设备信息、日志信息;<br>" +
-                "3.我们会努力采取各种安全技术保护您的个人信息，未经您同意;我们不会从第三方获取、共享或对外提供您的信息;<br>" +
-                "4.您还可以访问、更正、删除您的个人信息，我们也将提供注销、投诉方式;", BuildConfig.URL_AGREEMENT,BuildConfig.URL_PRIVACY);
         String s = MyUtilsWebView.setWebViewText(content, "font-size:14px;color:#666666;line-height:1.8", "\na{text-decoration:none}\n");
         WebViewSeting.setting(webPrivacy, MainActivity.this, s);
     }
@@ -188,6 +215,7 @@ public class MainActivity extends AppCompatActivity implements TabberView {
                 }
             });
 
+            //用户同意
             btnAgreePriv.setOnClickListener(new OnMultiClickListener() {
                 @Override
                 public void onMultiClick(View v) {
@@ -195,9 +223,15 @@ public class MainActivity extends AppCompatActivity implements TabberView {
                     editor.putInt(STRING_KEY, 1);
                     editor.commit();
                     priLayout.setVisibility(View.GONE);
+
+                    //统计唯一识别码
+                    createUniqueID();
+                    //注册到微信
+                    regToWx();
                 }
             });
 
+            //用户不同意
             btnDisagreePriv.setOnClickListener(new OnMultiClickListener() {
                 @Override
                 public void onMultiClick(View v) {
@@ -213,30 +247,66 @@ public class MainActivity extends AppCompatActivity implements TabberView {
                 }
             });
         }
-
     }
 
-//    private void initLogin() {
-//        HashMap<String, Object> map = new HashMap<>();
-//        map.put("ly", "app");
-//        map.put("phone", "zhangying");
-//        map.put("code", "12356");
-//        RemoteRepository.getInstance()
-//                .pwdlogin(map)
-//                .subscribeWith(new DefaultDisposableSubscriber<BaseBean>() {
-//
-//                    @Override
-//                    protected void success(BaseBean data) {
-//                        ToastUtil.showToast(data.getMsg());
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable t) {
-//                        super.onError(t);
-//
-//                    }
-//                });
-//    }
+    //统计个人信息
+    private void createUniqueID(){
+        //we make this look like a valid IMEI//13 digits
+        String m_szDevIDShort = "35" +
+                Build.BOARD.length()%10 +
+                Build.BRAND.length()%10 +
+                Build.CPU_ABI.length()%10 +
+                Build.DEVICE.length()%10 +
+                Build.DISPLAY.length()%10 +
+                Build.HOST.length()%10 +
+                Build.ID.length()%10 +
+                Build.MANUFACTURER.length()%10 +
+                Build.MODEL.length()%10 +
+                Build.PRODUCT.length()%10 +
+                Build.TAGS.length()%10 +
+                Build.TYPE.length()%10 +
+                Build.USER.length()%10;
+
+        //统计设备
+        HashMap<String,Object> hashMap = new HashMap<String,Object>();
+        hashMap.put("did",m_szDevIDShort);
+        hashMap.put("dtype","2");
+        hashMap.put("ctype",Build.MODEL);
+        hashMap.put("cversion",android.os.Build.VERSION.SDK_INT);
+
+        PackageInfo packInfo = getPackageInfo(this);
+        hashMap.put("aversion",packInfo != null ? packInfo.versionCode : "");
+        RemoteRepository.getInstance()
+                .count_device(hashMap)
+                .subscribeWith(new DefaultDisposableSubscriber<BaseBean>() {
+                    @Override
+                    protected void success(BaseBean newscontBean) {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        super.onError(t);
+
+                    }
+                });
+    }
+
+    private PackageInfo getPackageInfo(Context context) {
+        PackageInfo pi = null;
+
+        try {
+            PackageManager pm = context.getPackageManager();
+            pi = pm.getPackageInfo(context.getPackageName(),
+                    PackageManager.GET_CONFIGURATIONS);
+
+            return pi;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return pi;
+    }
 
     private void selectTab(int index) {
         releaseImaAndText();

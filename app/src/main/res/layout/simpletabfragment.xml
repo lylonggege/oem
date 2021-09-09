@@ -89,7 +89,6 @@
                     android:layout_marginRight="@dimen/dp_5"
                     android:text=""
                     android:textColor="@color/ff3600">
-
                 </TextView>
 
                 <TextView
@@ -97,7 +96,7 @@
                     android:layout_height="@dimen/dp_20"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/dp_5"
-                    android:layout_marginRight="@dimen/dp_5"
+                    android:layout_marginRight="@dimen/dp_1"
                     android:background="@color/ee">
 
                 </TextView>
