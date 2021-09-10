@@ -26,6 +26,7 @@ import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.base.BaseActivity;
 import com.zhangying.oem1688.bean.BaseBean;
 import com.zhangying.oem1688.bean.EvenBusMessageBean;
+import com.zhangying.oem1688.bean.ListHistoryBean;
 import com.zhangying.oem1688.bean.PhoneloginBean;
 import com.zhangying.oem1688.constant.BuildConfig;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
@@ -85,11 +86,14 @@ public class LoginActivity extends BaseActivity {
     ImageView qq_iv;
     @BindView(R.id.btn_close)
     ImageView btnClose;
+    @BindView(R.id.checksign_imageview)
+    ImageView imageCheckSign;
     private CountDownButtonHelper mCountDownHelper;
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private static OkHttpClient client = new OkHttpClient();
     private int type;
     private PhoneloginBean phoneloginBean;
+    private boolean isSelect;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -120,7 +124,7 @@ public class LoginActivity extends BaseActivity {
         return KeyboardUtils.onDisableBackKeyDown(keyCode) && super.onKeyDown(keyCode, event);
     }
 
-    @OnClick({R.id.btn_get_verify_code, R.id.btn_login, R.id.tv_forget_password,
+    @OnClick({R.id.btn_get_verify_code, R.id.btn_login, R.id.tv_forget_password,R.id.checksign_rl,
               R.id.qq_iv, R.id.weixin_iv, R.id.btn_close,R.id.tv_user_protocol,R.id.tv_privacy_protocol})
     public void onClick(View view) {
         if (!AppUtils.isFastClick()){
@@ -128,6 +132,14 @@ public class LoginActivity extends BaseActivity {
         }
 
         switch (view.getId()) {
+            case R.id.checksign_rl:
+                isSelect = !isSelect;
+                if (!isSelect) {
+                    imageCheckSign.setVisibility(View.GONE);
+                } else {
+                    imageCheckSign.setVisibility(View.VISIBLE);
+                }
+                break;
             case R.id.tv_user_protocol://用户协议
                 MyWebActivity.simpleActivity(this, BuildConfig.URL_AGREEMENT, "用户协议");
                 break;
@@ -143,6 +155,11 @@ public class LoginActivity extends BaseActivity {
                 }
                 break;
             case R.id.btn_login://执行登录操作
+                if (!isSelect){
+                    ToastUtil.showToast("请先勾选同意协议后再登录");
+                    break;
+                }
+
                 if (etPhoneNumber.validate()) {
                     if (etVerifyCode.validate()) {
                         loginByVerifyCode(etPhoneNumber.getEditValue(), etVerifyCode.getEditValue());

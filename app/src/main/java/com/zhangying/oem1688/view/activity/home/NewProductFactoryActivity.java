@@ -40,6 +40,7 @@ import com.zhangying.oem1688.onterface.BaseValidateCredentials;
 import com.zhangying.oem1688.onterface.BaseView;
 import com.zhangying.oem1688.util.AppUtils;
 import com.zhangying.oem1688.util.SpacesItemDecoration;
+import com.zhangying.oem1688.util.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -344,6 +345,7 @@ public class NewProductFactoryActivity extends BaseActivity implements BaseView 
 
     private void initdata() {
         showLoading();
+        title_TV.setText(name + "OEM,ODM贴牌工厂-代工帮");
         HashMap<String, Object> map = new HashMap<>();
         map.put("ly", "app");
         map.put("catebid", "0");
@@ -356,7 +358,11 @@ public class NewProductFactoryActivity extends BaseActivity implements BaseView 
                         dissmissLoading();
 
                         CompanyFactoryBean.RetvalBean retval = data.getRetval();
-                        title_TV.setText(name + "OEM,ODM贴牌工厂-代工帮");
+                        String headTitle = retval.getPageinfo().getHeadtitle();
+                        if (!StringUtils.isEmity(headTitle)){
+                            title_TV.setText(headTitle);
+                        }
+
                         cateList = retval.getOemcate();
 
                         List<CompanyFactoryBean.RetvalBean.OemcateBean> maxList = cateList;

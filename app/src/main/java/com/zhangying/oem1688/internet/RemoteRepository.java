@@ -31,6 +31,7 @@ import com.zhangying.oem1688.bean.RecomendIndexBean;
 import com.zhangying.oem1688.bean.ScinfoDetailBean;
 import com.zhangying.oem1688.bean.ScinfoTopBean;
 import com.zhangying.oem1688.bean.SitetopinfoBean;
+import com.zhangying.oem1688.bean.VersionBean;
 import com.zhangying.oem1688.bean.WordsBean;
 import com.zhangying.oem1688.bean.ListHistoryBean;
 
@@ -238,5 +239,13 @@ public class RemoteRepository {
 
     public Flowable<BaseBean> count_device(HashMap<String, Object> body) {
         return serverApi.count_device(body);
+    }
+
+    public Flowable<VersionBean> get_version() {
+        return serverApi.get_version();
+    }
+
+    public Flowable<BaseBean> cancel_account(HashMap<String, Object> body) {
+        return serverApi.cancel_account(body);
     }
 }

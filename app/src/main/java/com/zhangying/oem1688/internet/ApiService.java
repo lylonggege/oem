@@ -32,6 +32,7 @@ import com.zhangying.oem1688.bean.RecomendIndexBean;
 import com.zhangying.oem1688.bean.ScinfoDetailBean;
 import com.zhangying.oem1688.bean.ScinfoTopBean;
 import com.zhangying.oem1688.bean.SitetopinfoBean;
+import com.zhangying.oem1688.bean.VersionBean;
 import com.zhangying.oem1688.bean.WordsBean;
 import com.zhangying.oem1688.constant.BuildConfig;
 
@@ -245,6 +246,14 @@ public interface ApiService {
     //用户协议
     @GET("?app=xcxindex&act=privacy&android=1")
     Flowable<PrivacyBean> get_privacy();
+
+    //获取apk新版本
+    @GET("?app=xcxindex&act=getversion")
+    Flowable<VersionBean> get_version();
+
+    //获取apk新版本
+    @GET("?app=member&act=cancel_account")
+    Flowable<BaseBean> cancel_account(@QueryMap HashMap<String, Object> hashMap);
 
     //Login -  统计设备标识
     @FormUrlEncoded

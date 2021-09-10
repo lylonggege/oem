@@ -495,6 +495,8 @@ public class MainActivity extends AppCompatActivity implements TabberView {
         int type = bean.getType();
         if (type == 1) {
             selectTab(1);
+        }else if (type == 0){
+            selectTab(0);
         }
     }
 

@@ -1,13 +1,14 @@
 package com.zhangying.oem1688.view.activity.my;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -15,15 +16,14 @@ import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.luck.picture.lib.permissions.Permission;
+import com.luck.picture.lib.permissions.RxPermissions;
 import com.xuexiang.xui.widget.imageview.RadiusImageView;
 import com.xuexiang.xutil.tip.ToastUtils;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.base.BaseActivity;
 import com.zhangying.oem1688.bean.BaseBean;
 import com.zhangying.oem1688.bean.BaseBeancClass;
-import com.zhangying.oem1688.bean.CcatesJsonBean;
-import com.zhangying.oem1688.bean.EvenBusMessageBean;
-import com.zhangying.oem1688.bean.ListHistoryBean;
 import com.zhangying.oem1688.bean.MemberInfoBean;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
@@ -32,16 +32,11 @@ import com.zhangying.oem1688.singleton.HashMapSingleton;
 import com.zhangying.oem1688.util.AppUtils;
 import com.zhangying.oem1688.util.Base64Util;
 import com.zhangying.oem1688.util.GlideUtil;
-import com.zhangying.oem1688.util.MD5Util;
-import com.zhangying.oem1688.util.ToastUtil;
-import com.zhangying.oem1688.util.TokenUtils;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
+import io.reactivex.functions.Consumer;
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -117,19 +112,22 @@ public class MessageActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.head_imageView:
-                PictureSelector.create(this)
-                        .openGallery(PictureMimeType.ofImage())
-                        .theme(false ? R.style.XUIPictureStyle_Custom : R.style.XUIPictureStyle)
-                        .maxSelectNum(1)
-                        .minSelectNum(1)
-                        .selectionMode(PictureConfig.MULTIPLE)
-                        .previewImage(true)
-                        .isCamera(true)
-                        .enableCrop(false)
-                        .compress(true)
-                        .previewEggs(true)
-                        .selectionMedia(mSelectList)
-                        .forResult(PictureConfig.CHOOSE_REQUEST);
+                //获取写的权限
+                RxPermissions rxPermissions=new RxPermissions(this);
+                rxPermissions.requestEach(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        .subscribe(new Consumer<Permission>() {
+                        @Override
+                        public void accept(Permission permission){
+                            if (permission.granted){
+                                //申请的权限全部允许
+                                doOpenPictureSelector();
+                            }else{
+                                //只要有一个权限被拒绝，就会执行
+                                Toast.makeText(MessageActivity.this, "拒绝", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                });
+
                 break;
             case R.id.submit_tv:
                 showLoading();
@@ -154,7 +152,6 @@ public class MessageActivity extends BaseActivity {
                                 } else {
                                     ToastUtils.toast(data.getMsg());
                                 }
-
                             }
 
                             @Override
@@ -167,13 +164,33 @@ public class MessageActivity extends BaseActivity {
         }
     }
 
+    //打开照片选择
+    private void doOpenPictureSelector(){
+        PictureSelector.create(this)
+                .openGallery(PictureMimeType.ofImage())
+                .theme(false ? R.style.XUIPictureStyle_Custom : R.style.XUIPictureStyle)
+                .maxSelectNum(1)
+                .minSelectNum(1)
+                .selectionMode(PictureConfig.MULTIPLE)
+                .previewImage(true)
+                .isCamera(true)
+                .enableCrop(false)
+                .compress(true)
+                .previewEggs(true)
+                .selectionMedia(mSelectList)
+                .forResult(PictureConfig.CHOOSE_REQUEST);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        System.out.println("resultCode:" + resultCode);
+        System.out.println("requestCode:" + requestCode);
+        System.out.println("data:" + PictureSelector.obtainMultipleResult(data).size());
+        //System.out.println("path:" + mSelectList.get(0).getCompressPath());
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case PictureConfig.CHOOSE_REQUEST:
-                case PictureConfig.REQUEST_CAMERA:
                     // 图片选择
                     mSelectList = PictureSelector.obtainMultipleResult(data);
                     if (mSelectList.size() > 0) {

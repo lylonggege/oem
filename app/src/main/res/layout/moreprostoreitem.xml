@@ -9,7 +9,8 @@
     app:cardCornerRadius="@dimen/dp_5"
     android:elevation="@dimen/dp_0"
     android:id="@+id/cardview"
-    app:cardElevation="@dimen/dp_0">
+    app:cardElevation="0dp"
+    app:cardPreventCornerOverlap="false">
 
     <LinearLayout
         android:layout_width="match_parent"
