@@ -124,8 +124,12 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
                     @Override
                     protected void success(FactoryDetailBean data) {
                         loading.dismiss();
-                        retval = data.getRetval();
+                        if (!data.isDone()){
+                            ToastUtil.showToast(data.getMsg());
+                            finish();
+                        }
 
+                        retval = data.getRetval();
                         //切换到首页
                         selectTab(tabIndex);
 
@@ -218,6 +222,12 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
     private void doShowMessagePop(){
         if (msgPop == null){
             msgPop = new GoodsDetailPopu(this);
+
+            String popTitle = retval.getCalltitle();
+            if (!StringUtils.isEmity(popTitle)){
+                msgPop.setPopTitle(popTitle);
+            }
+
             msgPop.setMessageLister(new BaseMessageListener() {
                 @Override
                 public boolean submit(String name, String phone) {

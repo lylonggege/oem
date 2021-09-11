@@ -136,17 +136,6 @@ public class ReleaseActivity extends BaseActivity implements ImageSelectGridAdap
                 });
     }
 
-    /**
-     * 隐藏软键盘(只适用于Activity，不适用于Fragment)
-     */
-    private void hideSoftKeyboard(Activity activity) {
-        View view = activity.getCurrentFocus();
-        if (view != null) {
-            InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-        }
-    }
-
     @OnClick({R.id.bacK_RL, R.id.release_tv, R.id.cate_LL})
     public void onClick(View view) {
         if (!AppUtils.isFastClick()){
@@ -159,7 +148,7 @@ public class ReleaseActivity extends BaseActivity implements ImageSelectGridAdap
                 break;
             case R.id.cate_LL:
                 //隐藏软键盘
-                hideSoftKeyboard(this);
+                AppUtils.hideSoftKeyboard(this);
 
                 isboolean = true;
                 OptionsPickerView pvOptions = new OptionsPickerBuilder(ReleaseActivity.this, (v, options1, options2, options3) -> {

@@ -52,6 +52,7 @@ public class MyWebActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         webView.loadUrl(pageUrl);
+        webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {

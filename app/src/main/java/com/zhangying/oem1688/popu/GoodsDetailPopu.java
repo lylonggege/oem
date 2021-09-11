@@ -18,6 +18,7 @@ public class GoodsDetailPopu extends PositionPopupView {
     private EditText phone_et_popu;
     private TextView submit_tv_popu;
     private LinearLayout rootView;
+    private TextView popTitle;
 
     public GoodsDetailPopu(@NonNull Context context) {
         super(context);
@@ -28,6 +29,14 @@ public class GoodsDetailPopu extends PositionPopupView {
     }
 
     private BaseMessageListener messageListener;
+
+    public void setPopTitle(String title){
+        if (popTitle == null){
+            popTitle = findViewById(R.id.pop_msg_title);
+        }
+
+        popTitle.setText(title);
+    }
 
     @Override
     protected int getImplLayoutId() {

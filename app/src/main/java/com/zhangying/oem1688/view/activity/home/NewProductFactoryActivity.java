@@ -358,11 +358,6 @@ public class NewProductFactoryActivity extends BaseActivity implements BaseView 
                         dissmissLoading();
 
                         CompanyFactoryBean.RetvalBean retval = data.getRetval();
-                        String headTitle = retval.getPageinfo().getHeadtitle();
-                        if (!StringUtils.isEmity(headTitle)){
-                            title_TV.setText(headTitle);
-                        }
-
                         cateList = retval.getOemcate();
 
                         List<CompanyFactoryBean.RetvalBean.OemcateBean> maxList = cateList;

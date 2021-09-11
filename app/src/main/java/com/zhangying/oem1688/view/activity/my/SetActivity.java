@@ -1,18 +1,19 @@
 package com.zhangying.oem1688.view.activity.my;
 
-import android.app.AlertDialog;
+import android.Manifest;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.WebStorage;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lxj.xpopup.XPopup;
@@ -37,7 +38,14 @@ import com.zhangying.oem1688.util.CacheUtil;
 import com.zhangying.oem1688.util.StringUtils;
 import com.zhangying.oem1688.util.ToastUtil;
 import com.zhangying.oem1688.util.TokenUtils;
+import com.zhangying.oem1688.view.activity.entry.LoginActivity;
 
+import java.io.File;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -48,8 +56,22 @@ public class SetActivity extends BaseActivity {
     TextView cache_tv;
     @BindView(R.id.version_tv)
     TextView versionTV;
+    @BindView(R.id.bangdingshouji_rl)
+    RelativeLayout bindMobileRL;
+    @BindView(R.id.re_password_rl)
+    RelativeLayout updatePwdRL;
+    @BindView(R.id.cancel_rl)
+    RelativeLayout cancelRL;
+    @BindView(R.id.bangdingshouji_top)
+    View bindMobileTop;
+    @BindView(R.id.bangdingshouji_line)
+    View bindMobileLine;
+    @BindView(R.id.re_password_line)
+    View updatePwdLine;
 
     private String version;
+    private String apkPath;
+    private long apkSize;
 
     @Override
     protected int getLayoutId() {
@@ -60,6 +82,15 @@ public class SetActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         titleTV.setText("设置");
+        if (!LoginActivity.hasLogin()){
+            bindMobileRL.setVisibility(View.GONE);
+            updatePwdRL.setVisibility(View.GONE);
+            cancelRL.setVisibility(View.GONE);
+            bindMobileTop.setVisibility(View.GONE);
+            bindMobileLine.setVisibility(View.GONE);
+            updatePwdLine.setVisibility(View.GONE);
+        }
+
         try {
             String totalCacheSize = CacheUtil.getTotalCacheSize(this);
             cache_tv.setText(totalCacheSize);
@@ -203,13 +234,15 @@ public class SetActivity extends BaseActivity {
                     protected void success(VersionBean data) {
                         dissmissLoading();
                         if (data.isDone()) {
-                            String remoteV = data.getRetval().getVersion();
-                            String downUlr = data.getRetval().getUrl();
+                            VersionBean.RetvalBean retval = data.getRetval();
+                            String remoteV = retval.getVersion();
+                            String downUlr = retval.getUrl();
                             if (StringUtils.isEmity(remoteV) || StringUtils.isEmity(version) || StringUtils.isEmity(downUlr) || version.equals(remoteV)){
                                 ToastUtil.showToast("当前已是最新版本");
                             }else {
                                 //去下载最新版
-                                showUpdaloadDialog(data.getRetval().getUrl());
+                                apkSize = retval.getIsize();
+                                showUpdaloadDialog(retval.getUrl());
                             }
                         }else {
                             ToastUtil.showToast(data.getMsg());
@@ -227,21 +260,17 @@ public class SetActivity extends BaseActivity {
 
     //2、弹出提示是否更新apk
     private void showUpdaloadDialog(final String downloadUrl){
-        // 这里的属性可以一直设置，因为每次设置后返回的是一个builder对象
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        // 设置提示框的标题
-        builder.setTitle("版本升级").
-                setIcon(R.mipmap.ic_launcher). // 设置提示框的图标
-                setMessage("发现新版本！请及时更新").// 设置要显示的信息
-                setPositiveButton("确定", new DialogInterface.OnClickListener() {// 设置确定按钮
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                startUpload(downloadUrl);//下载最新的版本程序
-            }
-        }).setNegativeButton("取消", null);//设置取消按钮,null是什么都不做，并关闭对话框
-        AlertDialog alertDialog = builder.create();
-        // 显示对话框
-        alertDialog.show();
+        new XPopup.Builder(this)
+                .hasShadowBg(true)
+                .asConfirm("版本升级", "发现新版本！请及时更新",
+                        "取消", "确定",
+                        new OnConfirmListener() {
+                            @Override
+                            public void onConfirm() {
+                                startUpload(downloadUrl);//下载最新的版本程序
+                            }
+                        }, null, false)
+                .show();
     }
 
     //3、下载新版apk
@@ -252,6 +281,7 @@ public class SetActivity extends BaseActivity {
                     @Override
                     public void onStart() {
                         HProgressDialogUtils.showHorizontalProgressDialog(SetActivity.this, "正在下载新版本...", true);
+                        HProgressDialogUtils.setMax(apkSize);
                     }
 
                     @Override
@@ -269,7 +299,7 @@ public class SetActivity extends BaseActivity {
                     public void onComplete(String path) {
                         ToastUtils.toast("下载完成");
                         HProgressDialogUtils.cancel();
-                        openAPK(path);
+                        applyInstallCheck(path);
                     }
                 });
     }
@@ -277,11 +307,88 @@ public class SetActivity extends BaseActivity {
     //4、下载完成安装apk，给系统发送一个intent
     private void openAPK(String fileSavePath){
         Intent intent = new Intent();
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.parse("file://"+fileSavePath),"application/vnd.android.package-archive");
-        startActivity(intent);
+        File apkFile = new File(fileSavePath);
+        //判断是否是AndroidN以及更高的版本
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            try {
+                String ss = "com.zhangying.oem1688.fileprovider";
+                Uri contentUri = FileProvider.getUriForFile(this, ss, apkFile);
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            intent.setDataAndType(Uri.parse("file://"+fileSavePath),"application/vnd.android.package-archive");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+        try {
+           startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+//        Intent intent = new Intent();
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        intent.setAction(Intent.ACTION_VIEW);
+//        intent.setDataAndType(Uri.parse("file://"+fileSavePath),"application/vnd.android.package-archive");
+//        startActivity(intent);
     }
 
+    //3.1判断是否有安装权限
+    private void applyInstallCheck(String path){
+        apkPath = path;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {//8.0
+            //来判断应用是否有权限安装apk
+            boolean installAllowed = getPackageManager().canRequestPackageInstalls();
+            if (installAllowed) {//有权限
+                openAPK(path);//安装apk
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]   {Manifest.permission.REQUEST_INSTALL_PACKAGES},
+                        998);
+            }
+        } else {//8.0以下
+            openAPK(path);//安装apk
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
+    {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 998 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            openAPK(apkPath);
+        }else {
+            new XPopup.Builder(this)
+                    .hasShadowBg(true)
+                    .asConfirm("安装权限", "需要打开允许来自此来源，请去设置中开启此权限",
+                            "取消", "确定",
+                            new OnConfirmListener() {
+                                @Override
+                                public void onConfirm() {
+                                    toInstallPermissionSettingIntent();
+                                }
+                            }, null, false)
+                    .show();
+        }
+    }
+
+    //打开安装权限的设置界面
+    private void toInstallPermissionSettingIntent() {
+        Uri packageURI = Uri.parse("package:"+getPackageName());
+        Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,packageURI);
+        startActivityForResult(intent, 996);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK && requestCode == 996) {
+            openAPK(apkPath);
+        }
+    }
 
 }

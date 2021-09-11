@@ -183,8 +183,14 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
 
                     @Override
                     protected void success(GoodsdetailBean data) {
-                        goodsdetailBean = data;
                         dissmissLoading();
+
+                        if (!data.isDone()){
+                            ToastUtil.showToast(data.getMsg());
+                            finish();
+                        }
+
+                        goodsdetailBean = data;
                         GoodsdetailBean.RetvalBean retval = data.getRetval();
                         titleTV.setText(retval.getGoods().getGoods_name());
 
@@ -204,7 +210,6 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
                         GoodsdetailBean.RetvalBean.PageinfoBean pageinfo = retval.getPageinfo();
                         setViewPageinfo(pageinfo);
                         //品类
-
                     }
 
                     @Override
@@ -424,6 +429,14 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
     private void doShowMessagePop(){
         if (msgPop == null){
             msgPop = new GoodsDetailPopu(this);
+
+            if (isToCall){
+                String popTitle = goodsdetailBean.getRetval().getStore_data().getCalltitle();
+                if (!StringUtils.isEmity(popTitle)){
+                    msgPop.setPopTitle(popTitle);
+                }
+            }
+
             msgPop.setMessageLister(new BaseMessageListener() {
                 @Override
                 public boolean submit(String name, String phone) {

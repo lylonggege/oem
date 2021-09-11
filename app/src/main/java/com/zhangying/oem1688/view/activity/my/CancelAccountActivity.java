@@ -104,7 +104,7 @@ public class CancelAccountActivity extends BaseActivity {
                         if (data.isDone()) {
                             TokenUtils.clearToken();
                             ToastUtil.showToast("账号注销成功");
-                            AppManagerUtil.getInstance().finishAllHomeActivity();
+                            AppManagerUtil.getInstance().finishAllActivity();
                             //返回主界面
                             EvenBusBean evenBusBean = new EvenBusBean();
                             evenBusBean.setType(0);

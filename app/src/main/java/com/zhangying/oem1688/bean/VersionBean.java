@@ -36,5 +36,9 @@ public class VersionBean {
         public void setUrl(String url) { this.url = url; }
         private String url;
 
+        public long getIsize() { return isize; }
+        public void setIsize(long isize) { this.isize = isize; }
+        private long isize;
+
     }
 }

@@ -153,7 +153,7 @@ public class MyFragment extends BaseFragment implements MemberInfoView {
         }
 
         int tagId = view.getId();
-        if (tagId != R.id.user_kefu_RL && tagId != R.id.user_about_RL){
+        if (tagId != R.id.user_kefu_RL && tagId != R.id.user_about_RL && tagId != R.id.user_set_RL){
             boolean hasLogin = LoginActivity.simpleActivity(getActivity(), BuildConfig.UPDATE_MYFRAGMNET_ENTER_TYPE);
             if (!hasLogin) {
                 return;

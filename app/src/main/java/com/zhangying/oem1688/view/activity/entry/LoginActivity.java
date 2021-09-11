@@ -155,13 +155,14 @@ public class LoginActivity extends BaseActivity {
                 }
                 break;
             case R.id.btn_login://执行登录操作
-                if (!isSelect){
-                    ToastUtil.showToast("请先勾选同意协议后再登录");
-                    break;
-                }
-
                 if (etPhoneNumber.validate()) {
                     if (etVerifyCode.validate()) {
+                        if (!isSelect){
+                            AppUtils.hideSoftKeyboard(this);
+                            ToastUtil.showToast("请先勾选协议后再登录");
+                            break;
+                        }
+
                         loginByVerifyCode(etPhoneNumber.getEditValue(), etVerifyCode.getEditValue());
                     }
                 }

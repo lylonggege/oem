@@ -10,8 +10,8 @@
     {
       "type": "UNIVERSAL",
       "filters": [],
-      "versionCode": 1,
-      "versionName": "1.0",
+      "versionCode": 3,
+      "versionName": "1.2",
       "outputFile": "app-universal-release.apk"
     },
     {
@@ -22,8 +22,8 @@
           "value": "armeabi-v7a"
         }
       ],
-      "versionCode": 1,
-      "versionName": "1.0",
+      "versionCode": 3,
+      "versionName": "1.2",
       "outputFile": "app-armeabi-v7a-release.apk"
     },
     {
@@ -34,8 +34,8 @@
           "value": "x86"
         }
       ],
-      "versionCode": 1,
-      "versionName": "1.0",
+      "versionCode": 3,
+      "versionName": "1.2",
       "outputFile": "app-x86-release.apk"
     },
     {
@@ -46,8 +46,8 @@
           "value": "x86_64"
         }
       ],
-      "versionCode": 1,
-      "versionName": "1.0",
+      "versionCode": 3,
+      "versionName": "1.2",
       "outputFile": "app-x86_64-release.apk"
     }
   ]
