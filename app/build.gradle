@@ -126,7 +126,8 @@ dependencies {
     //腾讯的键值对存储mmkv
     implementation 'com.tencent:mmkv:1.0.22'
     api 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
-
+    //视频播放器GSYVideoPlayer
+    implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer:v8.1.5-jitpack'
 }
 
 buildscript {

@@ -73,9 +73,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/line_tab"
                     android:layout_marginTop="@dimen/dp_10"></include>
-
             </RelativeLayout>
-
 
             <com.scwang.smartrefresh.layout.SmartRefreshLayout
                 android:id="@+id/refresh_layout"
@@ -95,22 +93,18 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
-
                         <com.zhangying.oem1688.custom.MyRecycleView
                             android:id="@+id/recycview"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
-
                         </com.zhangying.oem1688.custom.MyRecycleView>
 
                         <com.zhangying.oem1688.custom.MyRecycleView
                             android:id="@+id/goodsrecycview"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
-
                         </com.zhangying.oem1688.custom.MyRecycleView>
                     </RelativeLayout>
-
 
                 </androidx.core.widget.NestedScrollView>
 
@@ -119,7 +113,7 @@
                     android:layout_height="wrap_content" />
             </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
-            <include layout="@layout/emptyview"></include>
+            <include layout="@layout/emptyview" android:visibility="gone"></include>
 
         </LinearLayout>
     </LinearLayout>

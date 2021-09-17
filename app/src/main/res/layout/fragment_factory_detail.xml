@@ -57,12 +57,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:layout_marginLeft="@dimen/dp_15"
-                android:layout_marginRight="@dimen/dp_15"
+                android:layout_marginHorizontal="@dimen/dp_15"
                 app:clickAll="true"
                 app:maxLine="4"
                 app:textColor="@color/b7" />
-
+            <com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
+                android:id="@+id/detail_player"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_200"
+                android:layout_marginHorizontal="@dimen/dp_15"/>
             <LinearLayout
                 android:id="@+id/imageView_group_LL"
                 android:layout_width="match_parent"

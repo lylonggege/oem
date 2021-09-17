@@ -112,7 +112,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_8"
                 android:layout_marginTop="@dimen/dp_10"
-                android:background="@color/ee">
+                android:background="@color/f6">
             </View>
 
             //帮我找找工厂

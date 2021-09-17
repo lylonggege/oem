@@ -2,6 +2,7 @@ package com.zhangying.oem1688.adpter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
@@ -73,8 +74,16 @@ public class ChengJieDaiGongAdpter extends BaseRecyclerAdapter<MoreScinfoBean.Re
                 @Override
                 public void startPosition(int position,ImageView imageView) {
                     List<ImageViewInfo> list = new ArrayList<>();
+                    int left = 0,top = 0,right = 0,bottom = 0, width = imageView.getWidth(), height = imageView.getHeight();
+                    int baseLeft = company_recycleview.getLeft(),baseTop = company_recycleview.getTop(),baseRight = company_recycleview.getRight(),baseBottom = company_recycleview.getBottom();
                     for (int i1 = 0; i1 < images.size(); i1++) {
+                        left = ((int)(i1 % 3)) * (width + 5) + baseLeft;
+                        right = left + width + baseTop;
+
+                        top = ((int)(i1 / 3)) * (width + 5) + baseRight;
+                        bottom = top + height + baseBottom;
                         ImageViewInfo imageViewInfo = new ImageViewInfo((String) images.get(i1));
+                        imageViewInfo.setBounds(new Rect(left, top, right, bottom));
                         list.add(imageViewInfo);
                     }
                     PreviewImageView.save(imageView, position, list);

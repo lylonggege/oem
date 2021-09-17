@@ -39,6 +39,7 @@ import com.zhangying.oem1688.mvp.newfactoryproduct.FactoryProductPersenterImpl;
 import com.zhangying.oem1688.onterface.BaseValidateCredentials;
 import com.zhangying.oem1688.onterface.BaseView;
 import com.zhangying.oem1688.util.AppUtils;
+import com.zhangying.oem1688.util.FlowSpaceItemDecoration;
 import com.zhangying.oem1688.util.SpacesItemDecoration;
 import com.zhangying.oem1688.util.StringUtils;
 
@@ -52,6 +53,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -137,10 +139,12 @@ public class NewProductFactoryActivity extends BaseActivity implements BaseView 
         factoryProductPersenter = new FactoryProductPersenterImpl(this);
         moreProstoreAdpter = new MoreProstoreAdpter(NewProductFactoryActivity.this);
         home_goodAdpter = new HomeGoodAdpter(NewProductFactoryActivity.this);
-        WidgetUtils.initRecyclerView(recycleView);
+        WidgetUtils.initRecyclerView(recycleView,0);
         int space = getResources().getDimensionPixelSize(R.dimen.dp_5);
-        goodsrecycview.addItemDecoration(new SpacesItemDecoration(space, space));
-        goodsrecycview.setLayoutManager(new GridLayoutManager(NewProductFactoryActivity.this, 2));
+//        goodsrecycview.addItemDecoration(new SpacesItemDecoration(space, space));
+//        goodsrecycview.setLayoutManager(new GridLayoutManager(NewProductFactoryActivity.this, 2));
+        goodsrecycview.addItemDecoration(new FlowSpaceItemDecoration(space, space));
+        goodsrecycview.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         recycleView.setAdapter(moreProstoreAdpter);
         goodsrecycview.setAdapter(home_goodAdpter);
 
@@ -344,7 +348,6 @@ public class NewProductFactoryActivity extends BaseActivity implements BaseView 
     }
 
     private void initdata() {
-        showLoading();
         title_TV.setText(name + "OEM,ODM贴牌工厂-代工帮");
         HashMap<String, Object> map = new HashMap<>();
         map.put("ly", "app");
@@ -355,7 +358,6 @@ public class NewProductFactoryActivity extends BaseActivity implements BaseView 
                 .subscribeWith(new DefaultDisposableSubscriber<CompanyFactoryBean>() {
                     @Override
                     protected void success(CompanyFactoryBean data) {
-                        dissmissLoading();
 
                         CompanyFactoryBean.RetvalBean retval = data.getRetval();
                         cateList = retval.getOemcate();

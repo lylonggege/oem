@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"/>
             <androidx.core.widget.NestedScrollView
                 android:paddingBottom="@dimen/dp_10"
-                android:background="@color/de"
+                android:background="@color/f6"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <com.zhangying.oem1688.custom.MyRecycleView

@@ -20,6 +20,7 @@ import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.onterface.BaseInterfacePosition;
 import com.zhangying.oem1688.onterface.ICallBcak;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
+import com.zhangying.oem1688.util.FlowSpaceItemDecoration;
 import com.zhangying.oem1688.util.ScreenTools;
 import com.zhangying.oem1688.util.SpacesItemDecoration;
 
@@ -29,6 +30,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import butterknife.BindView;
 
 public class FactoryDetailClassFragment extends BaseFragment {
@@ -167,8 +169,10 @@ public class FactoryDetailClassFragment extends BaseFragment {
         int screenWidth = ScreenTools.instance(context).getScreenWidth();
         home_goodAdpter.setParentWidth(screenWidth - recycleView_left.getWidth());
         int space = getResources().getDimensionPixelSize(R.dimen.dp_5);
-        recycleView_right.addItemDecoration(new SpacesItemDecoration(space, space));
-        recycleView_right.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+//        recycleView_right.addItemDecoration(new SpacesItemDecoration(space, space));
+//        recycleView_right.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        recycleView_right.addItemDecoration(new FlowSpaceItemDecoration(space, space));
+        recycleView_right.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         recycleView_right.setAdapter(home_goodAdpter);
 
         //初始化右侧产品分类视图

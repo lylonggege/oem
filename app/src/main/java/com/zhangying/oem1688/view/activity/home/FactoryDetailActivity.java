@@ -91,7 +91,6 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
 
     private static String mcid;
     private FactoryDetailBean.RetvalBean retval;
-    private boolean ishomne = true;
     private BaseValidateCredentials fenLeiRealization;
     private static int tabIndex;
     private GoodsDetailPopu msgPop;
@@ -104,7 +103,6 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHomeCateSate(ishomne);
         EventBus.getDefault().register(this);
         AppManagerUtil.getInstance().addHomeActivity(this);
         fenLeiRealization = new FenLeiRealization(this, this);
@@ -114,6 +112,8 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
 
         if (tabIndex == 1) {
             setHomeCateSate(false);
+        }else {
+            setHomeCateSate(true);
         }
         HashMapSingleton.getInstance().reload();
         HashMapSingleton.getInstance().put("cid", mcid);
@@ -208,6 +208,7 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
     public static void simpleActivity(Context context, String cid) {
         Intent intent = new Intent(context, FactoryDetailActivity.class);
         mcid = cid;
+        tabIndex = 0;
         context.startActivity(intent);
     }
 

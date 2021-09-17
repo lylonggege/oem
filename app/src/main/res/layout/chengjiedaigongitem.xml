@@ -31,7 +31,7 @@
                 android:layout_marginLeft="@dimen/dp_10"
                 android:layout_toRightOf="@+id/company_loge_iv"
                 android:text="hahah"
-                android:textColor="@color/b3"
+                android:textColor="@color/b0"
                 android:textSize="@dimen/dp_16"></TextView>
 
             <TextView
@@ -63,6 +63,7 @@
             android:layout_marginTop="@dimen/dp_12"
             android:text="hahhahha"
             android:textColor="@color/b3"
+            android:lineSpacingExtra="@dimen/dp_5"
             android:textSize="@dimen/dp_16"></TextView>
 
         <com.zhangying.oem1688.custom.MyRecycleView
@@ -85,8 +86,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_8"
-        android:background="@color/fF3F4F5">
-
+        android:layout_height="8dp"
+        android:background="@color/f6">
     </View>
 </RelativeLayout>

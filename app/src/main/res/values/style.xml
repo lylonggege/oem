@@ -29,22 +29,18 @@
         <item name="colorPrimary">@color/app_blue</item>
         <item name="colorPrimaryDark">@color/app_blue</item>
         <item name="colorAccent">@color/app_blue</item>
-
     </style>
 
     <style name="XUITheme" parent="XUIBaseTheme">
         <!--设置默认窗口的动画样式-->
         <item name="android:windowAnimationStyle">@style/WindowAnimStyle</item>
-
         <!--自定义标题栏样式方法1-->
         <!--<item name="xui_actionbar_color">@color/app_color_theme_1</item>-->
         <!--<item name="xui_actionbar_text_color">@color/xui_config_color_primary_text</item>-->
         <!--<item name="xui_actionbar_immersive">true</item>-->
-
         <!--自定义标题栏样式方法2-->
         <!--<item name="TitleBarStyle">@style/TitleBar.Custom</item>-->
     </style>
-
 
     <style name="WindowAnimStyle" parent="@android:style/Animation">
         <item name="android:activityOpenEnterAnimation">@anim/xpage_slide_in_right</item>
@@ -53,9 +49,10 @@
         <item name="android:activityCloseExitAnimation">@anim/xpage_slide_out_right</item>
     </style>
 
-
-
-
-
+    <style name="AppTheme.Launcher" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/bg_splash</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">false</item>
+    </style>
 
 </resources>

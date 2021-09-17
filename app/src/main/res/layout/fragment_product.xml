@@ -103,7 +103,7 @@
                     android:layout_height="wrap_content" />
             </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
-            <include layout="@layout/emptyview"></include>
+            <include layout="@layout/emptyview" android:visibility="gone"></include>
 
         </LinearLayout>
     </LinearLayout>

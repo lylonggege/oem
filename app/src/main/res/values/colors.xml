@@ -13,8 +13,11 @@
     <color name="ff3600">#ff3600</color>
     <color name="fff1ed">#fff1ed</color>
     <color name="b666666">#666666</color>
+    <color name="b0">#000000</color>
     <color name="b3">#333333</color>
     <color name="ee">#eeeeee</color>
+    <color name="e5">#e5e5e5</color>
+    <color name="e8">#e8e8e8</color>
     <color name="b6">#666666</color>
     <color name="de">#dedede</color>
     <color name="f6">#f6f6f6</color>
@@ -39,4 +42,5 @@
     <color name="dialog_bg">#f5f5f5</color>
     <color name="e6">#e6e6e6</color>
     <color name="f7">#f7f7f7</color>
+    <color name="default_image_banner_placeholder_color">#f6f6f6</color>
 </resources>

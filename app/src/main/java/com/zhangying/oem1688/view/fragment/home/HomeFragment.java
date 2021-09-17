@@ -39,6 +39,7 @@ import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.singleton.GlobalEntitySingleton;
 import com.zhangying.oem1688.singleton.HashMapSingleton;
 import com.zhangying.oem1688.util.AppUtils;
+import com.zhangying.oem1688.util.FlowSpaceItemDecoration;
 import com.zhangying.oem1688.util.ScreenTools;
 import com.zhangying.oem1688.util.SpacesItemDecoration;
 import com.zhangying.oem1688.view.activity.home.FindFactoryActivity;
@@ -56,6 +57,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -384,8 +386,10 @@ public class HomeFragment extends BaseFragment {
 
     private void bindGoodsAdapter(){
         int space = getResources().getDimensionPixelSize(R.dimen.dp_5);
-        recycView_sgoodlist.addItemDecoration(new SpacesItemDecoration(space, space));
-        recycView_sgoodlist.setLayoutManager(new GridLayoutManager(context, 2));
+        //recycView_sgoodlist.addItemDecoration(new SpacesItemDecoration(space, space));
+        //recycView_sgoodlist.setLayoutManager(new GridLayoutManager(context, 2));
+        recycView_sgoodlist.addItemDecoration(new FlowSpaceItemDecoration(space, space));
+        recycView_sgoodlist.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         recycView_sgoodlist.setAdapter(home_goodAdpter);
     }
 

@@ -124,6 +124,4 @@ public class MoreProstoreAdpter extends BaseRecyclerAdapter<MoreProstoreBean.Ret
             }
         });
     }
-
-
 }

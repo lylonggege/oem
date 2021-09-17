@@ -42,7 +42,7 @@ public class NewsFragment extends BaseFragment {
     @Override
     public void initView() {
         newsOemMoreAdpter = new NewsOemMoreAdpter(getActivity());
-        WidgetUtils.initRecyclerView(recycview);
+        WidgetUtils.initRecyclerView(recycview, 0);
         recycview.setAdapter(newsOemMoreAdpter);
         initRefresh();
         initdata();

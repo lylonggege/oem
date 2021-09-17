@@ -161,8 +161,7 @@ public class MainActivity extends AppCompatActivity implements TabberView {
     private void setPrivacyView(){
         //获取SharedPreferences对象
         String STRING_KEY = "STRING_KEY";
-        Context ctx = MainActivity.this;
-        SharedPreferences sp = ctx.getSharedPreferences("SP", MODE_PRIVATE);
+        SharedPreferences sp = getSharedPreferences("SP", MODE_PRIVATE);
         int iAgree = sp.getInt(STRING_KEY, 0);
         if (iAgree == 1){//已同意
             priLayout.setVisibility(View.GONE);

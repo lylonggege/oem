@@ -88,31 +88,39 @@ public class HomeFragment extends XBaseFragment implements TabLayout.OnTabSelect
     }
 
     private void gethome() {
-        if (loading == null) {
-            loading = new LoadingDialog(getActivity());
+        HomeBena tmpData =  GlobalEntitySingleton.getInstance().getHomeData();
+        if (tmpData == null){
+            if (loading == null) {
+                loading = new LoadingDialog(getActivity());
+            }
+            loading.show();
+
+            RemoteRepository.getInstance()
+                    .gethome()
+                    .subscribeWith(new DefaultDisposableSubscriber<HomeBena>() {
+
+                        @Override
+                        protected void success(HomeBena data) {
+                            loading.dismiss();
+                            GlobalEntitySingleton.getInstance().setHomeData(data);
+                            HomeBena.RetvalBean retval = data.getRetval();
+                            //tab
+                            List<HomeBena.RetvalBean.SindustryBean> sindustry = retval.getSindustry();
+                            refreshAdapter(sindustry);
+                        }
+
+                        @Override
+                        public void onError(Throwable t) {
+                            loading.dismiss();
+                            super.onError(t);
+                        }
+                    });
+        }else {
+            HomeBena.RetvalBean retval = tmpData.getRetval();
+            //tab
+            List<HomeBena.RetvalBean.SindustryBean> sindustry = retval.getSindustry();
+            refreshAdapter(sindustry);
         }
-        loading.show();
-
-        RemoteRepository.getInstance()
-                .gethome()
-                .subscribeWith(new DefaultDisposableSubscriber<HomeBena>() {
-
-                    @Override
-                    protected void success(HomeBena data) {
-                        loading.dismiss();
-                        GlobalEntitySingleton.getInstance().setHomeData(data);
-                        HomeBena.RetvalBean retval = data.getRetval();
-                        //tab
-                        List<HomeBena.RetvalBean.SindustryBean> sindustry = retval.getSindustry();
-                        refreshAdapter(sindustry);
-                    }
-
-                    @Override
-                    public void onError(Throwable t) {
-                        loading.dismiss();
-                        super.onError(t);
-                    }
-                });
     }
 
     private void refreshAdapter(List<HomeBena.RetvalBean.SindustryBean> sindustry) {

@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.internal.LinkedTreeMap;
 
 import androidx.core.widget.NestedScrollView;
 
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
 import android.os.Message;
@@ -18,12 +21,21 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.enums.PopupAnimation;
 import com.lxj.xpopup.interfaces.XPopupCallback;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
+import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
+import com.shuyu.gsyvideoplayer.listener.VideoAllCallBack;
+import com.shuyu.gsyvideoplayer.utils.OrientationOption;
+import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
+import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
+import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 import com.xuexiang.xui.utils.DensityUtils;
 import com.xuexiang.xui.utils.WidgetUtils;
 import com.xuexiang.xui.widget.banner.widget.banner.BannerItem;
@@ -55,13 +67,18 @@ import com.zhangying.oem1688.util.ToastUtil;
 import com.zhangying.oem1688.view.activity.home.FactoryDetailActivity;
 import com.zhangying.oem1688.widget.RadiusImageBanner;
 
+import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
+
+import androidx.annotation.NonNull;
+import android.content.res.Configuration;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class FactoryDetailFragment extends BaseFragment {
+public class FactoryDetailFragment extends BaseFragment implements VideoAllCallBack {
     @BindView(R.id.company_loge_iv)
     RadiusImageView companyLogeIv;
     @BindView(R.id.companyname_tv)
@@ -92,6 +109,8 @@ public class FactoryDetailFragment extends BaseFragment {
     EditText nameEt;
     @BindView(R.id.description_tv)
     MoreLineTextView description_tv;
+    @BindView(R.id.detail_player)
+    StandardGSYVideoPlayer detailPlayer;
 
     @BindView(R.id.tuijian_RecycleView)
     MyRecycleView tuijianRecycleView;
@@ -125,9 +144,10 @@ public class FactoryDetailFragment extends BaseFragment {
 
     private static String mcid;
     private FactoryDetailBean.RetvalBean retval;
-    private boolean ishomne = true;
     FactoryDetailCatesAdpter factoryDetailCatesAdpter;
     private GoodsDetailPopu msgPop;
+    private String videoUrl;
+    private GoodsDetailOemAdpter goodsDetailOemAdpter;
 
     @Override
     protected int getLayoutId() {
@@ -138,6 +158,10 @@ public class FactoryDetailFragment extends BaseFragment {
     public void initView() {
         companynameTv.getPaint().setStyle(Paint.Style.FILL_AND_STROKE);
         companynameTv.getPaint().setStrokeWidth(0.5f);
+
+        //增加title
+        detailPlayer.getTitleTextView().setVisibility(View.GONE);
+        detailPlayer.getBackButton().setVisibility(View.GONE);
 
         //初始化工厂产品列表
         factoryDetailCatesAdpter = new FactoryDetailCatesAdpter(getActivity());
@@ -153,6 +177,56 @@ public class FactoryDetailFragment extends BaseFragment {
         }
     }
 
+    /**
+     * 配置播放器
+     */
+    public GSYVideoOptionBuilder getGSYVideoOptionBuilder() {
+        //内置封面可参考SampleCoverVideo
+        ImageView imageView = new ImageView(getContext());
+        loadCover(imageView, retval.getVideo_cover());
+        return new GSYVideoOptionBuilder()
+                .setThumbImageView(imageView)
+                .setUrl(videoUrl)
+                .setCacheWithPlay(true)
+                .setVideoTitle(retval.getStore_name())
+                .setIsTouchWiget(true)
+                //.setAutoFullWithSize(true)
+                .setRotateViewAuto(false)
+                .setLockLand(false)
+                .setShowFullAnimation(false)//打开动画
+                .setNeedLockFull(true)
+                .setSeekRatio(1);
+    }
+
+    private void loadCover(ImageView imageView, String url) {
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        imageView.setImageResource(R.drawable.goods_default);
+        Glide.with(getActivity().getApplicationContext())
+                .setDefaultRequestOptions(
+                        new RequestOptions()
+                                .frame(3000000)
+                                .centerCrop()
+                                .error(R.drawable.goods_default)
+                                .placeholder(R.drawable.goods_default))
+                .load(url)
+                .into(imageView);
+    }
+
+    /**
+     * 点击了全屏
+     */
+    public void clickForFullScreen() {
+
+    }
+
+    /**
+     * 是否启动旋转横屏，true表示启动
+     */
+    public boolean getDetailOrientationRotateAuto() {
+        return true;
+    }
+
+    //网络加载工厂详情
     private void loadFactoryInfo() {
         HashMapSingleton.getInstance().reload();
         HashMapSingleton.getInstance().put("cid", mcid);
@@ -174,6 +248,7 @@ public class FactoryDetailFragment extends BaseFragment {
                 });
     }
 
+    //渲染工厂详情
     private void renderFactoryInfo() {
         //初始化公司基本信息
         initCompanyBase(retval);
@@ -208,7 +283,8 @@ public class FactoryDetailFragment extends BaseFragment {
                 if (content.size() == 0) {
                     continue;
                 }
-                List<ImageViewInfo> list = new ArrayList<>();
+                ArrayList<ImageViewInfo> list = new ArrayList<>();
+                int baseY = 0;
                 for (int i1 = 0; i1 < content.size(); i1++) {
                     LinkedTreeMap<String, Object> hashMap = (LinkedTreeMap<String, Object>) content.get(i1);
                     ImageView imageView = new ImageView(getActivity());
@@ -224,6 +300,8 @@ public class FactoryDetailFragment extends BaseFragment {
                     }
 
                     ImageViewInfo imageViewInfo = new ImageViewInfo((String) hashMap.get("url"));
+                    imageViewInfo.setBounds(new Rect(0,baseY,layoutParams.width,layoutParams.height));
+                    baseY += layoutParams.height;
                     list.add(imageViewInfo);
                     int finalI = i1;
                     imageView.setOnClickListener(new OnMultiClickListener() {
@@ -265,6 +343,7 @@ public class FactoryDetailFragment extends BaseFragment {
             drawable.setStroke(2, getResources().getColor(R.color.redf04142));
         }
 
+        //logo和vip标记
         GlideUtil.loadImage(getActivity(), retval.getStore_logo(), companyLogeIv);
         companynameTv.setText(retval.getStore_name());
         companynameAuthtagTv.setText(retval.getAuthtag());
@@ -276,6 +355,15 @@ public class FactoryDetailFragment extends BaseFragment {
         }
         cateTv.setText(retval.getStoretip() + retval.getService());
 
+        //设置播放视频
+        videoUrl = retval.getStore_video();
+        if (!StringUtils.isEmity(videoUrl)){
+            initVideoBuilderMode();
+        }else {
+            detailPlayer.setVisibility(View.GONE);
+        }
+
+        //标签
         List<FactoryDetailBean.RetvalBean.storetagsBean> storetags = retval.getStoretags();
         if (storetags.size() > 0) {
             if (storetags.get(0) != null) {
@@ -303,7 +391,7 @@ public class FactoryDetailFragment extends BaseFragment {
         description_tv.setText(retval.getDescription());
 
         //代工留言区域中工厂产品系列
-        GoodsDetailOemAdpter goodsDetailOemAdpter = new GoodsDetailOemAdpter();
+        goodsDetailOemAdpter = new GoodsDetailOemAdpter();
         goodsDetailOemAdpter.refresh(retval.getStore_gcates());
         WidgetUtils.initGridRecyclerView(oemRecycleView, 3, DensityUtils.dp2px(5));
         oemRecycleView.setAdapter(goodsDetailOemAdpter);
@@ -425,6 +513,16 @@ public class FactoryDetailFragment extends BaseFragment {
                         if (data.isDone()) {
                             ToastUtil.showToast("留言成功");
                             if (chkCate) {
+                                //清空留言姓名、电话、选择的品类
+                                List<GoodsdetailBean.RetvalBean.StoreDataBean.StoreGcatesBean> catesList = retval.getStore_gcates();
+                                for (int i = 0; i < catesList.size(); i++) {
+                                    GoodsdetailBean.RetvalBean.StoreDataBean.StoreGcatesBean storeGcatesBean = catesList.get(i);
+                                    if (storeGcatesBean.isaBoolean()) {
+                                        storeGcatesBean.setaBoolean(false);
+                                        goodsDetailOemAdpter.notifyItemChanged(i);
+                                    }
+                                }
+
                                 nameEt.setText("");
                                 phoneEt.setText("");
                             }
@@ -446,5 +544,255 @@ public class FactoryDetailFragment extends BaseFragment {
         Intent intent = new Intent(context, FactoryDetailActivity.class);
         mcid = cid;
         context.startActivity(intent);
+    }
+
+    protected boolean isPlay;
+    protected boolean isPause;
+    protected OrientationUtils orientationUtils;
+
+    /**
+     * 选择普通模式
+     */
+    public void initVideo() {
+        //外部辅助的旋转，帮助全屏
+        orientationUtils = new OrientationUtils(getActivity(), getGSYVideoPlayer(), getOrientationOption());
+        //初始化不打开外部的旋转
+        orientationUtils.setEnable(false);
+        if (getGSYVideoPlayer().getFullscreenButton() != null) {
+            getGSYVideoPlayer().getFullscreenButton().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showFull();
+                    clickForFullScreen();
+                }
+            });
+        }
+    }
+
+    public StandardGSYVideoPlayer getGSYVideoPlayer() {
+        return detailPlayer;
+    }
+
+    /**
+     * 选择builder模式
+     */
+    public void initVideoBuilderMode() {
+        initVideo();
+        getGSYVideoOptionBuilder().
+                setVideoAllCallBack(this)
+                .build(getGSYVideoPlayer());
+    }
+
+    public void showFull() {
+        if (orientationUtils.getIsLand() != 1) {
+            //直接横屏
+            // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+            // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
+            orientationUtils.resolveByClick();
+        }
+        //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
+        getGSYVideoPlayer().startWindowFullscreen(getActivity(), hideActionBarWhenFull(), hideStatusBarWhenFull());
+    }
+
+
+    public void onBackPressed() {
+        // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+        // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
+        if (orientationUtils != null) {
+            orientationUtils.backToProtVideo();
+        }
+        if (GSYVideoManager.backFromWindowFull(getActivity())) {
+            return;
+        }
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getGSYVideoPlayer().getCurrentPlayer().onVideoPause();
+        if (orientationUtils != null) {
+            orientationUtils.setIsPause(true);
+        }
+        isPause = true;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getGSYVideoPlayer().getCurrentPlayer().onVideoResume();
+        if (orientationUtils != null) {
+            orientationUtils.setIsPause(false);
+        }
+        isPause = false;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (isPlay) {
+            getGSYVideoPlayer().getCurrentPlayer().release();
+        }
+        if (orientationUtils != null)
+            orientationUtils.releaseListener();
+    }
+
+    /**
+     * orientationUtils 和  detailPlayer.onConfigurationChanged 方法是用于触发屏幕旋转的
+     */
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        //如果旋转了就全屏
+        if (isPlay && !isPause) {
+            getGSYVideoPlayer().onConfigurationChanged(getActivity(), newConfig, orientationUtils, hideActionBarWhenFull(), hideStatusBarWhenFull());
+        }
+    }
+
+    @Override
+    public void onStartPrepared(String url, Object... objects) {
+
+    }
+
+    @Override
+    public void onPrepared(String url, Object... objects) {
+
+        if (orientationUtils == null) {
+            throw new NullPointerException("initVideo() or initVideoBuilderMode() first");
+        }
+        //开始播放了才能旋转和全屏
+        orientationUtils.setEnable(getDetailOrientationRotateAuto() && !isAutoFullWithSize());
+        isPlay = true;
+    }
+
+    @Override
+    public void onClickStartIcon(String url, Object... objects) {
+
+    }
+
+    @Override
+    public void onClickStartError(String url, Object... objects) {
+
+    }
+
+    @Override
+    public void onClickStop(String url, Object... objects) {
+
+    }
+
+    @Override
+    public void onClickStopFullscreen(String url, Object... objects) {
+
+    }
+
+    @Override
+    public void onClickResume(String url, Object... objects) {
+
+    }
+
+    @Override
+    public void onClickResumeFullscreen(String url, Object... objects) {
+
+    }
+
+    @Override
+    public void onClickSeekbar(String url, Object... objects) {
+
+    }
+
+    @Override
+    public void onClickSeekbarFullscreen(String url, Object... objects) {
+
+    }
+
+    @Override
+    public void onAutoComplete(String url, Object... objects) {
+
+    }
+
+    @Override
+    public void onEnterFullscreen(String url, Object... objects) {
+
+    }
+
+    @Override
+    public void onQuitFullscreen(String url, Object... objects) {
+        // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
+        // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
+        if (orientationUtils != null) {
+            orientationUtils.backToProtVideo();
+        }
+    }
+
+    @Override
+    public void onQuitSmallWidget(String url, Object... objects) {
+
+    }
+
+    @Override
+    public void onEnterSmallWidget(String url, Object... objects) {
+
+    }
+
+    @Override
+    public void onTouchScreenSeekVolume(String url, Object... objects) {
+
+    }
+
+    @Override
+    public void onTouchScreenSeekPosition(String url, Object... objects) {
+
+    }
+
+    @Override
+    public void onTouchScreenSeekLight(String url, Object... objects) {
+
+    }
+
+    @Override
+    public void onPlayError(String url, Object... objects) {
+
+    }
+
+    @Override
+    public void onClickStartThumb(String url, Object... objects) {
+
+    }
+
+    @Override
+    public void onClickBlank(String url, Object... objects) {
+
+    }
+
+    @Override
+    public void onClickBlankFullscreen(String url, Object... objects) {
+
+    }
+
+    @Override
+    public void onComplete(String url, Object... objects) {
+
+    }
+
+    public boolean hideActionBarWhenFull() {
+        return true;
+    }
+
+    public boolean hideStatusBarWhenFull() {
+        return true;
+    }
+
+    /**
+     * 可配置旋转 OrientationUtils
+     */
+    public OrientationOption getOrientationOption() {
+        return null;
+    }
+
+    /**
+     * 是否根据视频尺寸，自动选择竖屏全屏或者横屏全屏，注意，这时候默认旋转无效
+     */
+    public boolean isAutoFullWithSize() {
+        return false;
     }
 }

@@ -27,8 +27,11 @@ import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.mvp.newfactoryproduct.FactoryProductPersenterImpl;
 import com.zhangying.oem1688.onterface.BaseValidateCredentials;
 import com.zhangying.oem1688.onterface.BaseView;
+import com.zhangying.oem1688.onterface.IMessageView;
 import com.zhangying.oem1688.util.AppUtils;
+import com.zhangying.oem1688.util.FlowSpaceItemDecoration;
 import com.zhangying.oem1688.util.SpacesItemDecoration;
+import com.zhangying.oem1688.view.activity.home.FactoryDetailActivity;
 import com.zhangying.oem1688.view.activity.home.SearchActivity;
 
 import org.greenrobot.eventbus.EventBus;
@@ -45,6 +48,7 @@ import androidx.annotation.NonNull;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -97,6 +101,7 @@ public class ProductFragment extends BaseFragment implements BaseView {
     private MoreProstoreAdpter moreProstoreAdpter;
     private HomeGoodAdpter home_goodAdpter;
     private List<HomeBena.RetvalBean.SgoodsListBean.GoodsBean> getGoods = new ArrayList<>();
+    private List<MoreProstoreBean.RetvalBean.DataBean> getStores = new ArrayList<>();
     private BaseValidateCredentials fenLeiRealization;
     LoadingDialog loading;
 
@@ -120,10 +125,12 @@ public class ProductFragment extends BaseFragment implements BaseView {
         factoryProductPersenter = new FactoryProductPersenterImpl(this);
         moreProstoreAdpter = new MoreProstoreAdpter(getActivity());
         home_goodAdpter = new HomeGoodAdpter(getActivity());
-        WidgetUtils.initRecyclerView(recycleView);
+        WidgetUtils.initRecyclerView(recycleView,0);
         int space = getResources().getDimensionPixelSize(R.dimen.dp_5);
-        goodsrecycview.addItemDecoration(new SpacesItemDecoration(space, space));
-        goodsrecycview.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+//        goodsrecycview.addItemDecoration(new SpacesItemDecoration(space, space));
+//        goodsrecycview.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        goodsrecycview.addItemDecoration(new FlowSpaceItemDecoration(space, space));
+        goodsrecycview.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         recycleView.setAdapter(moreProstoreAdpter);
         goodsrecycview.setAdapter(home_goodAdpter);
 
@@ -269,6 +276,8 @@ public class ProductFragment extends BaseFragment implements BaseView {
         if (type == 1) {
             goodsrecycview.setVisibility(View.GONE);
             recycleView.setVisibility(View.VISIBLE);
+
+            getStores.clear();
             if (page == 1) {
                 moreProstoreAdpter.refresh(retval.getData());
             } else {

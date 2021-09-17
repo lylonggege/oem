@@ -58,13 +58,6 @@ public class HomeGoodAdpter extends BaseRecyclerAdapter<HomeBena.RetvalBean.Sgoo
                 GoodsDetailActivity.simpleActivity(context, item.getGoods_id());
             }
         });
-        LinearLayout.LayoutParams layoutParamsiv = (LinearLayout.LayoutParams) imageView.getLayoutParams();
-        int Morelength = ScreenTools.instance(context).dip2px(10);
-        int screenWidth = ScreenTools.instance(context).getScreenWidth();
-        if (parentWidth > 0)screenWidth = parentWidth;
-        layoutParamsiv.width = (screenWidth - Morelength) / 2;
-        layoutParamsiv.height = layoutParamsiv.width;
-        imageView.setLayoutParams(layoutParamsiv);
 
         if (item.getGoods_name() != null && item.getGoods_name().length() > 0) {
             content_tv.setVisibility(View.VISIBLE);
@@ -77,6 +70,7 @@ public class HomeGoodAdpter extends BaseRecyclerAdapter<HomeBena.RetvalBean.Sgoo
         LinearLayout bottom_LL = (LinearLayout) holder.findView(R.id.bottom_LL);
 
         if (item.getGoods_tags() != null && item.getGoods_tags().size() > 0) {
+            bottom_LL.setVisibility(View.VISIBLE);
             bottom_LL.removeAllViews();
             int index = 0;
             for (HomeBena.RetvalBean.SgoodsListBean.GoodsBean.GoodsTagsBean goods_tag : item.getGoods_tags()) {
@@ -116,19 +110,15 @@ public class HomeGoodAdpter extends BaseRecyclerAdapter<HomeBena.RetvalBean.Sgoo
                     textView.setText(goods_tag.getStag());
                     textView.setTextSize(10);
                     LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) textView.getLayoutParams();
-                    layoutParams.setMargins(index == 0 ? 10 : 20, 0, 0, 0);
+                    layoutParams.setMargins(index == 0 ? 20 : 8, 0, 0, 0);
                     textView.setPadding(5, 3, 5, 3);
                     index ++;
                 } catch (Exception e) {
 
                 }
-
-
             }
         } else {
-
+            bottom_LL.setVisibility(View.GONE);
         }
-
-
     }
 }

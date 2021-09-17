@@ -40,7 +40,7 @@ public class ChengJieDaiGongFragment extends BaseFragment {
     @Override
     public void initView() {
         chengJieDaiGongAdpter =new ChengJieDaiGongAdpter(getActivity());
-        WidgetUtils.initRecyclerView(recycview);
+        WidgetUtils.initRecyclerView(recycview,0);
         recycview.setAdapter(chengJieDaiGongAdpter);
         initRefresh();
         showLoading();

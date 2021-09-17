@@ -31,6 +31,7 @@ import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.mvp.newfactoryproduct.FactoryProductPersenterImpl;
 import com.zhangying.oem1688.onterface.BaseView;
 import com.zhangying.oem1688.util.AppUtils;
+import com.zhangying.oem1688.util.FlowSpaceItemDecoration;
 import com.zhangying.oem1688.util.KeyboardUtil;
 import com.zhangying.oem1688.util.SpacesItemDecoration;
 
@@ -41,6 +42,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -122,10 +124,12 @@ public class SearchResultActivity extends BaseActivity implements BaseView, Text
         factoryProductPersenter = new FactoryProductPersenterImpl(this);
         moreProstoreAdpter = new MoreProstoreAdpter(this);
         home_goodAdpter = new HomeGoodAdpter(this);
-        WidgetUtils.initRecyclerView(recycleView);
+        WidgetUtils.initRecyclerView(recycleView,0);
         int space = getResources().getDimensionPixelSize(R.dimen.dp_5);
-        goodsrecycview.addItemDecoration(new SpacesItemDecoration(space, space));
-        goodsrecycview.setLayoutManager(new GridLayoutManager(this, 2));
+//        goodsrecycview.addItemDecoration(new SpacesItemDecoration(space, space));
+//        goodsrecycview.setLayoutManager(new GridLayoutManager(this, 2));
+        goodsrecycview.addItemDecoration(new FlowSpaceItemDecoration(space, space));
+        goodsrecycview.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         recycleView.setAdapter(moreProstoreAdpter);
         goodsrecycview.setAdapter(home_goodAdpter);
 
