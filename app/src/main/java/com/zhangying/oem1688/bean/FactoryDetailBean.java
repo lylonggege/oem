@@ -463,7 +463,8 @@ public class FactoryDetailBean {
             private String headtitle;
             private String shareTitle;
             private String shareCont;
-            private Object shareCover;
+            private String shareUrl;
+            private String shareCover;
             private Object shareCoverTof;
 
             public String getHeadtitle() {
@@ -495,11 +496,11 @@ public class FactoryDetailBean {
                 this.shareCont = shareCont;
             }
 
-            public Object getShareCover() {
+            public String getShareCover() {
                 return shareCover;
             }
 
-            public void setShareCover(Object shareCover) {
+            public void setShareCover(String shareCover) {
                 this.shareCover = shareCover;
             }
 
@@ -509,6 +510,14 @@ public class FactoryDetailBean {
 
             public void setShareCoverTof(Object shareCoverTof) {
                 this.shareCoverTof = shareCoverTof;
+            }
+
+            public String getShareUrl() {
+                return shareUrl;
+            }
+
+            public void setShareUrl(String shareUrl) {
+                this.shareUrl = shareUrl;
             }
         }
 

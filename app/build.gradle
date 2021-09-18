@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.xuexiang.xaop' //引用xaop插件
 apply plugin: 'com.xuexiang.xrouter' //引用xrouter-plugin插件实现自动注册
+apply plugin: 'com.mob.sdk'
 android {
     compileSdkVersion 28
     buildToolsVersion "28.0.3"
@@ -59,6 +60,36 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    MobSDK {
+        appKey "m3404ee43c70a0"
+        appSecret "6c7ded6608a3faec566864ba0c225c0a"
+        ShareSDK {
+            loopShare true
+            devInfo {
+                Wechat {
+                    appId "wx309c1651b07c82f7"
+                    appSecret "b59b8e2b587981169585da9d0e1a9c6b"
+                    userName ""
+                    path ""
+                    withShareTicket true
+                    miniprogramType 0
+                }
+                WechatMoments {
+                    appId "wx309c1651b07c82f7"
+                    appSecret "b59b8e2b587981169585da9d0e1a9c6b"
+                }
+                QQ{
+                    appId "1112053948"
+                    appSecret "ybPbBJvT5GrafUBu"
+                }
+                QZone{
+                    appId "1112053948"
+                    appSecret "ybPbBJvT5GrafUBu"
+                }
+            }
+        }
     }
 }
 
@@ -134,6 +165,13 @@ buildscript {
     repositories {
         jcenter()       // 原有 jCenter 引用可继续保留
         mavenCentral()
+        maven {
+            url "https://mvn.mob.com/android"
+        }
+    }
+    dependencies {
+        // 2.注册MobSDK
+        classpath "com.mob.sdk:MobSDK:2018.0319.1724"
     }
 }
 

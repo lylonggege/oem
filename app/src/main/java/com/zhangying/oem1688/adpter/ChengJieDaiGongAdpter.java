@@ -67,8 +67,9 @@ public class ChengJieDaiGongAdpter extends BaseRecyclerAdapter<MoreScinfoBean.Re
         company_contont_tv.setText(style);
         company_time_tv.setText(item.getNtime());
         List<String> images = item.getNimg();
+        int itemSpace = 3;
         if (images != null && images.size() > 0) {
-            WidgetUtils.initGridRecyclerView(company_recycleview, 3, DensityUtils.dp2px(5));
+            WidgetUtils.initGridRecyclerView(company_recycleview, 3, DensityUtils.dp2px(itemSpace));
             NewsOemNimgAdpter newsOemNimgAdpter = new NewsOemNimgAdpter(context);
             newsOemNimgAdpter.setImagePreview(new BaseImagePreview() {
                 @Override
@@ -77,10 +78,10 @@ public class ChengJieDaiGongAdpter extends BaseRecyclerAdapter<MoreScinfoBean.Re
                     int left = 0,top = 0,right = 0,bottom = 0, width = imageView.getWidth(), height = imageView.getHeight();
                     int baseLeft = company_recycleview.getLeft(),baseTop = company_recycleview.getTop(),baseRight = company_recycleview.getRight(),baseBottom = company_recycleview.getBottom();
                     for (int i1 = 0; i1 < images.size(); i1++) {
-                        left = ((int)(i1 % 3)) * (width + 5) + baseLeft;
+                        left = ((int)(i1 % 3)) * (width + itemSpace) + baseLeft;
                         right = left + width + baseTop;
 
-                        top = ((int)(i1 / 3)) * (width + 5) + baseRight;
+                        top = ((int)(i1 / 3)) * (width + itemSpace) + baseRight;
                         bottom = top + height + baseBottom;
                         ImageViewInfo imageViewInfo = new ImageViewInfo((String) images.get(i1));
                         imageViewInfo.setBounds(new Rect(left, top, right, bottom));

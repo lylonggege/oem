@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.mob.MobSDK;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
@@ -227,6 +228,8 @@ public class MainActivity extends AppCompatActivity implements TabberView {
                     createUniqueID();
                     //注册到微信
                     regToWx();
+                    //MobSDK回传用户隐私授权结果
+                    MobSDK.submitPolicyGrantResult(true, null);
                 }
             });
 

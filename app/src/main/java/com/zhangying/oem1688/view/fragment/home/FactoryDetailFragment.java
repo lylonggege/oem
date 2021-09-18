@@ -147,6 +147,7 @@ public class FactoryDetailFragment extends BaseFragment implements VideoAllCallB
     FactoryDetailCatesAdpter factoryDetailCatesAdpter;
     private GoodsDetailPopu msgPop;
     private String videoUrl;
+    private boolean hasVideo;
     private GoodsDetailOemAdpter goodsDetailOemAdpter;
 
     @Override
@@ -357,7 +358,8 @@ public class FactoryDetailFragment extends BaseFragment implements VideoAllCallB
 
         //设置播放视频
         videoUrl = retval.getStore_video();
-        if (!StringUtils.isEmity(videoUrl)){
+        hasVideo = !StringUtils.isEmity(videoUrl);
+        if (hasVideo){
             initVideoBuilderMode();
         }else {
             detailPlayer.setVisibility(View.GONE);
@@ -610,31 +612,37 @@ public class FactoryDetailFragment extends BaseFragment implements VideoAllCallB
     @Override
     public void onPause() {
         super.onPause();
-        getGSYVideoPlayer().getCurrentPlayer().onVideoPause();
-        if (orientationUtils != null) {
-            orientationUtils.setIsPause(true);
+        if (hasVideo){
+            getGSYVideoPlayer().getCurrentPlayer().onVideoPause();
+            if (orientationUtils != null) {
+                orientationUtils.setIsPause(true);
+            }
+            isPause = true;
         }
-        isPause = true;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        getGSYVideoPlayer().getCurrentPlayer().onVideoResume();
-        if (orientationUtils != null) {
-            orientationUtils.setIsPause(false);
+        if (hasVideo) {
+            getGSYVideoPlayer().getCurrentPlayer().onVideoResume();
+            if (orientationUtils != null) {
+                orientationUtils.setIsPause(false);
+            }
+            isPause = false;
         }
-        isPause = false;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (isPlay) {
-            getGSYVideoPlayer().getCurrentPlayer().release();
+        if (hasVideo) {
+            if (isPlay) {
+                getGSYVideoPlayer().getCurrentPlayer().release();
+            }
+            if (orientationUtils != null)
+                orientationUtils.releaseListener();
         }
-        if (orientationUtils != null)
-            orientationUtils.releaseListener();
     }
 
     /**
@@ -643,9 +651,11 @@ public class FactoryDetailFragment extends BaseFragment implements VideoAllCallB
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        //如果旋转了就全屏
-        if (isPlay && !isPause) {
-            getGSYVideoPlayer().onConfigurationChanged(getActivity(), newConfig, orientationUtils, hideActionBarWhenFull(), hideStatusBarWhenFull());
+        if (hasVideo) {
+            //如果旋转了就全屏
+            if (isPlay && !isPause) {
+                getGSYVideoPlayer().onConfigurationChanged(getActivity(), newConfig, orientationUtils, hideActionBarWhenFull(), hideStatusBarWhenFull());
+            }
         }
     }
 
@@ -656,13 +666,14 @@ public class FactoryDetailFragment extends BaseFragment implements VideoAllCallB
 
     @Override
     public void onPrepared(String url, Object... objects) {
-
-        if (orientationUtils == null) {
-            throw new NullPointerException("initVideo() or initVideoBuilderMode() first");
+        if (hasVideo) {
+            if (orientationUtils == null) {
+                throw new NullPointerException("initVideo() or initVideoBuilderMode() first");
+            }
+            //开始播放了才能旋转和全屏
+            orientationUtils.setEnable(getDetailOrientationRotateAuto() && !isAutoFullWithSize());
+            isPlay = true;
         }
-        //开始播放了才能旋转和全屏
-        orientationUtils.setEnable(getDetailOrientationRotateAuto() && !isAutoFullWithSize());
-        isPlay = true;
     }
 
     @Override
@@ -719,8 +730,10 @@ public class FactoryDetailFragment extends BaseFragment implements VideoAllCallB
     public void onQuitFullscreen(String url, Object... objects) {
         // ------- ！！！如果不需要旋转屏幕，可以不调用！！！-------
         // 不需要屏幕旋转，还需要设置 setNeedOrientationUtils(false)
-        if (orientationUtils != null) {
-            orientationUtils.backToProtVideo();
+        if (hasVideo) {
+            if (orientationUtils != null) {
+                orientationUtils.backToProtVideo();
+            }
         }
     }
 

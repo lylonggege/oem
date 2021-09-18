@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -28,8 +29,10 @@ import com.zhangying.oem1688.base.BaseActivity;
 import com.zhangying.oem1688.bean.BaseBean;
 import com.zhangying.oem1688.bean.EvenBusMessageBean;
 import com.zhangying.oem1688.bean.FactoryDetailBean;
+import com.zhangying.oem1688.bean.ShareBean;
 import com.zhangying.oem1688.constant.BuildConfig;
 import com.zhangying.oem1688.custom.FenLeiRealization;
+import com.zhangying.oem1688.custom.ShareRealization;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.onterface.BaseMessageListener;
@@ -87,11 +90,14 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
     TextView rootview_shoucang_tv;
     @BindView(R.id.title_TV)
     TextView navTitle;
+    @BindView(R.id.share_RL)
+    RelativeLayout shareRL;
     private Fragment factoryDetailClassFragment, factoryDetailFragment;
 
     private static String mcid;
     private FactoryDetailBean.RetvalBean retval;
     private BaseValidateCredentials fenLeiRealization;
+    private BaseValidateCredentials shareRealization;
     private static int tabIndex;
     private GoodsDetailPopu msgPop;
 
@@ -106,6 +112,7 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
         EventBus.getDefault().register(this);
         AppManagerUtil.getInstance().addHomeActivity(this);
         fenLeiRealization = new FenLeiRealization(this, this);
+        shareRL.setVisibility(View.VISIBLE);
 
         LoadingDialog loading = new LoadingDialog(this);
         loading.show();
@@ -149,7 +156,7 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
     }
 
     @OnClick({R.id.rootView_shop_b_sp_ll, R.id.rootview_shoucang_tv,
-            R.id.rootView_shop_b_sc_ll, R.id.rootView_phone,
+            R.id.rootView_shop_b_sc_ll, R.id.rootView_phone,R.id.share_RL,
             R.id.rootView_line, R.id.rootView_shop_b_dp_ll, R.id.bacK_RL, R.id.imageView2, R.id.textView})
     public void onClick(View view) {
         if (!AppUtils.isFastClick()){
@@ -159,6 +166,17 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
         switch (view.getId()) {
             case R.id.bacK_RL://返回
                 finish();
+                break;
+            case R.id.share_RL://点击分享
+                if (shareRealization == null){
+                    ShareBean shareBean = new ShareBean();
+                    shareBean.setTitle(retval.getPageinfo().getShareTitle());
+                    shareBean.setDesc(retval.getPageinfo().getShareCont());
+                    shareBean.setUrl(retval.getPageinfo().getShareUrl());
+                    shareBean.setImage(retval.getPageinfo().getShareCover());
+                    shareRealization = new ShareRealization(this,shareBean);
+                }
+                shareRealization.validateCredentials();
                 break;
             case R.id.rootView_shop_b_dp_ll: //首頁
                 setHomeCateSate(true);

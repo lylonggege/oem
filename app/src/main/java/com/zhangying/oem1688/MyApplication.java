@@ -2,16 +2,12 @@ package com.zhangying.oem1688;
 
 import android.app.Application;
 import android.content.Context;
-import android.view.View;
 
+import com.mob.MobSDK;
 import com.xuexiang.xhttp2.XHttpSDK;
 import com.xuexiang.xui.XUI;
-import com.xuexiang.xutil.XUtil;
 import com.zhangying.oem1688.constant.BuildConfig;
-import com.zhangying.oem1688.db.StuDBHelper;
-import com.zhangying.oem1688.util.SettingSPUtils;
 import com.zhangying.oem1688.util.TokenUtils;
-import com.zhangying.oem1688.view.activity.TestActivity;
 
 public class MyApplication extends Application {
     public static Context myApplicationContext = null;
@@ -37,6 +33,7 @@ public class MyApplication extends Application {
 
         XHttpSDK.init(this);   //初始化网络请求框架，必须首先执行
         XHttpSDK.setBaseUrl(BuildConfig.URL);  //设置网络请求的基础地址
+        MobSDK.init(this);
     }
 
     /**
