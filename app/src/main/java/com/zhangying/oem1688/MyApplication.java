@@ -33,7 +33,7 @@ public class MyApplication extends Application {
 
         XHttpSDK.init(this);   //初始化网络请求框架，必须首先执行
         XHttpSDK.setBaseUrl(BuildConfig.URL);  //设置网络请求的基础地址
-        MobSDK.init(this);
+        MobSDK.init(this,"m3404ee43c70a0","6c7ded6608a3faec566864ba0c225c0a");
     }
 
     /**

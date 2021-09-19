@@ -10,9 +10,16 @@ import com.xuexiang.xui.adapter.recyclerview.BaseRecyclerAdapter;
 import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
 import com.zhangying.oem1688.R;
 import com.zhangying.oem1688.bean.ShareBean;
+import com.zhangying.oem1688.onterface.IMessageView;
 import com.zhangying.oem1688.onterface.OnMultiClickListener;
+import com.zhangying.oem1688.util.ToastUtil;
 
 import androidx.annotation.NonNull;
+
+import java.util.HashMap;
+
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 
 public class ShareItemAdpter extends BaseRecyclerAdapter<String> {
@@ -22,7 +29,11 @@ public class ShareItemAdpter extends BaseRecyclerAdapter<String> {
     }
     private Context context;
     private ShareBean shareBean;
-    private String platform = "";
+
+    private IMessageView iCloseEvent;
+    public void setiCloseEvent(IMessageView iCloseEvent) {
+        this.iCloseEvent = iCloseEvent;
+    }
 
     @Override
     protected int getItemLayoutId(int viewType) {
@@ -32,7 +43,7 @@ public class ShareItemAdpter extends BaseRecyclerAdapter<String> {
     @Override
     protected void bindData(@NonNull RecyclerViewHolder holder, int position, String item) {
         ImageView image = holder.findViewById(R.id.image);
-        String itemId = "";
+        String itemId = "",platform = "";
         switch (item){
             case "1":
                 itemId = "share_wx";
@@ -53,10 +64,11 @@ public class ShareItemAdpter extends BaseRecyclerAdapter<String> {
         }
         image.setImageResource(this.getResId(itemId));
 
+        String finalPlatform = platform;
         image.setOnClickListener(new OnMultiClickListener(){
             @Override
             public void onMultiClick(View view) {
-                showShare(platform);
+                showShare(finalPlatform);
             }
         });
     }
@@ -83,7 +95,32 @@ public class ShareItemAdpter extends BaseRecyclerAdapter<String> {
         oks.setImageUrl(shareBean.getImage());
         // url仅在微信（包括好友和朋友圈）中使用
         oks.setUrl("http://sharesdk.cn");
+        //分享回调
+        oks.setCallback(new PlatformActionListener() {
+            @Override
+            public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
+                // 分享成功回调
+            }
+            @Override
+            public void onError(Platform platform, int i, Throwable throwable) {
+                // 分享失败回调
+                // 失败的回调，arg:平台对象，arg1:表示当前的动作(9表示分享)，arg2:异常信息
+            }
+            @Override
+            public void onCancel(Platform platform, int i) {
+                // 分享取消回调
+                ToastUtil.showToast("取消分享");
+            }
+        });
+        //去除分享正在后台的提示
+        oks.setDisappearShareToast(true);
+        //关闭一键分享默认ui
+        oks.setSilent(true);
         //启动分享
         oks.show(MobSDK.getContext());
+
+        if (iCloseEvent != null){
+            iCloseEvent.viewPosition(0);
+        }
     }
 }

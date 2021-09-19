@@ -8,6 +8,7 @@ import com.lxj.xpopup.enums.PopupAnimation;
 import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.zhangying.oem1688.bean.ShareBean;
 import com.zhangying.oem1688.onterface.BaseValidateCredentials;
+import com.zhangying.oem1688.onterface.IMessageView;
 import com.zhangying.oem1688.popu.SharePopu;
 import com.zhangying.oem1688.util.StringUtils;
 
@@ -27,6 +28,12 @@ public class ShareRealization implements BaseValidateCredentials {
 
     public void realization() {
         SharePopu shareView = new SharePopu(context,shareBean);
+        shareView.setiCloseEvent(new IMessageView() {
+            @Override
+            public void viewPosition(int position) {
+                popView.dismiss();
+            }
+        });
         popView = new XPopup.Builder(context)
                 .setPopupCallback(new XPopupCallback() {
                     @Override

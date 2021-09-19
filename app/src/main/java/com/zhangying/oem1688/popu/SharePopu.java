@@ -20,6 +20,7 @@ import com.zhangying.oem1688.custom.MyRecycleView;
 import com.zhangying.oem1688.onterface.BaseInterfacePosition;
 import com.zhangying.oem1688.onterface.BaseView;
 import com.zhangying.oem1688.onterface.IJumPage;
+import com.zhangying.oem1688.onterface.IMessageView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,7 +34,12 @@ public class SharePopu extends BottomPopupView {
     private Context mContext;
     private ShareItemAdpter shareAdpter;
     private ShareBean shareBean;
-    
+
+    private IMessageView iCloseEvent;
+    public void setiCloseEvent(IMessageView iCloseEvent) {
+        this.iCloseEvent = iCloseEvent;
+    }
+
     public SharePopu(@NonNull Context context, @NonNull ShareBean shareBean) {
         super(context);
         this.mContext = context;
@@ -54,6 +60,14 @@ public class SharePopu extends BottomPopupView {
         MyRecycleView_share = findViewById(R.id.MyRecycleView_Share);
         WidgetUtils.initGridRecyclerView(MyRecycleView_share, 4, DensityUtils.dp2px(2));
         shareAdpter = new ShareItemAdpter(mContext,shareBean);
+        shareAdpter.setiCloseEvent(new IMessageView() {
+            @Override
+            public void viewPosition(int position) {
+                if (iCloseEvent != null){
+                    iCloseEvent.viewPosition(0);
+                }
+            }
+        });
 
         shareAdpter.refresh(itemList);
         MyRecycleView_share.setAdapter(shareAdpter);
@@ -62,7 +76,9 @@ public class SharePopu extends BottomPopupView {
         btnCancel.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-
+                if (iCloseEvent != null){
+                    iCloseEvent.viewPosition(0);
+                }
             }
         });
     }
