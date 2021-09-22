@@ -32,9 +32,11 @@ import com.zhangying.oem1688.base.BaseActivity;
 import com.zhangying.oem1688.bean.BaseBean;
 import com.zhangying.oem1688.bean.EvenBusMessageBean;
 import com.zhangying.oem1688.bean.GoodsdetailBean;
+import com.zhangying.oem1688.bean.ShareBean;
 import com.zhangying.oem1688.constant.BuildConfig;
 import com.zhangying.oem1688.custom.FenLeiRealization;
 import com.zhangying.oem1688.custom.MyRecycleView;
+import com.zhangying.oem1688.custom.ShareRealization;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.mvp.leave.DateBean;
@@ -146,7 +148,10 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
     ImageView shop_b_dp_image;
     @BindView(R.id.shop_b_sp_db_iv)
     ImageView shop_b_sp_db_iv;
+    @BindView(R.id.share_RL)
+    RelativeLayout shareRL;
     private GoodsdetailBean goodsdetailBean;
+    private BaseValidateCredentials shareRealization;
 
     @Override
     protected int getLayoutId() {
@@ -164,6 +169,7 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        shareRL.setVisibility(View.VISIBLE);
         companynameTv.getPaint().setStyle(Paint.Style.FILL_AND_STROKE);
         companynameTv.getPaint().setStrokeWidth(1.0f);
 
@@ -325,8 +331,8 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
 
     @OnClick({R.id.bacK_RL,R.id.submit_tv, R.id.rootView_shop_b_dp_ll,
             R.id.rootView_shop_b_sp_ll, R.id.rootView_shop_b_sc_ll,
-            R.id.rootView_phone, R.id.rootView_line, R.id.message_LL
-            , R.id.imageView2, R.id.textView,R.id.rootView})
+            R.id.rootView_phone, R.id.rootView_line, R.id.message_LL,R.id.share_RL,
+            R.id.imageView2, R.id.textView,R.id.rootView})
     public void onClick(View view) {
         if (!AppUtils.isFastClick()){
             return;
@@ -336,6 +342,17 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
         switch (view.getId()) {
             case R.id.bacK_RL://返回
                 finish();
+                break;
+            case R.id.share_RL://点击分享
+                if (shareRealization == null){
+                    ShareBean shareBean = new ShareBean();
+                    shareBean.setTitle(goodsdetailBean.getRetval().getPageinfo().getShareTitle());
+                    shareBean.setDesc(goodsdetailBean.getRetval().getPageinfo().getShareCont());
+                    shareBean.setUrl(goodsdetailBean.getRetval().getPageinfo().getShareUrl());
+                    shareBean.setImage(goodsdetailBean.getRetval().getPageinfo().getShareCover());
+                    shareRealization = new ShareRealization(this,shareBean);
+                }
+                shareRealization.validateCredentials();
                 break;
             case R.id.rootView:
                 FactoryDetailActivity.simpleActivity(this,goodsdetailBean.getRetval().getGoods().getStore_id());
@@ -481,6 +498,11 @@ public class GoodsDetailActivity extends BaseActivity implements BaseView {
 
         if (phone == null || phone.length() == 0) {
             ToastUtil.showToast("请输入您的电话");
+            return false;
+        }
+
+        if (phone.length() != 11){
+            ToastUtil.showToast("电话格式不对，请重新输入");
             return false;
         }
 

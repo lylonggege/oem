@@ -65,7 +65,7 @@ public interface ApiService {
     Flowable<CompanyFactoryBean> getgoodslists(@QueryMap HashMap<String, Object> paramsMap);
 
     //获取Factory - 找工厂
-    @GET("?app=xcxindex&act=storelists")
+    @GET("?app=xcxindex&act=storelists&android=1")
     Flowable<CompanyFactoryBean> getstorelists(@QueryMap HashMap<String, Object> paramsMap);
 
     //获取Factory -  个人信息

@@ -299,6 +299,11 @@ public class FactoryDetailActivity extends BaseActivity implements BaseView {
             return false;
         }
 
+        if (phone.length() != 11){
+            ToastUtil.showToast("电话格式不对，请重新输入");
+            return false;
+        }
+
         showLoading();
         HashMapSingleton.getInstance().reload();
         HashMapSingleton.getInstance().put("uname", name);

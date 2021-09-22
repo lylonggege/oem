@@ -490,6 +490,11 @@ public class FactoryDetailFragment extends BaseFragment implements VideoAllCallB
             return false;
         }
 
+        if (phone.length() != 11){
+            ToastUtil.showToast("电话格式不对，请重新输入");
+            return false;
+        }
+
         if (chkCate && StringUtils.isEmity(cates)) {
             ToastUtil.showToast("请填写代工系列");
             return false;

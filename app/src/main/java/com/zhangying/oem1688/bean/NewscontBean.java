@@ -139,60 +139,13 @@ public class NewscontBean {
 
         public static class PageinfoBean {
             private String headtitle;
-            private boolean ly_flag;
-            private boolean foothide;
-            private int footnav;
-            private String sharentitle;
-            private String sharencover;
-            private String shareTitle;
-            private String shareCoverTof;
 
-            public String getHeadtitle() {
-                return headtitle;
+            public String getShareCover() {
+                return shareCover;
             }
 
-            public void setHeadtitle(String headtitle) {
-                this.headtitle = headtitle;
-            }
-
-            public boolean isLy_flag() {
-                return ly_flag;
-            }
-
-            public void setLy_flag(boolean ly_flag) {
-                this.ly_flag = ly_flag;
-            }
-
-            public boolean isFoothide() {
-                return foothide;
-            }
-
-            public void setFoothide(boolean foothide) {
-                this.foothide = foothide;
-            }
-
-            public int getFootnav() {
-                return footnav;
-            }
-
-            public void setFootnav(int footnav) {
-                this.footnav = footnav;
-            }
-
-            public String getSharentitle() {
-                return sharentitle;
-            }
-
-            public void setSharentitle(String sharentitle) {
-                this.sharentitle = sharentitle;
-            }
-
-            public String getSharencover() {
-                return sharencover;
-            }
-
-            public void setSharencover(String sharencover) {
-                this.sharencover = sharencover;
+            public void setShareCover(String shareCover) {
+                this.shareCover = shareCover;
             }
 
             public String getShareTitle() {
@@ -203,13 +156,35 @@ public class NewscontBean {
                 this.shareTitle = shareTitle;
             }
 
-            public String getShareCoverTof() {
-                return shareCoverTof;
+            public String getShareUrl() {
+                return shareUrl;
             }
 
-            public void setShareCoverTof(String shareCoverTof) {
-                this.shareCoverTof = shareCoverTof;
+            public void setShareUrl(String shareUrl) {
+                this.shareUrl = shareUrl;
             }
+
+            public String getShareCont() {
+                return shareCont;
+            }
+
+            public void setShareCont(String shareCont) {
+                this.shareCont = shareCont;
+            }
+
+            private String shareCover;
+            private String shareTitle;
+            private String shareUrl;
+            private String shareCont;
+
+            public String getHeadtitle() {
+                return headtitle;
+            }
+            public void setHeadtitle(String headtitle) {
+                this.headtitle = headtitle;
+            }
+
+
         }
 
         public static class NewsnavBean {

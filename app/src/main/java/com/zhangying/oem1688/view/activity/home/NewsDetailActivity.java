@@ -3,6 +3,7 @@ package com.zhangying.oem1688.view.activity.home;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -12,6 +13,7 @@ import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.zhangying.oem1688.R;
@@ -19,11 +21,14 @@ import com.zhangying.oem1688.base.BaseActivity;
 import com.zhangying.oem1688.bean.BaseBean;
 import com.zhangying.oem1688.bean.NewscontBean;
 import com.zhangying.oem1688.bean.ScinfoDetailBean;
+import com.zhangying.oem1688.bean.ShareBean;
+import com.zhangying.oem1688.custom.ShareRealization;
 import com.zhangying.oem1688.internet.DefaultDisposableSubscriber;
 import com.zhangying.oem1688.internet.RemoteRepository;
 import com.zhangying.oem1688.mvp.leave.DateBean;
 import com.zhangying.oem1688.mvp.leave.LeaveMessagePersenterImpl;
 import com.zhangying.oem1688.onterface.BasePresenter;
+import com.zhangying.oem1688.onterface.BaseValidateCredentials;
 import com.zhangying.oem1688.onterface.BaseView;
 import com.zhangying.oem1688.util.AppUtils;
 import com.zhangying.oem1688.util.GlideUtil;
@@ -68,11 +73,14 @@ public class NewsDetailActivity extends BaseActivity implements BaseView {
     LinearLayout images_ll;
     @BindView(R.id.cinfoContent)
     TextView cinfoContent;
+    @BindView(R.id.share_RL)
+    RelativeLayout shareRL;
     private int nid;
     private int type;
     private BasePresenter basePresenter;
     private NewscontBean mnewscontBean;
     private ScinfoDetailBean mscinfoDetailBean;
+    private BaseValidateCredentials shareRealization;
 
     @Override
     protected int getLayoutId() {
@@ -84,6 +92,8 @@ public class NewsDetailActivity extends BaseActivity implements BaseView {
         super.onCreate(savedInstanceState);
         nid = getIntent().getIntExtra("NID", 0);
         type = getIntent().getIntExtra("TYPE", 0);
+        titleContontTV.getPaint().setStyle(Paint.Style.FILL_AND_STROKE);
+        titleContontTV.getPaint().setStrokeWidth(1.3f);
         newscont();
     }
 
@@ -91,6 +101,7 @@ public class NewsDetailActivity extends BaseActivity implements BaseView {
         HashMap<String, Object> hashMap = new HashMap<>();
         String blueColor = "#025BDE";
         if (type == 1) {
+            shareRL.setVisibility(View.VISIBLE);
             hashMap.put("ly", "app");
             hashMap.put("nid", nid);
             RemoteRepository.getInstance()
@@ -177,8 +188,6 @@ public class NewsDetailActivity extends BaseActivity implements BaseView {
                         }
                     });
         }
-
-
     }
 
     public static void simpleActivity(Context context, int nid, int type) {
@@ -188,7 +197,7 @@ public class NewsDetailActivity extends BaseActivity implements BaseView {
         context.startActivity(intent);
     }
 
-    @OnClick({R.id.bacK_RL, R.id.submit_tv})
+    @OnClick({R.id.bacK_RL, R.id.submit_tv, R.id.share_RL})
     public void onClick(View view) {
         if (!AppUtils.isFastClick()){
             return;
@@ -197,6 +206,17 @@ public class NewsDetailActivity extends BaseActivity implements BaseView {
         switch (view.getId()) {
             case R.id.bacK_RL:
                 finish();
+                break;
+            case R.id.share_RL://点击分享
+                if (shareRealization == null){
+                    ShareBean shareBean = new ShareBean();
+                    shareBean.setTitle(mnewscontBean.getRetval().getPageinfo().getShareTitle());
+                    shareBean.setDesc(mnewscontBean.getRetval().getPageinfo().getShareCont());
+                    shareBean.setUrl(mnewscontBean.getRetval().getPageinfo().getShareUrl());
+                    shareBean.setImage(mnewscontBean.getRetval().getPageinfo().getShareCover());
+                    shareRealization = new ShareRealization(this,shareBean);
+                }
+                shareRealization.validateCredentials();
                 break;
             case R.id.submit_tv:
                 String name = nameEt.getText().toString();

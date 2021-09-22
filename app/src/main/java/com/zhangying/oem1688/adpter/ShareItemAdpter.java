@@ -21,6 +21,7 @@ import java.util.HashMap;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.onekeyshare.OnekeyShare;
+import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
 
 public class ShareItemAdpter extends BaseRecyclerAdapter<String> {
     public ShareItemAdpter(Context context,ShareBean shareBean) {
@@ -94,20 +95,23 @@ public class ShareItemAdpter extends BaseRecyclerAdapter<String> {
         //分享网络图片，新浪微博分享网络图片需要通过审核后申请高级写入接口，否则请注释掉测试新浪微博
         oks.setImageUrl(shareBean.getImage());
         // url仅在微信（包括好友和朋友圈）中使用
-        oks.setUrl("http://sharesdk.cn");
+        oks.setUrl(shareBean.getUrl());
         //分享回调
         oks.setCallback(new PlatformActionListener() {
             @Override
             public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
                 // 分享成功回调
+                System.out.println("Share Complete");
             }
             @Override
             public void onError(Platform platform, int i, Throwable throwable) {
                 // 分享失败回调
                 // 失败的回调，arg:平台对象，arg1:表示当前的动作(9表示分享)，arg2:异常信息
+                System.out.println("Share Error");
             }
             @Override
             public void onCancel(Platform platform, int i) {
+                System.out.println("Share Cancel");
                 // 分享取消回调
                 ToastUtil.showToast("取消分享");
             }

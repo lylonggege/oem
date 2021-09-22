@@ -592,6 +592,11 @@ public class GoodsdetailBean {
             private String shareCoverTof;
             private String shareTemplateId;
 
+            public String getShareUrl() { return shareUrl; }
+            public void setShareUrl(String shareUrl) { this.shareUrl = shareUrl; }
+
+            private String shareUrl;
+
             public String getHeadtitle() {
                 return headtitle;
             }
